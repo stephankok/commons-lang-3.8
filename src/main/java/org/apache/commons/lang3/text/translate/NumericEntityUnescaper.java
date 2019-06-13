@@ -115,18 +115,17 @@ public class NumericEntityUnescaper extends CharSequenceTranslator {
                 }
             }
 
-            int entityValue;
-            try {
-                if(isHex) {
-                    entityValue = Integer.parseInt(input.subSequence(start, end).toString(), 16);
-                } else {
-                    entityValue = Integer.parseInt(input.subSequence(start, end).toString(), 10);
-                }
-            } catch(final NumberFormatException nfe) {
-                return 0;
-            }
-
-            if(entityValue > 0xFFFF) {
+            int entityValue;           
+    		try {
+    			if (isHex) {
+    				entityValue = Integer.parseInt(input.subSequence(start, end).toString(), 16);
+    			} else {
+    				entityValue = Integer.parseInt(input.subSequence(start, end).toString(), 10);
+    			}
+    		} catch (final NumberFormatException nfe) {
+    			return 0;
+    		}    	    	
+			if(entityValue > 0xFFFF) {
                 final char[] chars = Character.toChars(entityValue);
                 out.write(chars[0]);
                 out.write(chars[1]);
