@@ -950,9 +950,8 @@ public class NumberUtils {
         }
         int pos = 0; // offset within string
         int radix = 10;
-        boolean negate = false; // need to negate later?
-        if (str.startsWith("-")) {
-            negate = true;
+        boolean negate = longmethod(str);
+		if (str.startsWith("-")) {
             pos = 1;
         }
         if (str.startsWith("0x", pos) || str.startsWith("0X", pos)) { // hex
@@ -969,6 +968,14 @@ public class NumberUtils {
         final BigInteger value = new BigInteger(str.substring(pos), radix);
         return negate ? value.negate() : value;
     }
+
+	private static boolean longmethod(final String str) {
+		boolean negate = false;
+		if (str.startsWith("-")) {
+			negate = true;
+		}
+		return negate;
+	}
 
     /**
      * <p>Convert a <code>String</code> to a <code>BigDecimal</code>.</p>
@@ -1744,10 +1751,8 @@ public class NumberUtils {
     private static boolean withDecimalsParsing(final String str, final int beginIdx) {
         int decimalPoints = 0;
         for (int i = beginIdx; i < str.length(); i++) {
-            final boolean isDecimalPoint = str.charAt(i) == '.';
-            if (isDecimalPoint) {
-                decimalPoints++;
-            }
+			final boolean isDecimalPoint = str.charAt(i) == '.';
+			decimalPoints = increaseDecimalPoints(isDecimalPoint, decimalPoints);
             if (decimalPoints > 1) {
                 return false;
             }
@@ -1757,6 +1762,13 @@ public class NumberUtils {
         }
         return true;
     }
+
+	private static int increaseDecimalPoints(boolean isDecimalPoint, int decimalPoints) {		
+		if (isDecimalPoint) {
+			decimalPoints++;
+		}
+		return decimalPoints;
+	}
 
     /**
      * <p>Compares two {@code int} values numerically. This is the same functionality as provided in Java 7.</p>
