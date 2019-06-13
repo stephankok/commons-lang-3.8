@@ -187,15 +187,9 @@ public class MultiBackgroundInitializer
 
         // start the child initializers
         final ExecutorService exec = getActiveExecutor();
-        for (final BackgroundInitializer<?> bi : inits.values()) {
-            if (bi.getExternalExecutor() == null) {
-                // share the executor service if necessary
-                bi.setExternalExecutor(exec);
-            }
-            bi.start();
-        }
-
-        // collect the results
+        startChildInitializers(inits, exec);
+        
+		// collect the results
         final Map<String, Object> results = new HashMap<>();
         final Map<String, ConcurrentException> excepts = new HashMap<>();
         for (final Map.Entry<String, BackgroundInitializer<?>> e : inits.entrySet()) {
@@ -208,6 +202,20 @@ public class MultiBackgroundInitializer
 
         return new MultiBackgroundInitializerResults(inits, results, excepts);
     }
+
+	private void startChildInitializers(Map<String, BackgroundInitializer<?>> inits,
+			final ExecutorService exec) {
+		for (final BackgroundInitializer<?> bi : inits.values()) {
+			initializerNullCheck(exec, bi);
+		}
+	}
+
+	private void initializerNullCheck(final ExecutorService exec, final BackgroundInitializer<?> bi) {
+		if (bi.getExternalExecutor() == null) {
+			bi.setExternalExecutor(exec);
+		}
+		bi.start();
+	}
 
     /**
      * A data class for storing the results of the background initialization

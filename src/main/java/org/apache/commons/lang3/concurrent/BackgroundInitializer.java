@@ -173,23 +173,25 @@ public abstract class BackgroundInitializer<T> implements
         // Not yet started?
         if (!isStarted()) {
 
-            // Determine the executor to use and whether a temporary one has to
-            // be created
-            ExecutorService tempExec;
-            executor = getExternalExecutor();
-            if (executor == null) {
-                executor = tempExec = createExecutor();
-            } else {
-                tempExec = null;
-            }
-
-            future = executor.submit(createTask(tempExec));
+            ExecutorService tempExec = tempExec();
+			future = executor.submit(createTask(tempExec));
 
             return true;
         }
 
         return false;
     }
+
+	private ExecutorService tempExec() {
+		ExecutorService tempExec;
+		executor = getExternalExecutor();
+		if (executor == null) {
+			executor = tempExec = createExecutor();
+		} else {
+			tempExec = null;
+		}
+		return tempExec;
+	}
 
     /**
      * Returns the result of the background initialization. This method blocks
