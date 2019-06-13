@@ -440,18 +440,23 @@ public abstract class ToStringStyle implements Serializable {
         final int len = buffer.length();
         final int sepLen = fieldSeparator.length();
         if (len > 0 && sepLen > 0 && len >= sepLen) {
-            boolean match = true;
-            for (int i = 0; i < sepLen; i++) {
-                if (buffer.charAt(len - 1 - i) != fieldSeparator.charAt(sepLen - 1 - i)) {
-                    match = false;
-                    break;
-                }
-            }
-            if (match) {
+            boolean match = removeSeperator(buffer, len, sepLen);
+			if (match) {
                 buffer.setLength(len - sepLen);
             }
         }
     }
+
+	private boolean removeSeperator(final StringBuffer buffer, final int len, final int sepLen) {
+		boolean match = true;
+		for (int i = 0; i < sepLen; i++) {
+			if (buffer.charAt(len - 1 - i) != fieldSeparator.charAt(sepLen - 1 - i)) {
+				match = false;
+				break;
+			}
+		}
+		return match;
+	}
 
     //----------------------------------------------------------------------------
 
@@ -1768,11 +1773,16 @@ public abstract class ToStringStyle implements Serializable {
      * @param arrayStart  the new array start text
      */
     protected void setArrayStart(String arrayStart) {
-        if (arrayStart == null) {
-            arrayStart = StringUtils.EMPTY;
-        }
-        this.arrayStart = arrayStart;
+        arrayStart = arrayStart(arrayStart);
+		this.arrayStart = arrayStart;
     }
+
+	private String arrayStart(String arrayStart) {
+		if (arrayStart == null) {
+			arrayStart = StringUtils.EMPTY;
+		}
+		return arrayStart;
+	}
 
     //---------------------------------------------------------------------
 
@@ -1794,11 +1804,16 @@ public abstract class ToStringStyle implements Serializable {
      * @param arrayEnd  the new array end text
      */
     protected void setArrayEnd(String arrayEnd) {
-        if (arrayEnd == null) {
-            arrayEnd = StringUtils.EMPTY;
-        }
-        this.arrayEnd = arrayEnd;
+        arrayEnd = arrayEnd(arrayEnd);
+		this.arrayEnd = arrayEnd;
     }
+
+	private String arrayEnd(String arrayEnd) {
+		if (arrayEnd == null) {
+			arrayEnd = StringUtils.EMPTY;
+		}
+		return arrayEnd;
+	}
 
     //---------------------------------------------------------------------
 
@@ -1820,11 +1835,16 @@ public abstract class ToStringStyle implements Serializable {
      * @param arraySeparator  the new array separator text
      */
     protected void setArraySeparator(String arraySeparator) {
-        if (arraySeparator == null) {
-            arraySeparator = StringUtils.EMPTY;
-        }
-        this.arraySeparator = arraySeparator;
+        arraySeparator = arraySeparator(arraySeparator);
+		this.arraySeparator = arraySeparator;
     }
+
+	private String arraySeparator(String arraySeparator) {
+		if (arraySeparator == null) {
+			arraySeparator = StringUtils.EMPTY;
+		}
+		return arraySeparator;
+	}
 
     //---------------------------------------------------------------------
 
@@ -1846,11 +1866,16 @@ public abstract class ToStringStyle implements Serializable {
      * @param contentStart  the new content start text
      */
     protected void setContentStart(String contentStart) {
-        if (contentStart == null) {
-            contentStart = StringUtils.EMPTY;
-        }
-        this.contentStart = contentStart;
+        contentStart = contentStart(contentStart);
+		this.contentStart = contentStart;
     }
+
+	private String contentStart(String contentStart) {
+		if (contentStart == null) {
+			contentStart = StringUtils.EMPTY;
+		}
+		return contentStart;
+	}
 
     //---------------------------------------------------------------------
 
@@ -1872,11 +1897,16 @@ public abstract class ToStringStyle implements Serializable {
      * @param contentEnd  the new content end text
      */
     protected void setContentEnd(String contentEnd) {
-        if (contentEnd == null) {
-            contentEnd = StringUtils.EMPTY;
-        }
-        this.contentEnd = contentEnd;
+        contentEnd = contentEnd(contentEnd);
+		this.contentEnd = contentEnd;
     }
+
+	private String contentEnd(String contentEnd) {
+		if (contentEnd == null) {
+			contentEnd = StringUtils.EMPTY;
+		}
+		return contentEnd;
+	}
 
     //---------------------------------------------------------------------
 
@@ -1898,11 +1928,16 @@ public abstract class ToStringStyle implements Serializable {
      * @param fieldNameValueSeparator  the new field name value separator text
      */
     protected void setFieldNameValueSeparator(String fieldNameValueSeparator) {
-        if (fieldNameValueSeparator == null) {
-            fieldNameValueSeparator = StringUtils.EMPTY;
-        }
-        this.fieldNameValueSeparator = fieldNameValueSeparator;
+        fieldNameValueSeparator = fieldNameValueSeparator(fieldNameValueSeparator);
+		this.fieldNameValueSeparator = fieldNameValueSeparator;
     }
+
+	private String fieldNameValueSeparator(String fieldNameValueSeparator) {
+		if (fieldNameValueSeparator == null) {
+			fieldNameValueSeparator = StringUtils.EMPTY;
+		}
+		return fieldNameValueSeparator;
+	}
 
     //---------------------------------------------------------------------
 
@@ -1924,11 +1959,16 @@ public abstract class ToStringStyle implements Serializable {
      * @param fieldSeparator  the new field separator text
      */
     protected void setFieldSeparator(String fieldSeparator) {
-        if (fieldSeparator == null) {
-            fieldSeparator = StringUtils.EMPTY;
-        }
-        this.fieldSeparator = fieldSeparator;
+        fieldSeparator = fieldSeparator(fieldSeparator);
+		this.fieldSeparator = fieldSeparator;
     }
+
+	private String fieldSeparator(String fieldSeparator) {
+		if (fieldSeparator == null) {
+			fieldSeparator = StringUtils.EMPTY;
+		}
+		return fieldSeparator;
+	}
 
     //---------------------------------------------------------------------
 
@@ -1998,11 +2038,16 @@ public abstract class ToStringStyle implements Serializable {
      * @param nullText  the new text to output when null found
      */
     protected void setNullText(String nullText) {
-        if (nullText == null) {
-            nullText = StringUtils.EMPTY;
-        }
-        this.nullText = nullText;
+        nullText = nullText(nullText);
+		this.nullText = nullText;
     }
+
+	private String nullText(String nullText) {
+		if (nullText == null) {
+			nullText = StringUtils.EMPTY;
+		}
+		return nullText;
+	}
 
     //---------------------------------------------------------------------
 
@@ -2030,11 +2075,16 @@ public abstract class ToStringStyle implements Serializable {
      * @param sizeStartText  the new start of size text
      */
     protected void setSizeStartText(String sizeStartText) {
-        if (sizeStartText == null) {
-            sizeStartText = StringUtils.EMPTY;
-        }
-        this.sizeStartText = sizeStartText;
+        sizeStartText = sizeStartText(sizeStartText);
+		this.sizeStartText = sizeStartText;
     }
+
+	private String sizeStartText(String sizeStartText) {
+		if (sizeStartText == null) {
+			sizeStartText = StringUtils.EMPTY;
+		}
+		return sizeStartText;
+	}
 
     //---------------------------------------------------------------------
 
@@ -2062,11 +2112,16 @@ public abstract class ToStringStyle implements Serializable {
      * @param sizeEndText  the new end of size text
      */
     protected void setSizeEndText(String sizeEndText) {
-        if (sizeEndText == null) {
-            sizeEndText = StringUtils.EMPTY;
-        }
-        this.sizeEndText = sizeEndText;
+        sizeEndText = sizeEndText(sizeEndText);
+		this.sizeEndText = sizeEndText;
     }
+
+	private String sizeEndText(String sizeEndText) {
+		if (sizeEndText == null) {
+			sizeEndText = StringUtils.EMPTY;
+		}
+		return sizeEndText;
+	}
 
     //---------------------------------------------------------------------
 
@@ -2094,11 +2149,16 @@ public abstract class ToStringStyle implements Serializable {
      * @param summaryObjectStartText  the new start of summary text
      */
     protected void setSummaryObjectStartText(String summaryObjectStartText) {
-        if (summaryObjectStartText == null) {
-            summaryObjectStartText = StringUtils.EMPTY;
-        }
-        this.summaryObjectStartText = summaryObjectStartText;
+        summaryObjectStartText = summaryObjectStartText(summaryObjectStartText);
+		this.summaryObjectStartText = summaryObjectStartText;
     }
+
+	private String summaryObjectStartText(String summaryObjectStartText) {
+		if (summaryObjectStartText == null) {
+			summaryObjectStartText = StringUtils.EMPTY;
+		}
+		return summaryObjectStartText;
+	}
 
     //---------------------------------------------------------------------
 
@@ -2126,11 +2186,16 @@ public abstract class ToStringStyle implements Serializable {
      * @param summaryObjectEndText  the new end of summary text
      */
     protected void setSummaryObjectEndText(String summaryObjectEndText) {
-        if (summaryObjectEndText == null) {
-            summaryObjectEndText = StringUtils.EMPTY;
-        }
-        this.summaryObjectEndText = summaryObjectEndText;
+        summaryObjectEndText = summaryObjectEndText(summaryObjectEndText);
+		this.summaryObjectEndText = summaryObjectEndText;
     }
+
+	private String summaryObjectEndText(String summaryObjectEndText) {
+		if (summaryObjectEndText == null) {
+			summaryObjectEndText = StringUtils.EMPTY;
+		}
+		return summaryObjectEndText;
+	}
 
     //----------------------------------------------------------------------------
 

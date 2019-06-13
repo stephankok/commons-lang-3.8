@@ -190,26 +190,37 @@ public class HashCodeBuilder implements Builder<Integer> {
             register(object);
             final Field[] fields = clazz.getDeclaredFields();
             AccessibleObject.setAccessible(fields, true);
-            for (final Field field : fields) {
-                if (!ArrayUtils.contains(excludeFields, field.getName())
-                    && !field.getName().contains("$")
-                    && (useTransients || !Modifier.isTransient(field.getModifiers()))
-                    && !Modifier.isStatic(field.getModifiers())
-                    && !field.isAnnotationPresent(HashCodeExclude.class)) {
-                    try {
-                        final Object fieldValue = field.get(object);
-                        builder.append(fieldValue);
-                    } catch (final IllegalAccessException e) {
-                        // this can't happen. Would get a Security exception instead
-                        // throw a runtime exception in case the impossible happens.
-                        throw new InternalError("Unexpected IllegalAccessException");
-                    }
-                }
-            }
+            longmethod2(object, builder, useTransients, excludeFields, fields);
         } finally {
             unregister(object);
         }
     }
+
+	private static void longmethod2(final Object object, final HashCodeBuilder builder, final boolean useTransients,
+			final String[] excludeFields, final Field[] fields) throws java.lang.IllegalArgumentException {
+		for (final Field field : fields) {
+			validField(object, builder, useTransients, excludeFields, field);
+		}
+	}
+
+	private static void validField(final Object object, final HashCodeBuilder builder, final boolean useTransients,
+			final String[] excludeFields, final Field field) throws java.lang.IllegalArgumentException {
+		if (!ArrayUtils.contains(excludeFields, field.getName()) && !field.getName().contains("$")
+				&& (useTransients || !Modifier.isTransient(field.getModifiers()))
+				&& !Modifier.isStatic(field.getModifiers()) && !field.isAnnotationPresent(HashCodeExclude.class)) {
+			try {
+				appendField(object, builder, field);
+			} catch (final IllegalAccessException e) {
+				throw new InternalError("Unexpected IllegalAccessException");
+			}
+		}
+	}
+
+	private static void appendField(final Object object, final HashCodeBuilder builder, final Field field)
+			throws java.lang.IllegalArgumentException, java.lang.IllegalAccessException {
+		final Object fieldValue = field.get(object);
+		builder.append(fieldValue);
+	}
 
     /**
      * <p>

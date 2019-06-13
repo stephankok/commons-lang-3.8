@@ -319,22 +319,30 @@ public class CompareToBuilder implements Builder<Integer> {
 
         final Field[] fields = clazz.getDeclaredFields();
         AccessibleObject.setAccessible(fields, true);
-        for (int i = 0; i < fields.length && builder.comparison == 0; i++) {
-            final Field f = fields[i];
-            if (!ArrayUtils.contains(excludeFields, f.getName())
-                && !f.getName().contains("$")
-                && (useTransients || !Modifier.isTransient(f.getModifiers()))
-                && !Modifier.isStatic(f.getModifiers())) {
-                try {
-                    builder.append(f.get(lhs), f.get(rhs));
-                } catch (final IllegalAccessException e) {
-                    // This can't happen. Would get a Security exception instead.
-                    // Throw a runtime exception in case the impossible happens.
-                    throw new InternalError("Unexpected IllegalAccessException");
-                }
-            }
-        }
+        longmethod(lhs, rhs, builder, useTransients, excludeFields, fields);
     }
+
+	private static void longmethod(final Object lhs, final Object rhs, final CompareToBuilder builder,
+			final boolean useTransients, final String[] excludeFields, final Field[] fields)
+			throws java.lang.IllegalArgumentException {
+		for (int i = 0; i < fields.length && builder.comparison == 0; i++) {
+			final Field f = fields[i];
+			if (!ArrayUtils.contains(excludeFields, f.getName()) && !f.getName().contains("$")
+					&& (useTransients || !Modifier.isTransient(f.getModifiers()))
+					&& !Modifier.isStatic(f.getModifiers())) {
+				try {
+					builder.append(f.get(lhs), f.get(rhs));
+				} catch (final IllegalAccessException e) {
+					throw new InternalError("Unexpected IllegalAccessException");
+				}
+				try {
+					builder.append(f.get(lhs), f.get(rhs));
+				} catch (final IllegalAccessException e) {
+					throw new InternalError("Unexpected IllegalAccessException");
+				}
+			}
+		}
+	}
 
     //-----------------------------------------------------------------------
     /**

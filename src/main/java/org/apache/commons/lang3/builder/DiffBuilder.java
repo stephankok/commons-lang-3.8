@@ -810,15 +810,9 @@ public class DiffBuilder implements Builder<DiffResult> {
             return this;
         }
 
-        Object objectToTest;
-        if (lhs != null) {
-            objectToTest = lhs;
-        } else {
-            // rhs cannot be null, as lhs != rhs
-            objectToTest = rhs;
-        }
-
-        if (objectToTest.getClass().isArray()) {
+        Object objectToTest = objectToTest(lhs, rhs);
+        
+		if (objectToTest.getClass().isArray()) {
             if (objectToTest instanceof boolean[]) {
                 return append(fieldName, (boolean[]) lhs, (boolean[]) rhs);
             }
@@ -868,6 +862,16 @@ public class DiffBuilder implements Builder<DiffResult> {
 
         return this;
     }
+
+	private Object objectToTest(final Object lhs, final Object rhs) {
+		Object objectToTest;
+		if (lhs != null) {
+			objectToTest = lhs;
+		} else {
+			objectToTest = rhs;
+		}
+		return objectToTest;
+	}
 
     /**
      * <p>
