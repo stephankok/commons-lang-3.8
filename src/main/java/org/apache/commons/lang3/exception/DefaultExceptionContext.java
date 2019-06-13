@@ -147,13 +147,8 @@ public class DefaultExceptionContext implements ExceptionContext, Serializable {
                 if (value == null) {
                     buffer.append("null");
                 } else {
-                    String valueStr;
-                    try {
-                        valueStr = value.toString();
-                    } catch (final Exception e) {
-                        valueStr = "Exception thrown on toString(): " + ExceptionUtils.getStackTrace(e);
-                    }
-                    buffer.append(valueStr);
+                    String valueStr = toString(value);
+					buffer.append(valueStr);
                 }
                 buffer.append("]\n");
             }
@@ -161,5 +156,15 @@ public class DefaultExceptionContext implements ExceptionContext, Serializable {
         }
         return buffer.toString();
     }
+
+	private String toString(final Object value) {
+		String valueStr;
+		try {
+			valueStr = value.toString();
+		} catch (final Exception e) {
+			valueStr = "Exception thrown on toString(): " + ExceptionUtils.getStackTrace(e);
+		}
+		return valueStr;
+	}
 
 }

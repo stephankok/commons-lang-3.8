@@ -195,14 +195,8 @@ public class ExceptionUtils {
      */
     // TODO: Remove in Lang 4.0
     private static Throwable getCauseUsingMethodName(final Throwable throwable, final String methodName) {
-        Method method = null;
-        try {
-            method = throwable.getClass().getMethod(methodName);
-        } catch (final NoSuchMethodException | SecurityException ignored) { // NOPMD
-            // exception ignored
-        }
-
-        if (method != null && Throwable.class.isAssignableFrom(method.getReturnType())) {
+        Method method = getMethod(throwable, methodName);
+		if (method != null && Throwable.class.isAssignableFrom(method.getReturnType())) {
             try {
                 return (Throwable) method.invoke(throwable);
             } catch (final IllegalAccessException | IllegalArgumentException | InvocationTargetException ignored) { // NOPMD
@@ -211,6 +205,15 @@ public class ExceptionUtils {
         }
         return null;
     }
+
+	private static Method getMethod(final Throwable throwable, final String methodName) {
+		Method method = null;
+		try {
+			method = throwable.getClass().getMethod(methodName);
+		} catch (final NoSuchMethodException | SecurityException ignored) {
+		}
+		return method;
+	}
 
     //-----------------------------------------------------------------------
     /**
@@ -386,10 +389,8 @@ public class ExceptionUtils {
         if (throwable == null || type == null) {
             return -1;
         }
-        if (fromIndex < 0) {
-            fromIndex = 0;
-        }
-        final Throwable[] throwables = getThrowables(throwable);
+        fromIndex = minimumIndex(fromIndex);
+		final Throwable[] throwables = getThrowables(throwable);
         if (fromIndex >= throwables.length) {
             return -1;
         }
@@ -408,6 +409,13 @@ public class ExceptionUtils {
         }
         return -1;
     }
+
+	private static int minimumIndex(int fromIndex) {
+		if (fromIndex < 0) {
+			fromIndex = 0;
+		}
+		return fromIndex;
+	}
 
     //-----------------------------------------------------------------------
     /**
@@ -804,9 +812,14 @@ public class ExceptionUtils {
      */
     public static boolean hasCause(Throwable chain,
             final Class<? extends Throwable> type) {
-        if (chain instanceof UndeclaredThrowableException) {
-            chain = chain.getCause();
-        }
-        return type.isInstance(chain);
+        chain = undeclaredChainCause(chain);
+		return type.isInstance(chain);
     }
+
+	private static Throwable undeclaredChainCause(Throwable chain) {
+		if (chain instanceof UndeclaredThrowableException) {
+			chain = chain.getCause();
+		}
+		return chain;
+	}
 }
