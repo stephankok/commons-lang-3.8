@@ -717,14 +717,18 @@ public class FastDateParser implements DateParser, Serializable {
          */
         @Override
         void setCalendar(final FastDateParser parser, final Calendar cal, final String value) {
-            final String lowerCase = value.toLowerCase(locale);
-            Integer iVal = lKeyValues.get(lowerCase);
-            if(iVal == null) {
-                // match missing the optional trailing period
-                iVal = lKeyValues.get(lowerCase + '.');
-            }
-            cal.set(field, iVal.intValue());
+            Integer iVal = iVal(value);
+			cal.set(field, iVal.intValue());
         }
+
+		private Integer iVal(final String value) {
+			final String lowerCase = value.toLowerCase(locale);
+			Integer iVal = lKeyValues.get(lowerCase);
+			if (iVal == null) {
+				iVal = lKeyValues.get(lowerCase + '.');
+			}
+			return iVal;
+		}
     }
 
 
@@ -765,10 +769,7 @@ public class FastDateParser implements DateParser, Serializable {
                 }
                 pos.setIndex(idx);
             } else {
-                final int end = idx + maxWidth;
-                if (last > end) {
-                    last = end;
-                }
+                last = maxWidth(maxWidth, idx, last);
             }
 
             for (; idx < last; ++idx) {
@@ -789,6 +790,14 @@ public class FastDateParser implements DateParser, Serializable {
             calendar.set(field, modify(parser, value));
             return true;
         }
+
+		private int maxWidth(final int maxWidth, int idx, int last) {
+			final int end = idx + maxWidth;
+			if (last > end) {
+				last = end;
+			}
+			return last;
+		}
 
         /**
          * Make any modifications to parsed integer
@@ -901,16 +910,20 @@ public class FastDateParser implements DateParser, Serializable {
             if (tz != null) {
                 cal.setTimeZone(tz);
             } else {
-                final String lowerCase = timeZone.toLowerCase(locale);
-                TzInfo tzInfo = tzNames.get(lowerCase);
-                if (tzInfo == null) {
-                    // match missing the optional trailing period
-                    tzInfo = tzNames.get(lowerCase + '.');
-                }
-                cal.set(Calendar.DST_OFFSET, tzInfo.dstOffset);
+                FastDateParser.TimeZoneStrategy.TzInfo tzInfo = tzInfo(timeZone);
+				cal.set(Calendar.DST_OFFSET, tzInfo.dstOffset);
                 cal.set(Calendar.ZONE_OFFSET, tzInfo.zone.getRawOffset());
             }
         }
+
+		private FastDateParser.TimeZoneStrategy.TzInfo tzInfo(final String timeZone) {
+			final String lowerCase = timeZone.toLowerCase(locale);
+			TzInfo tzInfo = tzNames.get(lowerCase);
+			if (tzInfo == null) {
+				tzInfo = tzNames.get(lowerCase + '.');
+			}
+			return tzInfo;
+		}
     }
 
     private static class ISO8601TimeZoneStrategy extends PatternStrategy {

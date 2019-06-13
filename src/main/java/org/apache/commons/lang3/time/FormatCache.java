@@ -70,12 +70,8 @@ abstract class FormatCache<F extends Format> {
      */
     public F getInstance(final String pattern, TimeZone timeZone, Locale locale) {
         Validate.notNull(pattern, "pattern must not be null");
-        if (timeZone == null) {
-            timeZone = TimeZone.getDefault();
-        }
-        if (locale == null) {
-            locale = Locale.getDefault();
-        }
+        timeZone = validateTimeZone(timeZone);
+		locale = validateLocale(locale);
         final MultipartKey key = new MultipartKey(pattern, timeZone, locale);
         F format = cInstanceCache.get(key);
         if (format == null) {
@@ -89,6 +85,13 @@ abstract class FormatCache<F extends Format> {
         }
         return format;
     }
+
+	private TimeZone validateTimeZone(TimeZone timeZone) {
+		if (timeZone == null) {
+			timeZone = TimeZone.getDefault();
+		}
+		return timeZone;
+	}
 
     /**
      * <p>Create a format instance using the specified pattern, time zone
@@ -118,12 +121,17 @@ abstract class FormatCache<F extends Format> {
      */
     // This must remain private, see LANG-884
     private F getDateTimeInstance(final Integer dateStyle, final Integer timeStyle, final TimeZone timeZone, Locale locale) {
-        if (locale == null) {
-            locale = Locale.getDefault();
-        }
-        final String pattern = getPatternForStyle(dateStyle, timeStyle, locale);
+        locale = validateLocale(locale);
+		final String pattern = getPatternForStyle(dateStyle, timeStyle, locale);
         return getInstance(pattern, timeZone, locale);
     }
+
+	private Locale validateLocale(Locale locale) {
+		if (locale == null) {
+			locale = Locale.getDefault();
+		}
+		return locale;
+	}
 
     /**
      * <p>Gets a date/time formatter instance using the specified style,
@@ -193,15 +201,8 @@ abstract class FormatCache<F extends Format> {
         String pattern = cDateTimeInstanceCache.get(key);
         if (pattern == null) {
             try {
-                DateFormat formatter;
-                if (dateStyle == null) {
-                    formatter = DateFormat.getTimeInstance(timeStyle.intValue(), locale);
-                } else if (timeStyle == null) {
-                    formatter = DateFormat.getDateInstance(dateStyle.intValue(), locale);
-                } else {
-                    formatter = DateFormat.getDateTimeInstance(dateStyle.intValue(), timeStyle.intValue(), locale);
-                }
-                pattern = ((SimpleDateFormat)formatter).toPattern();
+                DateFormat formatter = format(dateStyle, timeStyle, locale);
+				pattern = ((SimpleDateFormat)formatter).toPattern();
                 final String previous = cDateTimeInstanceCache.putIfAbsent(key, pattern);
                 if (previous != null) {
                     // even though it doesn't matter if another thread put the pattern
@@ -215,6 +216,18 @@ abstract class FormatCache<F extends Format> {
         }
         return pattern;
     }
+
+	private static DateFormat format(final Integer dateStyle, final Integer timeStyle, final Locale locale) {
+		DateFormat formatter;
+		if (dateStyle == null) {
+			formatter = DateFormat.getTimeInstance(timeStyle.intValue(), locale);
+		} else if (timeStyle == null) {
+			formatter = DateFormat.getDateInstance(dateStyle.intValue(), locale);
+		} else {
+			formatter = DateFormat.getDateTimeInstance(dateStyle.intValue(), timeStyle.intValue(), locale);
+		}
+		return formatter;
+	}
 
     // ----------------------------------------------------------------------
     /**
@@ -249,16 +262,26 @@ abstract class FormatCache<F extends Format> {
         @Override
         public int hashCode() {
             if(hashCode==0) {
-                int rc= 0;
-                for(final Object key : keys) {
-                    if(key!=null) {
-                        rc= rc*7 + key.hashCode();
-                    }
-                }
-                hashCode= rc;
+                int rc = hashcode2();
+				hashCode= rc;
             }
             return hashCode;
         }
+
+		private int hashcode2() {
+			int rc = 0;
+			for (final Object key : keys) {
+				rc = hashCode3(rc, key);
+			}
+			return rc;
+		}
+
+		private int hashCode3(int rc, final Object key) {
+			if (key != null) {
+				rc = rc * 7 + key.hashCode();
+			}
+			return rc;
+		}
     }
 
 }

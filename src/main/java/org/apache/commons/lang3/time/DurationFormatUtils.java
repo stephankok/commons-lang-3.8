@@ -345,13 +345,8 @@ public class DurationFormatUtils {
             // there are no M's in the format string
 
             if( !Token.containsTokenWithValue(tokens, y) ) {
-                int target = end.get(Calendar.YEAR);
-                if (months < 0) {
-                    // target is end-year -1
-                    target -= 1;
-                }
-
-                while (start.get(Calendar.YEAR) != target) {
+                int target = getTargetYear(end, months);
+				while (start.get(Calendar.YEAR) != target) {
                     days += start.getActualMaximum(Calendar.DAY_OF_YEAR) - start.get(Calendar.DAY_OF_YEAR);
 
                     // Not sure I grok why this is needed, but the brutal tests show it is
@@ -407,6 +402,14 @@ public class DurationFormatUtils {
 
         return format(tokens, years, months, days, hours, minutes, seconds, milliseconds, padWithZeros);
     }
+
+	private static int getTargetYear(final Calendar end, int months) {
+		int target = end.get(Calendar.YEAR);
+		if (months < 0) {
+			target -= 1;
+		}
+		return target;
+	}
 
     //-----------------------------------------------------------------------
     /**

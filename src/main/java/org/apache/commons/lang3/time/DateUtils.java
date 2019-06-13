@@ -971,33 +971,7 @@ public class DateUtils {
         // Calendar methods.
 
         final Date date = val.getTime();
-        long time = date.getTime();
-        boolean done = false;
-
-        // truncate milliseconds
-        final int millisecs = val.get(Calendar.MILLISECOND);
-        if (ModifyType.TRUNCATE == modType || millisecs < 500) {
-            time = time - millisecs;
-        }
-        if (field == Calendar.SECOND) {
-            done = true;
-        }
-
-        // truncate seconds
-        final int seconds = val.get(Calendar.SECOND);
-        if (!done && (ModifyType.TRUNCATE == modType || seconds < 30)) {
-            time = time - (seconds * 1000L);
-        }
-        if (field == Calendar.MINUTE) {
-            done = true;
-        }
-
-        // truncate minutes
-        final int minutes = val.get(Calendar.MINUTE);
-        if (!done && (ModifyType.TRUNCATE == modType || minutes < 30)) {
-            time = time - (minutes * 60000L);
-        }
-
+        long time = truncateTime(val, field, modType, date);
         // reset time
         if (date.getTime() != time) {
             date.setTime(time);
@@ -1094,6 +1068,30 @@ public class DateUtils {
         throw new IllegalArgumentException("The field " + field + " is not supported");
 
     }
+
+	private static long truncateTime(final Calendar val, final int field, final DateUtils.ModifyType modType, Date date) {
+		long time = date.getTime();
+		boolean done = false;
+		final int millisecs = val.get(Calendar.MILLISECOND);
+		if (ModifyType.TRUNCATE == modType || millisecs < 500) {
+			time = time - millisecs;
+		}
+		if (field == Calendar.SECOND) {
+			done = true;
+		}
+		final int seconds = val.get(Calendar.SECOND);
+		if (!done && (ModifyType.TRUNCATE == modType || seconds < 30)) {
+			time = time - (seconds * 1000L);
+		}
+		if (field == Calendar.MINUTE) {
+			done = true;
+		}
+		final int minutes = val.get(Calendar.MINUTE);
+		if (!done && (ModifyType.TRUNCATE == modType || minutes < 30)) {
+			time = time - (minutes * 60000L);
+		}
+		return time;
+	}
 
     //-----------------------------------------------------------------------
     /**
