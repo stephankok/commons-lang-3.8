@@ -275,16 +275,11 @@ public class WordUtils {
         if (str == null) {
             return null;
         }
-        if (newLineStr == null) {
-            newLineStr = System.lineSeparator();
-        }
-        if (wrapLength < 1) {
-            wrapLength = 1;
-        }
-        if (StringUtils.isBlank(wrapOn)) {
-            wrapOn = " ";
-        }
-        final Pattern patternToWrapOn = Pattern.compile(wrapOn);
+        newLineStr = newLineStr(newLineStr);
+		wrapLength = wrapLength(wrapLength);
+		wrapOn = wrapOn(wrapOn);
+		
+		final Pattern patternToWrapOn = Pattern.compile(wrapOn);
         final int inputLineLength = str.length();
         int offset = 0;
         final StringBuilder wrappedLine = new StringBuilder(inputLineLength + 32);
@@ -347,6 +342,27 @@ public class WordUtils {
 
         return wrappedLine.toString();
     }
+
+	private static String wrapOn(String wrapOn) {
+		if (StringUtils.isBlank(wrapOn)) {
+			wrapOn = " ";
+		}
+		return wrapOn;
+	}
+
+	private static int wrapLength(int wrapLength) {
+		if (wrapLength < 1) {
+			wrapLength = 1;
+		}
+		return wrapLength;
+	}
+
+	private static String newLineStr(String newLineStr) {
+		if (newLineStr == null) {
+			newLineStr = System.lineSeparator();
+		}
+		return newLineStr;
+	}
 
     // Capitalizing
     //-----------------------------------------------------------------------

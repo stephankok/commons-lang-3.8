@@ -176,12 +176,17 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @return this, to enable chaining
      */
     public StrBuilder setNullText(String nullText) {
-        if (nullText != null && nullText.isEmpty()) {
-            nullText = null;
-        }
-        this.nullText = nullText;
+        nullText = nullText(nullText);
+		this.nullText = nullText;
         return this;
     }
+
+	private String nullText(String nullText) {
+		if (nullText != null && nullText.isEmpty()) {
+			nullText = null;
+		}
+		return nullText;
+	}
 
     //-----------------------------------------------------------------------
     /**
@@ -442,13 +447,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
     public int readFrom(final Readable readable) throws IOException {
         final int oldSize = size;
         if (readable instanceof Reader) {
-            final Reader r = (Reader) readable;
-            ensureCapacity(size + 1);
-            int read;
-            while ((read = r.read(buffer, size, buffer.length - size)) != -1) {
-                size += read;
-                ensureCapacity(size + 1);
-            }
+            read(readable);
         } else if (readable instanceof CharBuffer) {
             final CharBuffer cb = (CharBuffer) readable;
             final int remaining = cb.remaining();
@@ -468,6 +467,16 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
         }
         return size - oldSize;
     }
+
+	private void read(final Readable readable) throws java.io.IOException {
+		final Reader r = (Reader) readable;
+		ensureCapacity(size + 1);
+		int read;
+		while ((read = r.read(buffer, size, buffer.length - size)) != -1) {
+			size += read;
+			ensureCapacity(size + 1);
+		}
+	}
 
     //-----------------------------------------------------------------------
     /**
@@ -1507,11 +1516,8 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
     public StrBuilder appendFixedWidthPadLeft(final Object obj, final int width, final char padChar) {
         if (width > 0) {
             ensureCapacity(size + width);
-            String str = (obj == null ? getNullText() : obj.toString());
-            if (str == null) {
-                str = StringUtils.EMPTY;
-            }
-            final int strLen = str.length();
+            String str = emptyStr(obj);
+			final int strLen = str.length();
             if (strLen >= width) {
                 str.getChars(strLen - width, strLen, buffer, size);
             } else {
@@ -1525,6 +1531,14 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
         }
         return this;
     }
+
+	private String emptyStr(final Object obj) {
+		String str = (obj == null ? getNullText() : obj.toString());
+		if (str == null) {
+			str = StringUtils.EMPTY;
+		}
+		return str;
+	}
 
     /**
      * Appends an object to the builder padding on the left to a fixed width.
@@ -1554,10 +1568,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
     public StrBuilder appendFixedWidthPadRight(final Object obj, final int width, final char padChar) {
         if (width > 0) {
             ensureCapacity(size + width);
-            String str = (obj == null ? getNullText() : obj.toString());
-            if (str == null) {
-                str = StringUtils.EMPTY;
-            }
+            String str = emptyStr(obj);
             final int strLen = str.length();
             if (strLen >= width) {
                 str.getChars(0, width, buffer, size);
@@ -1615,10 +1626,8 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      */
     public StrBuilder insert(final int index, String str) {
         validateIndex(index);
-        if (str == null) {
-            str = nullText;
-        }
-        if (str != null) {
+        str = nullStr(str);
+		if (str != null) {
             final int strLen = str.length();
             if (strLen > 0) {
                 final int newSize = size + strLen;
@@ -1630,6 +1639,13 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
         }
         return this;
     }
+
+	private String nullStr(String str) {
+		if (str == null) {
+			str = nullText;
+		}
+		return str;
+	}
 
     /**
      * Inserts the character array into this builder.
@@ -1823,20 +1839,29 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      */
     public StrBuilder deleteAll(final char ch) {
         for (int i = 0; i < size; i++) {
-            if (buffer[i] == ch) {
-                final int start = i;
-                while (++i < size) {
-                    if (buffer[i] != ch) {
-                        break;
-                    }
-                }
-                final int len = i - start;
-                deleteImpl(start, i, len);
-                i -= len;
-            }
+            deleteChar(ch, i);
         }
         return this;
     }
+
+	private void deleteChar(final char ch, int i) {
+		if (buffer[i] == ch) {
+			i = deleteFrom(ch, i);
+		}
+	}
+
+	private int deleteFrom(final char ch, int i) {
+		final int start = i;
+		while (++i < size) {
+			if (buffer[i] != ch) {
+				break;
+			}
+		}
+		final int len = i - start;
+		deleteImpl(start, i, len);
+		i -= len;
+		return i;
+	}
 
     /**
      * Deletes the character wherever it occurs in the builder.
@@ -1864,14 +1889,19 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
     public StrBuilder deleteAll(final String str) {
         final int len = (str == null ? 0 : str.length());
         if (len > 0) {
-            int index = indexOf(str, 0);
-            while (index >= 0) {
-                deleteImpl(index, index + len, len);
-                index = indexOf(str, index);
-            }
+            int index = index2(str, len);
         }
         return this;
     }
+
+	private int index2(final String str, final int len) {
+		int index = indexOf(str, 0);
+		while (index >= 0) {
+			deleteImpl(index, index + len, len);
+			index = indexOf(str, index);
+		}
+		return index;
+	}
 
     /**
      * Deletes the string wherever it occurs in the builder.
@@ -2011,15 +2041,20 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
     public StrBuilder replaceAll(final String searchStr, final String replaceStr) {
         final int searchLen = (searchStr == null ? 0 : searchStr.length());
         if (searchLen > 0) {
-            final int replaceLen = (replaceStr == null ? 0 : replaceStr.length());
-            int index = indexOf(searchStr, 0);
-            while (index >= 0) {
-                replaceImpl(index, index + searchLen, searchLen, replaceStr, replaceLen);
-                index = indexOf(searchStr, index + replaceLen);
-            }
+            int index = index(searchStr, replaceStr, searchLen);
         }
         return this;
     }
+
+	private int index(final String searchStr, final String replaceStr, final int searchLen) {
+		final int replaceLen = (replaceStr == null ? 0 : replaceStr.length());
+		int index = indexOf(searchStr, 0);
+		while (index >= 0) {
+			replaceImpl(index, index + searchLen, searchLen, replaceStr, replaceLen);
+			index = indexOf(searchStr, index + replaceLen);
+		}
+		return index;
+	}
 
     /**
      * Replaces the first instance of the search string with the replace string.
@@ -2117,20 +2152,30 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
             return this;
         }
         final int replaceLen = (replaceStr == null ? 0 : replaceStr.length());
-        for (int i = from; i < to && replaceCount != 0; i++) {
-            final char[] buf = buffer;
-            final int removeLen = matcher.isMatch(buf, i, from, to);
-            if (removeLen > 0) {
-                replaceImpl(i, i + removeLen, removeLen, replaceStr, replaceLen);
-                to = to - removeLen + replaceLen;
-                i = i + replaceLen - 1;
-                if (replaceCount > 0) {
-                    replaceCount--;
-                }
-            }
-        }
-        return this;
+        replaceImpl2(matcher, replaceStr, from, to, replaceCount, replaceLen);
+		return this;
     }
+
+	private void replaceImpl2(final StrMatcher matcher, final String replaceStr, final int from, int to,
+			int replaceCount, final int replaceLen) {
+		for (int i = from; i < to && replaceCount != 0; i++) {
+			final char[] buf = buffer;
+			final int removeLen = matcher.isMatch(buf, i, from, to);
+			if (removeLen > 0) {
+				replaceImpl(i, i + removeLen, removeLen, replaceStr, replaceLen);
+				to = to - removeLen + replaceLen;
+				i = i + replaceLen - 1;
+				replaceCount = decreaseReplaceCount(replaceCount);
+			}
+		}		
+	}
+
+	private int decreaseReplaceCount(int replaceCount) {
+		if (replaceCount > 0) {
+			replaceCount--;
+		}
+		return replaceCount;
+	}
 
     //-----------------------------------------------------------------------
     /**
@@ -2145,13 +2190,21 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
 
         final int half = size / 2;
         final char[] buf = buffer;
-        for (int leftIdx = 0, rightIdx = size - 1; leftIdx < half; leftIdx++,rightIdx--) {
-            final char swap = buf[leftIdx];
-            buf[leftIdx] = buf[rightIdx];
-            buf[rightIdx] = swap;
-        }
-        return this;
+        swapBuffer(half, buf);
+		return this;
     }
+
+	private void swapBuffer(final int half, final char[] buf) {
+		for (int leftIdx = 0, rightIdx = size - 1; leftIdx < half; leftIdx++, rightIdx--) {
+			swap(buf, leftIdx, rightIdx);
+		}
+	}
+
+	private void swap(final char[] buf, int leftIdx, int rightIdx) {
+		final char swap = buf[leftIdx];
+		buf[leftIdx] = buf[rightIdx];
+		buf[rightIdx] = swap;		
+	}
 
     //-----------------------------------------------------------------------
     /**
@@ -2166,14 +2219,9 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
         }
         int len = size;
         final char[] buf = buffer;
-        int pos = 0;
-        while (pos < len && buf[pos] <= ' ') {
-            pos++;
-        }
-        while (pos < len && buf[len - 1] <= ' ') {
-            len--;
-        }
-        if (len < size) {
+        int pos = trimStart(len, buf);
+        len = trimEnd(len, buf, pos);
+		if (len < size) {
             delete(len, size);
         }
         if (pos > 0) {
@@ -2181,6 +2229,21 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
         }
         return this;
     }
+
+	private int trimEnd(int len, final char[] buf, int pos) {
+		while (pos < len && buf[len - 1] <= ' ') {
+			len--;
+		}
+		return len;
+	}
+
+	private int trimStart(int len, final char[] buf) {
+		int pos = 0;
+		while (pos < len && buf[pos] <= ' ') {
+            pos++;
+        }
+		return pos;
+	}
 
     //-----------------------------------------------------------------------
     /**
@@ -2347,10 +2410,8 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @return the new string
      */
     public String midString(int index, final int length) {
-        if (index < 0) {
-            index = 0;
-        }
-        if (length <= 0 || index >= size) {
+        index = minimumIndex(index);
+		if (length <= 0 || index >= size) {
             return StringUtils.EMPTY;
         }
         if (size <= index + length) {
@@ -2358,6 +2419,13 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
         }
         return new String(buffer, index, length);
     }
+
+	private int minimumIndex(int index) {
+		if (index < 0) {
+			index = 0;
+		}
+		return index;
+	}
 
     //-----------------------------------------------------------------------
     /**

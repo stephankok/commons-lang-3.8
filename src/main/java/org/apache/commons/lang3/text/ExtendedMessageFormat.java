@@ -196,19 +196,22 @@ public class ExtendedMessageFormat extends MessageFormat {
         super.applyPattern(stripCustom.toString());
         toPattern = insertFormats(super.toPattern(), foundDescriptions);
         if (containsElements(foundFormats)) {
-            final Format[] origFormats = getFormats();
-            // only loop over what we know we have, as MessageFormat on Java 1.3
-            // seems to provide an extra format element:
-            int i = 0;
-            for (final Iterator<Format> it = foundFormats.iterator(); it.hasNext(); i++) {
-                final Format f = it.next();
-                if (f != null) {
-                    origFormats[i] = f;
-                }
-            }
-            super.setFormats(origFormats);
+            Format[] origFormats = getAllFormats(foundFormats);
+			super.setFormats(origFormats);
         }
     }
+
+	private Format[] getAllFormats(final ArrayList<Format> foundFormats) {
+		final Format[] origFormats = getFormats();
+		int i = 0;
+		for (final Iterator<Format> it = foundFormats.iterator(); it.hasNext(); i++) {
+			final Format f = it.next();
+			if (f != null) {
+				origFormats[i] = f;
+			}
+		}
+		return origFormats;
+	}
 
     /**
      * Throws UnsupportedOperationException - see class Javadoc for details.

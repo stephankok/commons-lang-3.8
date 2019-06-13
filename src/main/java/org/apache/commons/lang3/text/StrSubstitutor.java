@@ -809,15 +809,9 @@ public class StrSubstitutor {
                         } else {
                             // found variable end marker
                             if (nestedVarCount == 0) {
-                                String varNameExpr = new String(chars, startPos
-                                        + startMatchLen, pos - startPos
-                                        - startMatchLen);
-                                if (substitutionInVariablesEnabled) {
-                                    final StrBuilder bufName = new StrBuilder(varNameExpr);
-                                    substitute(bufName, 0, bufName.length());
-                                    varNameExpr = bufName.toString();
-                                }
-                                pos += endMatchLen;
+                                String varNameExpr = varNameExpr(substitutionInVariablesEnabled, chars, startMatchLen,
+										startPos, pos);
+								pos += endMatchLen;
                                 final int endPos = pos;
 
                                 String varName = varNameExpr;
@@ -890,6 +884,17 @@ public class StrSubstitutor {
         }
         return lengthChange;
     }
+
+	private String varNameExpr(final boolean substitutionInVariablesEnabled, char[] chars, final int startMatchLen,
+			final int startPos, int pos) {
+		String varNameExpr = new String(chars, startPos + startMatchLen, pos - startPos - startMatchLen);
+		if (substitutionInVariablesEnabled) {
+			final StrBuilder bufName = new StrBuilder(varNameExpr);
+			substitute(bufName, 0, bufName.length());
+			varNameExpr = bufName.toString();
+		}
+		return varNameExpr;
+	}
 
     /**
      * Checks if the specified variable is already in the stack (list) of variables.

@@ -664,12 +664,17 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
             if (isIgnoreEmptyTokens()) {
                 return;
             }
-            if (isEmptyTokenAsNull()) {
-                tok = null;
-            }
+            tok = nullToken(tok);
         }
         list.add(tok);
     }
+
+	private String nullToken(String tok) {
+		if (isEmptyTokenAsNull()) {
+			tok = null;
+		}
+		return tok;
+	}
 
     /**
      * Reads character by character through the String to get the next token.
@@ -683,21 +688,8 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
      *  immediately after the delimiter), or -1 if end of string found
      */
     private int readNextToken(final char[] srcChars, int start, final int len, final StrBuilder workArea, final List<String> tokenList) {
-        // skip all leading whitespace, unless it is the
-        // field delimiter or the quote character
-        while (start < len) {
-            final int removeLen = Math.max(
-                    getIgnoredMatcher().isMatch(srcChars, start, start, len),
-                    getTrimmerMatcher().isMatch(srcChars, start, start, len));
-            if (removeLen == 0 ||
-                getDelimiterMatcher().isMatch(srcChars, start, start, len) > 0 ||
-                getQuoteMatcher().isMatch(srcChars, start, start, len) > 0) {
-                break;
-            }
-            start += removeLen;
-        }
-
-        // handle reaching end
+        start = start(srcChars, start, len);
+		// handle reaching end
         if (start >= len) {
             addToken(tokenList, StringUtils.EMPTY);
             return -1;
@@ -717,6 +709,19 @@ public class StrTokenizer implements ListIterator<String>, Cloneable {
         }
         return readWithQuotes(srcChars, start, len, workArea, tokenList, 0, 0);
     }
+
+	private int start(final char[] srcChars, int start, final int len) {
+		while (start < len) {
+			final int removeLen = Math.max(getIgnoredMatcher().isMatch(srcChars, start, start, len),
+					getTrimmerMatcher().isMatch(srcChars, start, start, len));
+			if (removeLen == 0 || getDelimiterMatcher().isMatch(srcChars, start, start, len) > 0
+					|| getQuoteMatcher().isMatch(srcChars, start, start, len) > 0) {
+				break;
+			}
+			start += removeLen;
+		}
+		return start;
+	}
 
     /**
      * Reads a possibly quoted string token.
