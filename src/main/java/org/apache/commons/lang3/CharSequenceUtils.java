@@ -101,10 +101,8 @@ public class CharSequenceUtils {
             return ((String) cs).indexOf(searchChar, start);
         }
         final int sz = cs.length();
-        if (start < 0) {
-            start = 0;
-        }
-        if (searchChar < Character.MIN_SUPPLEMENTARY_CODE_POINT) {
+        start = minimumIndex(start);
+		if (searchChar < Character.MIN_SUPPLEMENTARY_CODE_POINT) {
             for (int i = start; i < sz; i++) {
                 if (cs.charAt(i) == searchChar) {
                     return i;
@@ -124,6 +122,13 @@ public class CharSequenceUtils {
         }
         return NOT_FOUND;
     }
+
+	private static int minimumIndex(int start) {
+		if (start < 0) {
+			start = 0;
+		}
+		return start;
+	}
 
     /**
      * Used by the indexOf(CharSequence methods) as a green implementation of indexOf.
@@ -180,10 +185,8 @@ public class CharSequenceUtils {
         if (start < 0) {
             return NOT_FOUND;
         }
-        if (start >= sz) {
-            start = sz - 1;
-        }
-        if (searchChar < Character.MIN_SUPPLEMENTARY_CODE_POINT) {
+        start = startAtEnd(start, sz);
+		if (searchChar < Character.MIN_SUPPLEMENTARY_CODE_POINT) {
             for (int i = start; i >= 0; --i) {
                 if (cs.charAt(i) == searchChar) {
                     return i;
@@ -208,6 +211,13 @@ public class CharSequenceUtils {
         }
         return NOT_FOUND;
     }
+
+	private static int startAtEnd(int start, final int sz) {
+		if (start >= sz) {
+			start = sz - 1;
+		}
+		return start;
+	}
 
     /**
      * Used by the lastIndexOf(CharSequence methods) as a green implementation of lastIndexOf

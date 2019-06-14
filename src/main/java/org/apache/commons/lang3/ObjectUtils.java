@@ -387,13 +387,15 @@ public class ObjectUtils {
     @Deprecated
     public static void identityToString(final StrBuilder builder, final Object object) {
         Validate.notNull(object, "Cannot get the toString of a null object");
-        final String name = object.getClass().getName();
-        final String hexString = Integer.toHexString(System.identityHashCode(object));
-        builder.ensureCapacity(builder.length() +  name.length() + 1 + hexString.length());
-        builder.append(name)
-              .append(AT_SIGN)
-              .append(hexString);
+        builderLongMethod(builder, object);
     }
+
+	private static void builderLongMethod(final StrBuilder builder, final Object object) {
+		final String name = object.getClass().getName();
+		final String hexString = Integer.toHexString(System.identityHashCode(object));
+		builder.ensureCapacity(builder.length() + name.length() + 1 + hexString.length());
+		builder.append(name).append(AT_SIGN).append(hexString);
+	}
 
     /**
      * <p>Appends the toString that would be produced by {@code Object}
@@ -686,34 +688,8 @@ public class ObjectUtils {
      */
     public static <T> T clone(final T obj) {
         if (obj instanceof Cloneable) {
-            final Object result;
-            if (obj.getClass().isArray()) {
-                final Class<?> componentType = obj.getClass().getComponentType();
-                if (componentType.isPrimitive()) {
-                    int length = Array.getLength(obj);
-                    result = Array.newInstance(componentType, length);
-                    while (length-- > 0) {
-                        Array.set(result, length, Array.get(obj, length));
-                    }
-                } else {
-                    result = ((Object[]) obj).clone();
-                }
-            } else {
-                try {
-                    final Method clone = obj.getClass().getMethod("clone");
-                    result = clone.invoke(obj);
-                } catch (final NoSuchMethodException e) {
-                    throw new CloneFailedException("Cloneable type "
-                        + obj.getClass().getName()
-                        + " has no clone method", e);
-                } catch (final IllegalAccessException e) {
-                    throw new CloneFailedException("Cannot clone Cloneable type "
-                        + obj.getClass().getName(), e);
-                } catch (final InvocationTargetException e) {
-                    throw new CloneFailedException("Exception cloning Cloneable type "
-                        + obj.getClass().getName(), e.getCause());
-                }
-            }
+            final Object result = getResultFromClonable(obj);
+            
             @SuppressWarnings("unchecked") // OK because input is of type T
             final T checked = (T) result;
             return checked;
@@ -721,6 +697,38 @@ public class ObjectUtils {
 
         return null;
     }
+
+	private static <T> Object getResultFromClonable(final T obj) {
+		final Object result;
+		if (obj.getClass().isArray()) {
+		    final Class<?> componentType = obj.getClass().getComponentType();
+		    if (componentType.isPrimitive()) {
+		        int length = Array.getLength(obj);
+		        result = Array.newInstance(componentType, length);
+		        while (length-- > 0) {
+		            Array.set(result, length, Array.get(obj, length));
+		        }
+		    } else {
+		        result = ((Object[]) obj).clone();
+		    }
+		} else {
+		    try {
+		        final Method clone = obj.getClass().getMethod("clone");
+		        result = clone.invoke(obj);
+		    } catch (final NoSuchMethodException e) {
+		        throw new CloneFailedException("Cloneable type "
+		            + obj.getClass().getName()
+		            + " has no clone method", e);
+		    } catch (final IllegalAccessException e) {
+		        throw new CloneFailedException("Cannot clone Cloneable type "
+		            + obj.getClass().getName(), e);
+		    } catch (final InvocationTargetException e) {
+		        throw new CloneFailedException("Exception cloning Cloneable type "
+		            + obj.getClass().getName(), e.getCause());
+		    }
+		}
+		return result;
+	}
 
     /**
      * <p>Clone an object if possible.</p>

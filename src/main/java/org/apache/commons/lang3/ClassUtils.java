@@ -230,15 +230,19 @@ public class ClassUtils {
             }
         }
 
-        final int lastDotIdx = className.lastIndexOf(PACKAGE_SEPARATOR_CHAR);
-        final int innerIdx = className.indexOf(
-                INNER_CLASS_SEPARATOR_CHAR, lastDotIdx == -1 ? 0 : lastDotIdx + 1);
-        String out = className.substring(lastDotIdx + 1);
-        if (innerIdx != -1) {
-            out = out.replace(INNER_CLASS_SEPARATOR_CHAR, PACKAGE_SEPARATOR_CHAR);
-        }
-        return out + arrayPrefix;
+        String out = className(className);
+		return out + arrayPrefix;
     }
+
+	private static String className(String className) {
+		final int lastDotIdx = className.lastIndexOf(PACKAGE_SEPARATOR_CHAR);
+		final int innerIdx = className.indexOf(INNER_CLASS_SEPARATOR_CHAR, lastDotIdx == -1 ? 0 : lastDotIdx + 1);
+		String out = className.substring(lastDotIdx + 1);
+		if (innerIdx != -1) {
+			out = out.replace(INNER_CLASS_SEPARATOR_CHAR, PACKAGE_SEPARATOR_CHAR);
+		}
+		return out;
+	}
 
     /**
      * <p>Null-safe version of <code>aClass.getSimpleName()</code></p>
@@ -383,21 +387,23 @@ public class ClassUtils {
             return StringUtils.EMPTY;
         }
 
-        // Strip array encoding
-        while (className.charAt(0) == '[') {
-            className = className.substring(1);
-        }
-        // Strip Object type encoding
-        if (className.charAt(0) == 'L' && className.charAt(className.length() - 1) == ';') {
-            className = className.substring(1);
-        }
-
-        final int i = className.lastIndexOf(PACKAGE_SEPARATOR_CHAR);
+        className = stripArrayEncoding(className);
+		final int i = className.lastIndexOf(PACKAGE_SEPARATOR_CHAR);
         if (i == -1) {
             return StringUtils.EMPTY;
         }
         return className.substring(0, i);
     }
+
+	private static String stripArrayEncoding(String className) {
+		while (className.charAt(0) == '[') {
+			className = className.substring(1);
+		}
+		if (className.charAt(0) == 'L' && className.charAt(className.length() - 1) == ';') {
+			className = className.substring(1);
+		}
+		return className;
+	}
 
     // Abbreviated name
     // ----------------------------------------------------------------------
@@ -456,13 +462,9 @@ public class ClassUtils {
       final String[] output = new String[packageLevels + 1];
       int endIndex = className.length() - 1;
       for (int level = packageLevels; level >= 0; level--) {
-        final int startIndex = className.lastIndexOf('.', endIndex);
-        final String part = className.substring(startIndex + 1, endIndex + 1);
-        availableSpace -= part.length();
-        if (level > 0) {
-          // all elements except top level require an additional char space
-          availableSpace--;
-        }
+	    final int startIndex = className.lastIndexOf('.', endIndex);
+	    final String part = className.substring(startIndex + 1, endIndex + 1);	    	   
+        availableSpace = availableSpace(part, availableSpace, level);        
         if (level == packageLevels) {
           // ClassName is always complete
           output[level] = part;
@@ -479,6 +481,14 @@ public class ClassUtils {
 
       return StringUtils.join(output, '.');
     }
+
+	private static int availableSpace(final String part, int availableSpace, int level) {
+		availableSpace -= part.length();
+		if (level > 0) {
+			availableSpace--;
+		}
+		return availableSpace;
+	}
 
     // Superclasses/Superinterfaces
     // ----------------------------------------------------------------------
@@ -680,12 +690,9 @@ public class ClassUtils {
         if (!ArrayUtils.isSameLength(classArray, toClassArray)) {
             return false;
         }
-        if (classArray == null) {
-            classArray = ArrayUtils.EMPTY_CLASS_ARRAY;
-        }
-        if (toClassArray == null) {
-            toClassArray = ArrayUtils.EMPTY_CLASS_ARRAY;
-        }
+        classArray = checkEmptyClassArray(classArray);
+		toClassArray = checkEmptyClassArray(toClassArray);
+		
         for (int i = 0; i < classArray.length; i++) {
             if (!isAssignable(classArray[i], toClassArray[i], autoboxing)) {
                 return false;
@@ -693,6 +700,13 @@ public class ClassUtils {
         }
         return true;
     }
+
+	private static Class<?>[] checkEmptyClassArray(Class<?>[] classArray) {
+		if (classArray == null) {
+			classArray = ArrayUtils.EMPTY_CLASS_ARRAY;
+		}
+		return classArray;
+	}
 
     /**
      * Returns whether the given {@code type} is a primitive or primitive wrapper ({@link Boolean}, {@link Byte}, {@link Character},

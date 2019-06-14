@@ -2545,26 +2545,27 @@ public class StringUtils {
             return INDEX_NOT_FOUND;
         }
 
-        // String's can't have a MAX_VALUEth index.
-        int ret = Integer.MAX_VALUE;
-
-        int tmp = 0;
-        for (final CharSequence search : searchStrs) {
-            if (search == null) {
-                continue;
-            }
-            tmp = CharSequenceUtils.indexOf(str, search, 0);
-            if (tmp == INDEX_NOT_FOUND) {
-                continue;
-            }
-
-            if (tmp < ret) {
-                ret = tmp;
-            }
-        }
-
-        return ret == Integer.MAX_VALUE ? INDEX_NOT_FOUND : ret;
+        int ret = indexOfAny2(str, searchStrs);
+		return ret == Integer.MAX_VALUE ? INDEX_NOT_FOUND : ret;
     }
+
+	private static int indexOfAny2(final CharSequence str, final CharSequence[] searchStrs) {
+		int ret = Integer.MAX_VALUE;
+		int tmp = 0;
+		for (final CharSequence search : searchStrs) {
+			if (search == null) {
+				continue;
+			}
+			tmp = CharSequenceUtils.indexOf(str, search, 0);
+			if (tmp == INDEX_NOT_FOUND) {
+				continue;
+			}
+			if (tmp < ret) {
+				ret = tmp;
+			}
+		}
+		return ret;
+	}
 
     /**
      * <p>Find the latest index of any of a set of potential substrings.</p>
@@ -2641,20 +2642,24 @@ public class StringUtils {
             return null;
         }
 
-        // handle negatives, which means last n characters
-        if (start < 0) {
-            start = str.length() + start; // remember start is negative
-        }
-
-        if (start < 0) {
-            start = 0;
-        }
-        if (start > str.length()) {
+        start = handleNegativeSubstring(str, start);
+        
+		if (start > str.length()) {
             return EMPTY;
         }
 
         return str.substring(start);
     }
+
+	private static int handleNegativeSubstring(final String str, int start) {
+		if (start < 0) {
+			start = str.length() + start;
+		}
+		if (start < 0) {
+			start = 0;
+		}
+		return start;
+	}
 
     /**
      * <p>Gets a substring from the specified String avoiding exceptions.</p>
@@ -2824,14 +2829,19 @@ public class StringUtils {
         if (len < 0 || pos > str.length()) {
             return EMPTY;
         }
-        if (pos < 0) {
-            pos = 0;
-        }
-        if (str.length() <= pos + len) {
+        pos = minimumIndex(pos);
+		if (str.length() <= pos + len) {
             return str.substring(pos);
         }
         return str.substring(pos, pos + len);
     }
+
+	private static int minimumIndex(int pos) {
+		if (pos < 0) {
+			pos = 0;
+		}
+		return pos;
+	}
 
     private static StringBuilder newStringBuilder(final int noOfItems) {
         return new StringBuilder(noOfItems * 16);
@@ -4572,11 +4582,8 @@ public class StringUtils {
         if (array == null) {
             return null;
         }
-        if (separator == null) {
-            separator = EMPTY;
-        }
-
-        // endIndex - startIndex > 0:   Len = NofStrings *(len(firstString) + len(separator))
+        separator = checkEmptyString(separator);
+		// endIndex - startIndex > 0:   Len = NofStrings *(len(firstString) + len(separator))
         //           (Assuming that all Strings are roughly equally long)
         final int noOfItems = endIndex - startIndex;
         if (noOfItems <= 0) {
@@ -5594,20 +5601,15 @@ public class StringUtils {
          if (isEmpty(text) || isEmpty(searchString) || replacement == null || max == 0) {
              return text;
          }
-         String searchText = text;
-         if (ignoreCase) {
-             searchText = text.toLowerCase();
-             searchString = searchString.toLowerCase();
-         }
+         String searchText = toLower(text, ignoreCase);
+         searchString = toLower(searchString, ignoreCase);
          int start = 0;
          int end = searchText.indexOf(searchString, start);
          if (end == INDEX_NOT_FOUND) {
              return text;
          }
          final int replLength = searchString.length();
-         int increase = replacement.length() - replLength;
-         increase = increase < 0 ? 0 : increase;
-         increase *= max < 0 ? 16 : max > 64 ? 64 : max;
+         int increase = increaseLongMethod(searchString, replacement, max, replLength);
          final StringBuilder buf = new StringBuilder(text.length() + increase);
          while (end != INDEX_NOT_FOUND) {
              buf.append(text, start, end).append(replacement);
@@ -5620,6 +5622,21 @@ public class StringUtils {
          buf.append(text, start, text.length());
          return buf.toString();
      }
+
+	private static String toLower(final String text, final boolean ignoreCase) {
+		String lowerText = text;
+		if (ignoreCase) {
+			lowerText = text.toLowerCase();
+		}
+		return lowerText;
+	}
+
+	private static int increaseLongMethod(String searchString, final String replacement, int max, int replLength) {		
+		int increase = replacement.length() - replLength;
+		increase = increase < 0 ? 0 : increase;
+		increase *= max < 0 ? 16 : max > 64 ? 64 : max;
+		return increase;
+	}
 
     /**
      * <p>Case insensitively replaces a String with another String inside a larger String,
@@ -5860,23 +5877,9 @@ public class StringUtils {
 
         int start = 0;
 
-        // get a good guess on the size of the result buffer so it doesn't have to double if it goes over a bit
-        int increase = 0;
-
-        // count the replacement text elements that are larger than their corresponding text being replaced
-        for (int i = 0; i < searchList.length; i++) {
-            if (searchList[i] == null || replacementList[i] == null) {
-                continue;
-            }
-            final int greater = replacementList[i].length() - searchList[i].length();
-            if (greater > 0) {
-                increase += 3 * greater; // assume 3 matches
-            }
-        }
-        // have upper-bound at 20% increase, then let Java take over
-        increase = Math.min(increase, text.length() / 5);
-
-        final StringBuilder buf = new StringBuilder(text.length() + increase);
+        int increase = countReplacementText(text, searchList, replacementList);
+        
+		final StringBuilder buf = new StringBuilder(text.length() + increase);
 
         while (textIndex != -1) {
 
@@ -5923,6 +5926,22 @@ public class StringUtils {
 
         return replaceEach(result, searchList, replacementList, repeat, timeToLive - 1);
     }
+
+	private static int countReplacementText(final String text, final String[] searchList,
+			final String[] replacementList) {
+		int increase = 0;
+		for (int i = 0; i < searchList.length; i++) {
+			if (searchList[i] == null || replacementList[i] == null) {
+				continue;
+			}
+			final int greater = replacementList[i].length() - searchList[i].length();
+			if (greater > 0) {
+				increase += 3 * greater;
+			}
+		}
+		increase = Math.min(increase, text.length() / 5);
+		return increase;
+	}
 
     // Replace, character based
     //-----------------------------------------------------------------------
@@ -5993,9 +6012,7 @@ public class StringUtils {
         if (isEmpty(str) || isEmpty(searchChars)) {
             return str;
         }
-        if (replaceChars == null) {
-            replaceChars = EMPTY;
-        }
+        replaceChars = checkEmptyString(replaceChars);
         boolean modified = false;
         final int replaceCharsLength = replaceChars.length();
         final int strLength = str.length();
@@ -6053,10 +6070,8 @@ public class StringUtils {
         if (str == null) {
             return null;
         }
-        if (overlay == null) {
-            overlay = EMPTY;
-        }
-        final int len = str.length();
+        overlay = checkEmptyString(overlay);
+		final int len = str.length();
         if (start < 0) {
             start = 0;
         }
@@ -6078,6 +6093,13 @@ public class StringUtils {
             overlay +
             str.substring(end);
     }
+
+	private static String checkEmptyString(String overlay) {
+		if (overlay == null) {
+			overlay = EMPTY;
+		}
+		return overlay;
+	}
 
     // Chomping
     //-----------------------------------------------------------------------
@@ -6119,18 +6141,22 @@ public class StringUtils {
             return str;
         }
 
-        int lastIdx = str.length() - 1;
-        final char last = str.charAt(lastIdx);
-
-        if (last == CharUtils.LF) {
-            if (str.charAt(lastIdx - 1) == CharUtils.CR) {
-                lastIdx--;
-            }
-        } else if (last != CharUtils.CR) {
-            lastIdx++;
-        }
-        return str.substring(0, lastIdx);
+        int lastIdx = removeNewLine(str);
+		return str.substring(0, lastIdx);
     }
+
+	private static int removeNewLine(final String str) {
+		int lastIdx = str.length() - 1;
+		final char last = str.charAt(lastIdx);
+		if (last == CharUtils.LF) {
+			if (str.charAt(lastIdx - 1) == CharUtils.CR) {
+				lastIdx--;
+			}
+		} else if (last != CharUtils.CR) {
+			lastIdx++;
+		}
+		return lastIdx;
+	}
 
     /**
      * <p>Removes {@code separator} from the end of
@@ -6415,9 +6441,7 @@ public class StringUtils {
         if (str == null) {
             return null;
         }
-        if (isEmpty(padStr)) {
-            padStr = SPACE;
-        }
+        padStr = checkEmptySpace(padStr);
         final int padLen = padStr.length();
         final int strLen = str.length();
         final int pads = size - strLen;
@@ -6433,11 +6457,7 @@ public class StringUtils {
         } else if (pads < padLen) {
             return str.concat(padStr.substring(0, pads));
         } else {
-            final char[] padding = new char[pads];
-            final char[] padChars = padStr.toCharArray();
-            for (int i = 0; i < pads; i++) {
-                padding[i] = padChars[i % padLen];
-            }
+        	char[] padding = calculatePadding(padStr, padLen, pads);
             return str.concat(new String(padding));
         }
     }
@@ -6527,9 +6547,7 @@ public class StringUtils {
         if (str == null) {
             return null;
         }
-        if (isEmpty(padStr)) {
-            padStr = SPACE;
-        }
+        padStr = checkEmptySpace(padStr);
         final int padLen = padStr.length();
         final int strLen = str.length();
         final int pads = size - strLen;
@@ -6545,14 +6563,19 @@ public class StringUtils {
         } else if (pads < padLen) {
             return padStr.substring(0, pads).concat(str);
         } else {
-            final char[] padding = new char[pads];
-            final char[] padChars = padStr.toCharArray();
-            for (int i = 0; i < pads; i++) {
-                padding[i] = padChars[i % padLen];
-            }
-            return new String(padding).concat(str);
+            char[] padding = calculatePadding(padStr, padLen, pads);
+			return new String(padding).concat(str);
         }
     }
+
+	private static char[] calculatePadding(String padStr, final int padLen, final int pads) {
+		final char[] padding = new char[pads];
+		final char[] padChars = padStr.toCharArray();
+		for (int i = 0; i < pads; i++) {
+			padding[i] = padChars[i % padLen];
+		}
+		return padding;
+	}
 
     /**
      * Gets a CharSequence length or {@code 0} if the CharSequence is
@@ -6666,10 +6689,8 @@ public class StringUtils {
         if (str == null || size <= 0) {
             return str;
         }
-        if (isEmpty(padStr)) {
-            padStr = SPACE;
-        }
-        final int strLen = str.length();
+        padStr = checkEmptySpace(padStr);
+		final int strLen = str.length();
         final int pads = size - strLen;
         if (pads <= 0) {
             return str;
@@ -6678,6 +6699,13 @@ public class StringUtils {
         str = rightPad(str, size, padStr);
         return str;
     }
+
+	private static String checkEmptySpace(String padStr) {
+		if (isEmpty(padStr)) {
+			padStr = SPACE;
+		}
+		return padStr;
+	}
 
     // Case conversion
     //-----------------------------------------------------------------------
@@ -6905,22 +6933,27 @@ public class StringUtils {
         final int newCodePoints[] = new int[strLen]; // cannot be longer than the char array
         int outOffset = 0;
         for (int i = 0; i < strLen; ) {
-            final int oldCodepoint = str.codePointAt(i);
-            final int newCodePoint;
-            if (Character.isUpperCase(oldCodepoint)) {
-                newCodePoint = Character.toLowerCase(oldCodepoint);
-            } else if (Character.isTitleCase(oldCodepoint)) {
-                newCodePoint = Character.toLowerCase(oldCodepoint);
-            } else if (Character.isLowerCase(oldCodepoint)) {
-                newCodePoint = Character.toUpperCase(oldCodepoint);
-            } else {
-                newCodePoint = oldCodepoint;
-            }
-            newCodePoints[outOffset++] = newCodePoint;
+            int newCodePoint = newCodePoint(str, i);
+			newCodePoints[outOffset++] = newCodePoint;
             i += Character.charCount(newCodePoint);
          }
         return new String(newCodePoints, 0, outOffset);
     }
+
+	private static int newCodePoint(final String str, int i) {
+		final int oldCodepoint = str.codePointAt(i);
+		final int newCodePoint;
+		if (Character.isUpperCase(oldCodepoint)) {
+			newCodePoint = Character.toLowerCase(oldCodepoint);
+		} else if (Character.isTitleCase(oldCodepoint)) {
+			newCodePoint = Character.toLowerCase(oldCodepoint);
+		} else if (Character.isLowerCase(oldCodepoint)) {
+			newCodePoint = Character.toUpperCase(oldCodepoint);
+		} else {
+			newCodePoint = oldCodepoint;
+		}
+		return newCodePoint;
+	}
 
     // Count matches
     //-----------------------------------------------------------------------
@@ -7864,13 +7897,8 @@ public class StringUtils {
         if (str.length() <= maxWidth) {
             return str;
         }
-        if (offset > str.length()) {
-            offset = str.length();
-        }
-        if (str.length() - offset < maxWidth - abbrevMarkerLength) {
-            offset = str.length() - (maxWidth - abbrevMarkerLength);
-        }
-        if (offset <= abbrevMarkerLength+1) {
+        offset = offset(str, offset, maxWidth, abbrevMarkerLength);
+		if (offset <= abbrevMarkerLength+1) {
             return str.substring(0, maxWidth - abbrevMarkerLength) + abbrevMarker;
         }
         if (maxWidth < minAbbrevWidthOffset) {
@@ -7881,6 +7909,16 @@ public class StringUtils {
         }
         return abbrevMarker + str.substring(str.length() - (maxWidth - abbrevMarkerLength));
     }
+
+	private static int offset(final String str, int offset, final int maxWidth, final int abbrevMarkerLength) {
+		if (offset > str.length()) {
+			offset = str.length();
+		}
+		if (str.length() - offset < maxWidth - abbrevMarkerLength) {
+			offset = str.length() - (maxWidth - abbrevMarkerLength);
+		}
+		return offset;
+	}
 
     /**
      * <p>Abbreviates a String to the length passed, replacing the middle characters with the supplied
@@ -8221,36 +8259,34 @@ public class StringUtils {
             m = t.length();
         }
 
-        final int p[] = new int[n + 1];
-        // indexes into strings s and t
-        int i; // iterates through s
-        int j; // iterates through t
-        int upper_left;
-        int upper;
-
-        char t_j; // jth character of t
-        int cost;
-
-        for (i = 0; i <= n; i++) {
-            p[i] = i;
-        }
-
-        for (j = 1; j <= m; j++) {
-            upper_left = p[0];
-            t_j = t.charAt(j - 1);
-            p[0] = j;
-
-            for (i = 1; i <= n; i++) {
-                upper = p[i];
-                cost = s.charAt(i - 1) == t_j ? 0 : 1;
-                // minimum of cell to the left+1, to the top+1, diagonally left and up +cost
-                p[i] = Math.min(Math.min(p[i - 1] + 1, p[i] + 1), upper_left + cost);
-                upper_left = upper;
-            }
-        }
-
-        return p[n];
+        int[] p = levenshteinCalculation(s, t, n, m);
+		return p[n];
     }
+
+	private static int[] levenshteinCalculation(CharSequence s, CharSequence t, int n, int m) {
+		final int p[] = new int[n + 1];
+		int i;
+		int j;
+		int upper_left;
+		int upper;
+		char t_j;
+		int cost;
+		for (i = 0; i <= n; i++) {
+			p[i] = i;
+		}
+		for (j = 1; j <= m; j++) {
+			upper_left = p[0];
+			t_j = t.charAt(j - 1);
+			p[0] = j;
+			for (i = 1; i <= n; i++) {
+				upper = p[i];
+				cost = s.charAt(i - 1) == t_j ? 0 : 1;
+				p[i] = Math.min(Math.min(p[i - 1] + 1, p[i] + 1), upper_left + cost);
+				upper_left = upper;
+			}
+		}
+		return p;
+	}
 
     /**
      * <p>Find the Levenshtein distance between two Strings if it's less than or equal to a given
@@ -8512,22 +8548,32 @@ public class StringUtils {
                 si++;
             }
         }
-        int transpositions = 0;
-        for (int mi = 0; mi < ms1.length; mi++) {
-            if (ms1[mi] != ms2[mi]) {
-                transpositions++;
-            }
-        }
-        int prefix = 0;
-        for (int mi = 0; mi < min.length(); mi++) {
-            if (first.charAt(mi) == second.charAt(mi)) {
-                prefix++;
-            } else {
-                break;
-            }
-        }
-        return new int[] { matches, transpositions / 2, prefix, max.length() };
+        int transpositions = transpositions(ms1, ms2);
+		int prefix = prefix(first, second, min);
+		return new int[] { matches, transpositions / 2, prefix, max.length() };
     }
+
+	private static int transpositions(final char[] ms1, final char[] ms2) {
+		int transpositions = 0;
+		for (int mi = 0; mi < ms1.length; mi++) {
+			if (ms1[mi] != ms2[mi]) {
+				transpositions++;
+			}
+		}
+		return transpositions;
+	}
+
+	private static int prefix(final CharSequence first, final CharSequence second, CharSequence min) {
+		int prefix = 0;
+		for (int mi = 0; mi < min.length(); mi++) {
+			if (first.charAt(mi) == second.charAt(mi)) {
+				prefix++;
+			} else {
+				break;
+			}
+		}
+		return prefix;
+	}
 
     /**
      * <p>Find the Fuzzy Distance which indicates the similarity score between two Strings.</p>
