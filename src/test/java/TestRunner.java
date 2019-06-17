@@ -64,7 +64,11 @@ public class TestRunner {
 		System.out.println("IgnoreCount: " + result.getIgnoreCount() + "\n");
 		System.out.print("Failed runs: ");
 		for (int i = 0; i < result.getFailures().size(); i++) {			
-			System.out.println("    " + result.getFailures().get(i));
+			System.out.println("    " + result.getFailures().get(i));			
+			System.out.println("    " + result.getFailures().get(i).getMessage());
+			System.out.println("    " + result.getFailures().get(i).getTrace());
+			System.out.println("    " + result.getFailures().get(i).getTestHeader());
+			System.out.println("    ");
 		}
 	}
 	
