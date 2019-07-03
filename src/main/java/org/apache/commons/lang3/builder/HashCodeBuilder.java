@@ -101,7 +101,9 @@ import org.apache.commons.lang3.Validate;
  * @since 1.0
  */
 public class HashCodeBuilder implements Builder<Integer> {
-    /**
+    private HashCodeBuilderProduct hashCodeBuilderProduct = new HashCodeBuilderProduct();
+
+	/**
      * The default initial value to use in reflection hash code building.
      */
     private static final int DEFAULT_INITIAL_VALUE = 17;
@@ -591,8 +593,7 @@ public class HashCodeBuilder implements Builder<Integer> {
      * @return this
      */
     public HashCodeBuilder append(final boolean value) {
-        iTotal = iTotal * iConstant + (value ? 0 : 1);
-        return this;
+        return hashCodeBuilderProduct.append(value, this, this.iConstant);
     }
 
     /**
@@ -605,14 +606,7 @@ public class HashCodeBuilder implements Builder<Integer> {
      * @return this
      */
     public HashCodeBuilder append(final boolean[] array) {
-        if (array == null) {
-            iTotal = iTotal * iConstant;
-        } else {
-            for (final boolean element : array) {
-                append(element);
-            }
-        }
-        return this;
+        return hashCodeBuilderProduct.append(array, this, this.iConstant);
     }
 
     // -------------------------------------------------------------------------
@@ -627,8 +621,7 @@ public class HashCodeBuilder implements Builder<Integer> {
      * @return this
      */
     public HashCodeBuilder append(final byte value) {
-        iTotal = iTotal * iConstant + value;
-        return this;
+        return hashCodeBuilderProduct.append(value, this, this.iConstant);
     }
 
     // -------------------------------------------------------------------------
@@ -643,14 +636,7 @@ public class HashCodeBuilder implements Builder<Integer> {
      * @return this
      */
     public HashCodeBuilder append(final byte[] array) {
-        if (array == null) {
-            iTotal = iTotal * iConstant;
-        } else {
-            for (final byte element : array) {
-                append(element);
-            }
-        }
-        return this;
+        return hashCodeBuilderProduct.append(array, this, this.iConstant);
     }
 
     /**
@@ -663,8 +649,7 @@ public class HashCodeBuilder implements Builder<Integer> {
      * @return this
      */
     public HashCodeBuilder append(final char value) {
-        iTotal = iTotal * iConstant + value;
-        return this;
+        return hashCodeBuilderProduct.append(value, this, this.iConstant);
     }
 
     /**
@@ -677,14 +662,7 @@ public class HashCodeBuilder implements Builder<Integer> {
      * @return this
      */
     public HashCodeBuilder append(final char[] array) {
-        if (array == null) {
-            iTotal = iTotal * iConstant;
-        } else {
-            for (final char element : array) {
-                append(element);
-            }
-        }
-        return this;
+        return hashCodeBuilderProduct.append(array, this, this.iConstant);
     }
 
     /**
@@ -869,15 +847,15 @@ public class HashCodeBuilder implements Builder<Integer> {
         } else if (object instanceof short[]) {
             append((short[]) object);
         } else if (object instanceof char[]) {
-            append((char[]) object);
+            hashCodeBuilderProduct.append((char[]) object, this, this.iConstant);
         } else if (object instanceof byte[]) {
-            append((byte[]) object);
+            hashCodeBuilderProduct.append((byte[]) object, this, this.iConstant);
         } else if (object instanceof double[]) {
             append((double[]) object);
         } else if (object instanceof float[]) {
             append((float[]) object);
         } else if (object instanceof boolean[]) {
-            append((boolean[]) object);
+            hashCodeBuilderProduct.append((boolean[]) object, this, this.iConstant);
         } else {
             // Not an array of primitives
             append((Object[]) object);
@@ -989,5 +967,9 @@ public class HashCodeBuilder implements Builder<Integer> {
     public int hashCode() {
         return toHashCode();
     }
+
+	public void setITotal(int iTotal) {
+		this.iTotal = iTotal;
+	}
 
 }

@@ -7,10 +7,9 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
 public class ReflectionToStringBuilderProduct {
+	private ReflectionToStringBuilderProductField reflectionToStringBuilderProductField = new ReflectionToStringBuilderProductField();
 	private boolean appendStatics = false;
 	private boolean appendTransients = false;
-	private String[] excludeFieldNames;
-
 	public boolean getAppendStatics() {
 		return appendStatics;
 	}
@@ -42,7 +41,7 @@ public class ReflectionToStringBuilderProduct {
 		if (Modifier.isStatic(field.getModifiers()) && !appendStatics) {
 			return false;
 		}
-		if (this.excludeFieldNames != null && Arrays.binarySearch(this.excludeFieldNames, field.getName()) >= 0) {
+		if (this.reflectionToStringBuilderProductField.getExcludeFieldNames2() != null && Arrays.binarySearch(this.reflectionToStringBuilderProductField.getExcludeFieldNames2(), field.getName()) >= 0) {
 			return false;
 		}
 		return !field.isAnnotationPresent(ToStringExclude.class);
@@ -52,7 +51,7 @@ public class ReflectionToStringBuilderProduct {
 	* @return  Returns the excludeFieldNames.
 	*/
 	public String[] getExcludeFieldNames() {
-		return this.excludeFieldNames.clone();
+		return reflectionToStringBuilderProductField.getExcludeFieldNames();
 	}
 
 	/**
@@ -62,13 +61,8 @@ public class ReflectionToStringBuilderProduct {
 	*/
 	public ReflectionToStringBuilder setExcludeFieldNames(ReflectionToStringBuilder reflectionToStringBuilder,
 			final String... excludeFieldNamesParam) {
-		if (excludeFieldNamesParam == null) {
-			this.excludeFieldNames = null;
-		} else {
-			this.excludeFieldNames = ReflectionToStringBuilder.toNoNullStringArray(excludeFieldNamesParam);
-			Arrays.sort(this.excludeFieldNames);
-		}
-		return reflectionToStringBuilder;
+		return reflectionToStringBuilderProductField.setExcludeFieldNames(reflectionToStringBuilder,
+				excludeFieldNamesParam);
 	}
 
 	/**

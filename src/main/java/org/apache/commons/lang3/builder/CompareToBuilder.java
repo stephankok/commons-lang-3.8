@@ -94,7 +94,8 @@ import org.apache.commons.lang3.ArrayUtils;
  */
 public class CompareToBuilder implements Builder<Integer> {
 
-    /**
+    private CompareToBuilderAppend compareToBuilderAppend = new CompareToBuilderAppend();
+	/**
      * Current state of the comparison as appended fields are checked.
      */
     private int comparison;
@@ -139,7 +140,7 @@ public class CompareToBuilder implements Builder<Integer> {
      *  with <code>lhs</code>
      */
     public static int reflectionCompare(final Object lhs, final Object rhs) {
-        return reflectionCompare(lhs, rhs, false, null);
+        return CompareToBuilderAppend.reflectionCompare(lhs, rhs, false, null);
     }
 
     /**
@@ -171,7 +172,7 @@ public class CompareToBuilder implements Builder<Integer> {
      *  with <code>lhs</code>
      */
     public static int reflectionCompare(final Object lhs, final Object rhs, final boolean compareTransients) {
-        return reflectionCompare(lhs, rhs, compareTransients, null);
+        return CompareToBuilderAppend.reflectionCompare(lhs, rhs, compareTransients, null);
     }
 
     /**
@@ -237,7 +238,7 @@ public class CompareToBuilder implements Builder<Integer> {
      * @since 2.2
      */
     public static int reflectionCompare(final Object lhs, final Object rhs, final String... excludeFields) {
-        return reflectionCompare(lhs, rhs, false, null, excludeFields);
+        return CompareToBuilderAppend.reflectionCompare(lhs, rhs, false, null, excludeFields);
     }
 
     /**
@@ -279,23 +280,7 @@ public class CompareToBuilder implements Builder<Integer> {
         final Class<?> reflectUpToClass,
         final String... excludeFields) {
 
-        if (lhs == rhs) {
-            return 0;
-        }
-        if (lhs == null || rhs == null) {
-            throw new NullPointerException();
-        }
-        Class<?> lhsClazz = lhs.getClass();
-        if (!lhsClazz.isInstance(rhs)) {
-            throw new ClassCastException();
-        }
-        final CompareToBuilder compareToBuilder = new CompareToBuilder();
-        reflectionAppend(lhs, rhs, lhsClazz, compareToBuilder, compareTransients, excludeFields);
-        while (lhsClazz.getSuperclass() != null && lhsClazz != reflectUpToClass) {
-            lhsClazz = lhsClazz.getSuperclass();
-            reflectionAppend(lhs, rhs, lhsClazz, compareToBuilder, compareTransients, excludeFields);
-        }
-        return compareToBuilder.toComparison();
+        return CompareToBuilderAppend.reflectionCompare(lhs, rhs, compareTransients, reflectUpToClass, excludeFields);
     }
 
     /**
@@ -309,7 +294,7 @@ public class CompareToBuilder implements Builder<Integer> {
      * @param useTransients  whether to compare transient fields
      * @param excludeFields  fields to exclude
      */
-    private static void reflectionAppend(
+    public static void reflectionAppend(
         final Object lhs,
         final Object rhs,
         final Class<?> clazz,
@@ -346,11 +331,7 @@ public class CompareToBuilder implements Builder<Integer> {
      * @since 2.0
      */
     public CompareToBuilder appendSuper(final int superCompareTo) {
-        if (comparison != 0) {
-            return this;
-        }
-        comparison = superCompareTo;
-        return this;
+        return compareToBuilderAppend.appendSuper(superCompareTo, this);
     }
 
     //-----------------------------------------------------------------------
@@ -440,19 +421,19 @@ public class CompareToBuilder implements Builder<Integer> {
         // handles multi dimensional arrays
         // throws a ClassCastException if rhs is not the correct array type
         if (lhs instanceof long[]) {
-            append((long[]) lhs, (long[]) rhs);
+            compareToBuilderAppend.append((long[]) lhs, (long[]) rhs, this);
         } else if (lhs instanceof int[]) {
-            append((int[]) lhs, (int[]) rhs);
+            compareToBuilderAppend.append((int[]) lhs, (int[]) rhs, this);
         } else if (lhs instanceof short[]) {
-            append((short[]) lhs, (short[]) rhs);
+            compareToBuilderAppend.append((short[]) lhs, (short[]) rhs, this);
         } else if (lhs instanceof char[]) {
-            append((char[]) lhs, (char[]) rhs);
+            compareToBuilderAppend.append((char[]) lhs, (char[]) rhs, this);
         } else if (lhs instanceof byte[]) {
-            append((byte[]) lhs, (byte[]) rhs);
+            compareToBuilderAppend.append((byte[]) lhs, (byte[]) rhs, this);
         } else if (lhs instanceof double[]) {
-            append((double[]) lhs, (double[]) rhs);
+            compareToBuilderAppend.append((double[]) lhs, (double[]) rhs, this);
         } else if (lhs instanceof float[]) {
-            append((float[]) lhs, (float[]) rhs);
+            compareToBuilderAppend.append((float[]) lhs, (float[]) rhs, this);
         } else if (lhs instanceof boolean[]) {
             append((boolean[]) lhs, (boolean[]) rhs);
         } else {
@@ -472,11 +453,7 @@ public class CompareToBuilder implements Builder<Integer> {
      * @return this - used to chain append calls
      */
     public CompareToBuilder append(final long lhs, final long rhs) {
-        if (comparison != 0) {
-            return this;
-        }
-        comparison = Long.compare(lhs, rhs);
-        return this;
+        return compareToBuilderAppend.append(lhs, rhs, this);
     }
 
     /**
@@ -488,11 +465,7 @@ public class CompareToBuilder implements Builder<Integer> {
      * @return this - used to chain append calls
      */
     public CompareToBuilder append(final int lhs, final int rhs) {
-        if (comparison != 0) {
-            return this;
-        }
-        comparison = Integer.compare(lhs, rhs);
-        return this;
+        return compareToBuilderAppend.append(lhs, rhs, this);
     }
 
     /**
@@ -504,11 +477,7 @@ public class CompareToBuilder implements Builder<Integer> {
      * @return this - used to chain append calls
      */
     public CompareToBuilder append(final short lhs, final short rhs) {
-        if (comparison != 0) {
-            return this;
-        }
-        comparison = Short.compare(lhs, rhs);
-        return this;
+        return compareToBuilderAppend.append(lhs, rhs, this);
     }
 
     /**
@@ -520,11 +489,7 @@ public class CompareToBuilder implements Builder<Integer> {
      * @return this - used to chain append calls
      */
     public CompareToBuilder append(final char lhs, final char rhs) {
-        if (comparison != 0) {
-            return this;
-        }
-        comparison = Character.compare(lhs, rhs);
-        return this;
+        return compareToBuilderAppend.append(lhs, rhs, this);
     }
 
     /**
@@ -536,11 +501,7 @@ public class CompareToBuilder implements Builder<Integer> {
      * @return this - used to chain append calls
      */
     public CompareToBuilder append(final byte lhs, final byte rhs) {
-        if (comparison != 0) {
-            return this;
-        }
-        comparison = Byte.compare(lhs, rhs);
-        return this;
+        return compareToBuilderAppend.append(lhs, rhs, this);
     }
 
     /**
@@ -557,11 +518,7 @@ public class CompareToBuilder implements Builder<Integer> {
      * @return this - used to chain append calls
      */
     public CompareToBuilder append(final double lhs, final double rhs) {
-        if (comparison != 0) {
-            return this;
-        }
-        comparison = Double.compare(lhs, rhs);
-        return this;
+        return compareToBuilderAppend.append(lhs, rhs, this);
     }
 
     /**
@@ -578,11 +535,7 @@ public class CompareToBuilder implements Builder<Integer> {
      * @return this - used to chain append calls
      */
     public CompareToBuilder append(final float lhs, final float rhs) {
-        if (comparison != 0) {
-            return this;
-        }
-        comparison = Float.compare(lhs, rhs);
-        return this;
+        return compareToBuilderAppend.append(lhs, rhs, this);
     }
 
     /**
@@ -697,28 +650,7 @@ public class CompareToBuilder implements Builder<Integer> {
      * @return this - used to chain append calls
      */
     public CompareToBuilder append(final long[] lhs, final long[] rhs) {
-        if (comparison != 0) {
-            return this;
-        }
-        if (lhs == rhs) {
-            return this;
-        }
-        if (lhs == null) {
-            comparison = -1;
-            return this;
-        }
-        if (rhs == null) {
-            comparison = 1;
-            return this;
-        }
-        if (lhs.length != rhs.length) {
-            comparison = lhs.length < rhs.length ? -1 : 1;
-            return this;
-        }
-        for (int i = 0; i < lhs.length && comparison == 0; i++) {
-            append(lhs[i], rhs[i]);
-        }
-        return this;
+        return compareToBuilderAppend.append(lhs, rhs, this);
     }
 
     /**
@@ -737,28 +669,7 @@ public class CompareToBuilder implements Builder<Integer> {
      * @return this - used to chain append calls
      */
     public CompareToBuilder append(final int[] lhs, final int[] rhs) {
-        if (comparison != 0) {
-            return this;
-        }
-        if (lhs == rhs) {
-            return this;
-        }
-        if (lhs == null) {
-            comparison = -1;
-            return this;
-        }
-        if (rhs == null) {
-            comparison = 1;
-            return this;
-        }
-        if (lhs.length != rhs.length) {
-            comparison = lhs.length < rhs.length ? -1 : 1;
-            return this;
-        }
-        for (int i = 0; i < lhs.length && comparison == 0; i++) {
-            append(lhs[i], rhs[i]);
-        }
-        return this;
+        return compareToBuilderAppend.append(lhs, rhs, this);
     }
 
     /**
@@ -777,28 +688,7 @@ public class CompareToBuilder implements Builder<Integer> {
      * @return this - used to chain append calls
      */
     public CompareToBuilder append(final short[] lhs, final short[] rhs) {
-        if (comparison != 0) {
-            return this;
-        }
-        if (lhs == rhs) {
-            return this;
-        }
-        if (lhs == null) {
-            comparison = -1;
-            return this;
-        }
-        if (rhs == null) {
-            comparison = 1;
-            return this;
-        }
-        if (lhs.length != rhs.length) {
-            comparison = lhs.length < rhs.length ? -1 : 1;
-            return this;
-        }
-        for (int i = 0; i < lhs.length && comparison == 0; i++) {
-            append(lhs[i], rhs[i]);
-        }
-        return this;
+        return compareToBuilderAppend.append(lhs, rhs, this);
     }
 
     /**
@@ -817,28 +707,7 @@ public class CompareToBuilder implements Builder<Integer> {
      * @return this - used to chain append calls
      */
     public CompareToBuilder append(final char[] lhs, final char[] rhs) {
-        if (comparison != 0) {
-            return this;
-        }
-        if (lhs == rhs) {
-            return this;
-        }
-        if (lhs == null) {
-            comparison = -1;
-            return this;
-        }
-        if (rhs == null) {
-            comparison = 1;
-            return this;
-        }
-        if (lhs.length != rhs.length) {
-            comparison = lhs.length < rhs.length ? -1 : 1;
-            return this;
-        }
-        for (int i = 0; i < lhs.length && comparison == 0; i++) {
-            append(lhs[i], rhs[i]);
-        }
-        return this;
+        return compareToBuilderAppend.append(lhs, rhs, this);
     }
 
     /**
@@ -857,28 +726,7 @@ public class CompareToBuilder implements Builder<Integer> {
      * @return this - used to chain append calls
      */
     public CompareToBuilder append(final byte[] lhs, final byte[] rhs) {
-        if (comparison != 0) {
-            return this;
-        }
-        if (lhs == rhs) {
-            return this;
-        }
-        if (lhs == null) {
-            comparison = -1;
-            return this;
-        }
-        if (rhs == null) {
-            comparison = 1;
-            return this;
-        }
-        if (lhs.length != rhs.length) {
-            comparison = lhs.length < rhs.length ? -1 : 1;
-            return this;
-        }
-        for (int i = 0; i < lhs.length && comparison == 0; i++) {
-            append(lhs[i], rhs[i]);
-        }
-        return this;
+        return compareToBuilderAppend.append(lhs, rhs, this);
     }
 
     /**
@@ -897,28 +745,7 @@ public class CompareToBuilder implements Builder<Integer> {
      * @return this - used to chain append calls
      */
     public CompareToBuilder append(final double[] lhs, final double[] rhs) {
-        if (comparison != 0) {
-            return this;
-        }
-        if (lhs == rhs) {
-            return this;
-        }
-        if (lhs == null) {
-            comparison = -1;
-            return this;
-        }
-        if (rhs == null) {
-            comparison = 1;
-            return this;
-        }
-        if (lhs.length != rhs.length) {
-            comparison = lhs.length < rhs.length ? -1 : 1;
-            return this;
-        }
-        for (int i = 0; i < lhs.length && comparison == 0; i++) {
-            append(lhs[i], rhs[i]);
-        }
-        return this;
+        return compareToBuilderAppend.append(lhs, rhs, this);
     }
 
     /**
@@ -937,28 +764,7 @@ public class CompareToBuilder implements Builder<Integer> {
      * @return this - used to chain append calls
      */
     public CompareToBuilder append(final float[] lhs, final float[] rhs) {
-        if (comparison != 0) {
-            return this;
-        }
-        if (lhs == rhs) {
-            return this;
-        }
-        if (lhs == null) {
-            comparison = -1;
-            return this;
-        }
-        if (rhs == null) {
-            comparison = 1;
-            return this;
-        }
-        if (lhs.length != rhs.length) {
-            comparison = lhs.length < rhs.length ? -1 : 1;
-            return this;
-        }
-        for (int i = 0; i < lhs.length && comparison == 0; i++) {
-            append(lhs[i], rhs[i]);
-        }
-        return this;
+        return compareToBuilderAppend.append(lhs, rhs, this);
     }
 
     /**
@@ -1029,5 +835,9 @@ public class CompareToBuilder implements Builder<Integer> {
     public Integer build() {
         return Integer.valueOf(toComparison());
     }
+
+	public void setComparison(int comparison) {
+		this.comparison = comparison;
+	}
 }
 

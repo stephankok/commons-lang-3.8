@@ -37,7 +37,9 @@ import org.apache.commons.lang3.Validate;
  */
 public class DiffResult implements Iterable<Diff<?>> {
 
-    /**
+    private DiffResultObjects diffResultObjects;
+
+	/**
      * <p>
      * The {@code String} returned when the objects have no differences:
      * {@value}
@@ -45,11 +47,9 @@ public class DiffResult implements Iterable<Diff<?>> {
      */
     public static final String OBJECTS_SAME_STRING = "";
 
-    private static final String DIFFERS_STRING = "differs from";
+    public static final String DIFFERS_STRING = "differs from";
 
     private final List<Diff<?>> diffs;
-    private final Object lhs;
-    private final Object rhs;
     private final ToStringStyle style;
 
     /**
@@ -73,14 +73,12 @@ public class DiffResult implements Iterable<Diff<?>> {
      */
     DiffResult(final Object lhs, final Object rhs, final List<Diff<?>> diffs,
             final ToStringStyle style) {
-        Validate.isTrue(lhs != null, "Left hand object cannot be null");
+        this.diffResultObjects = new DiffResultObjects(lhs, rhs);
+		Validate.isTrue(lhs != null, "Left hand object cannot be null");
         Validate.isTrue(rhs != null, "Right hand object cannot be null");
         Validate.isTrue(diffs != null, "List of differences cannot be null");
 
         this.diffs = diffs;
-        this.lhs = lhs;
-        this.rhs = rhs;
-
         if (style == null) {
             this.style = ToStringStyle.DEFAULT_STYLE;
         } else {
@@ -155,7 +153,7 @@ public class DiffResult implements Iterable<Diff<?>> {
      */
     @Override
     public String toString() {
-        return toString(style);
+        return diffResultObjects.toString(style, this.diffs);
     }
 
     /**
@@ -170,20 +168,7 @@ public class DiffResult implements Iterable<Diff<?>> {
      * @return a {@code String} description of the differences.
      */
     public String toString(final ToStringStyle style) {
-        if (diffs.isEmpty()) {
-            return OBJECTS_SAME_STRING;
-        }
-
-        final ToStringBuilder lhsBuilder = new ToStringBuilder(lhs, style);
-        final ToStringBuilder rhsBuilder = new ToStringBuilder(rhs, style);
-
-        for (final Diff<?> diff : diffs) {
-            lhsBuilder.append(diff.getFieldName(), diff.getLeft());
-            rhsBuilder.append(diff.getFieldName(), diff.getRight());
-        }
-
-        return String.format("%s %s %s", lhsBuilder.build(), DIFFERS_STRING,
-                rhsBuilder.build());
+        return diffResultObjects.toString(style, this.diffs);
     }
 
     /**

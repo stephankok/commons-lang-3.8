@@ -23,7 +23,9 @@ package org.apache.commons.lang3.arch;
  */
 public class Processor {
 
-    /**
+    private ProcessorType processorType;
+
+	/**
      * The {@link Arch} enum defines the architecture of
      * a microprocessor. The architecture represents the bit value
      * of the microprocessor.
@@ -86,8 +88,6 @@ public class Processor {
     }
 
     private final Arch arch;
-    private final Type type;
-
     /**
      * Constructs a {@link Processor} object with the given
      * parameters.
@@ -96,8 +96,8 @@ public class Processor {
      * @param type The processor type.
      */
     public Processor(final Arch arch, final Type type) {
-        this.arch = arch;
-        this.type = type;
+        this.processorType = new ProcessorType(type);
+		this.arch = arch;
     }
 
     /**
@@ -119,7 +119,7 @@ public class Processor {
      * @return A {@link Type} enum.
      */
     public Type getType() {
-        return type;
+        return processorType.getType();
     }
 
     /**
@@ -146,7 +146,7 @@ public class Processor {
      * @return <code>true</code>, if {@link Processor} is {@link Type#X86}, else <code>false</code>.
      */
     public boolean isX86() {
-        return Type.X86.equals(type);
+        return processorType.isX86();
     }
 
     /**
@@ -155,7 +155,7 @@ public class Processor {
      * @return <code>true</code>. if {@link Processor} is {@link Type#IA_64}, else <code>false</code>.
      */
     public boolean isIA64() {
-        return Type.IA_64.equals(type);
+        return processorType.isIA64();
     }
 
     /**
@@ -164,7 +164,7 @@ public class Processor {
      * @return <code>true</code>. if {@link Processor} is {@link Type#PPC}, else <code>false</code>.
      */
     public boolean isPPC() {
-        return Type.PPC.equals(type);
+        return processorType.isPPC();
     }
 
 }

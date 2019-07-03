@@ -5,13 +5,11 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 public class StrTokenizerMatcher implements Cloneable {
+	private StrTokenizerMatcherConfiguration strTokenizerMatcherConfiguration = new StrTokenizerMatcherConfiguration();
 	private StrMatcher delimMatcher = StrMatcher.splitMatcher();
 	private StrMatcher quoteMatcher = StrMatcher.noneMatcher();
 	private StrMatcher ignoredMatcher = StrMatcher.noneMatcher();
 	private StrMatcher trimmerMatcher = StrMatcher.noneMatcher();
-	private boolean emptyAsNull = false;
-	private boolean ignoreEmptyTokens = true;
-
 	public StrMatcher getDelimMatcher() {
 		return delimMatcher;
 	}
@@ -45,19 +43,19 @@ public class StrTokenizerMatcher implements Cloneable {
 	}
 
 	public boolean getEmptyAsNull() {
-		return emptyAsNull;
+		return strTokenizerMatcherConfiguration.getEmptyAsNull();
 	}
 
 	public void setEmptyAsNull(boolean emptyAsNull) {
-		this.emptyAsNull = emptyAsNull;
+		strTokenizerMatcherConfiguration.setEmptyAsNull(emptyAsNull);
 	}
 
 	public boolean getIgnoreEmptyTokens() {
-		return ignoreEmptyTokens;
+		return strTokenizerMatcherConfiguration.getIgnoreEmptyTokens();
 	}
 
 	public void setIgnoreEmptyTokens(boolean ignoreEmptyTokens) {
-		this.ignoreEmptyTokens = ignoreEmptyTokens;
+		strTokenizerMatcherConfiguration.setIgnoreEmptyTokens(ignoreEmptyTokens);
 	}
 
 	/**
@@ -81,12 +79,12 @@ public class StrTokenizerMatcher implements Cloneable {
 			start += removeLen;
 		}
 		if (start >= len) {
-			addToken(tokenList, StringUtils.EMPTY);
+			strTokenizerMatcherConfiguration.addToken(tokenList, StringUtils.EMPTY);
 			return -1;
 		}
 		final int delimLen = delimMatcher.isMatch(srcChars, start, start, len);
 		if (delimLen > 0) {
-			addToken(tokenList, StringUtils.EMPTY);
+			strTokenizerMatcherConfiguration.addToken(tokenList, StringUtils.EMPTY);
 			return start + delimLen;
 		}
 		final int quoteLen = quoteMatcher.isMatch(srcChars, start, start, len);
@@ -131,7 +129,7 @@ public class StrTokenizerMatcher implements Cloneable {
 			} else {
 				final int delimLen = delimMatcher.isMatch(srcChars, pos, start, len);
 				if (delimLen > 0) {
-					addToken(tokenList, workArea.substring(0, trimStart));
+					strTokenizerMatcherConfiguration.addToken(tokenList, workArea.substring(0, trimStart));
 					return pos + delimLen;
 				}
 				if (quoteLen > 0 && isQuote(srcChars, pos, len, quoteStart, quoteLen)) {
@@ -154,7 +152,7 @@ public class StrTokenizerMatcher implements Cloneable {
 				trimStart = workArea.size();
 			}
 		}
-		addToken(tokenList, workArea.substring(0, trimStart));
+		strTokenizerMatcherConfiguration.addToken(tokenList, workArea.substring(0, trimStart));
 		return -1;
 	}
 
@@ -164,15 +162,7 @@ public class StrTokenizerMatcher implements Cloneable {
 	* @param tok   the token to add
 	*/
 	public void addToken(final List<String> list, String tok) {
-		if (StringUtils.isEmpty(tok)) {
-			if (ignoreEmptyTokens) {
-				return;
-			}
-			if (emptyAsNull) {
-				tok = null;
-			}
-		}
-		list.add(tok);
+		strTokenizerMatcherConfiguration.addToken(list, tok);
 	}
 
 	/**

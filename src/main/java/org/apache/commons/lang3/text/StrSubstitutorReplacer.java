@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class StrSubstitutorReplacer {
+	private StrSubstitutorReplacerSuffix strSubstitutorReplacerSuffix = new StrSubstitutorReplacerSuffix();
+	private StrSubstitutorReplacerDelimiter strSubstitutorReplacerDelimiter = new StrSubstitutorReplacerDelimiter();
+	private StrSubstitutorReplacerPrefix strSubstitutorReplacerPrefix = new StrSubstitutorReplacerPrefix();
 	private char escapeChar;
 	private boolean preserveEscapes = false;
-	private StrMatcher prefixMatcher;
-	private StrMatcher suffixMatcher;
-	private StrMatcher valueDelimiterMatcher;
 	private boolean enableSubstitutionInVariables;
 
 	public char getEscapeChar() {
@@ -31,15 +31,15 @@ public class StrSubstitutorReplacer {
 	}
 
 	public StrMatcher getPrefixMatcher() {
-		return prefixMatcher;
+		return strSubstitutorReplacerPrefix.getPrefixMatcher();
 	}
 
 	public StrMatcher getSuffixMatcher() {
-		return suffixMatcher;
+		return strSubstitutorReplacerSuffix.getSuffixMatcher();
 	}
 
 	public StrMatcher getValueDelimiterMatcher() {
-		return valueDelimiterMatcher;
+		return strSubstitutorReplacerDelimiter.getValueDelimiterMatcher();
 	}
 
 	public boolean getEnableSubstitutionInVariables() {
@@ -293,11 +293,7 @@ public class StrSubstitutorReplacer {
 	* @throws IllegalArgumentException  if the prefix matcher is null
 	*/
 	public StrSubstitutor setVariablePrefixMatcher(final StrMatcher prefixMatcher, StrSubstitutor strSubstitutor) {
-		if (prefixMatcher == null) {
-			throw new IllegalArgumentException("Variable prefix matcher must not be null!");
-		}
-		this.prefixMatcher = prefixMatcher;
-		return strSubstitutor;
+		return strSubstitutorReplacerPrefix.setVariablePrefixMatcher(prefixMatcher, strSubstitutor);
 	}
 
 	/**
@@ -307,10 +303,7 @@ public class StrSubstitutorReplacer {
 	* @throws IllegalArgumentException  if the prefix is null
 	*/
 	public StrSubstitutor setVariablePrefix(final String prefix, StrSubstitutor strSubstitutor) {
-		if (prefix == null) {
-			throw new IllegalArgumentException("Variable prefix must not be null!");
-		}
-		return setVariablePrefixMatcher(StrMatcher.stringMatcher(prefix), strSubstitutor);
+		return strSubstitutorReplacerPrefix.setVariablePrefix(prefix, strSubstitutor);
 	}
 
 	/**
@@ -320,11 +313,7 @@ public class StrSubstitutorReplacer {
 	* @throws IllegalArgumentException  if the suffix matcher is null
 	*/
 	public StrSubstitutor setVariableSuffixMatcher(final StrMatcher suffixMatcher, StrSubstitutor strSubstitutor) {
-		if (suffixMatcher == null) {
-			throw new IllegalArgumentException("Variable suffix matcher must not be null!");
-		}
-		this.suffixMatcher = suffixMatcher;
-		return strSubstitutor;
+		return strSubstitutorReplacerSuffix.setVariableSuffixMatcher(suffixMatcher, strSubstitutor);
 	}
 
 	/**
@@ -334,10 +323,7 @@ public class StrSubstitutorReplacer {
 	* @throws IllegalArgumentException  if the suffix is null
 	*/
 	public StrSubstitutor setVariableSuffix(final String suffix, StrSubstitutor strSubstitutor) {
-		if (suffix == null) {
-			throw new IllegalArgumentException("Variable suffix must not be null!");
-		}
-		return setVariableSuffixMatcher(StrMatcher.stringMatcher(suffix), strSubstitutor);
+		return strSubstitutorReplacerSuffix.setVariableSuffix(suffix, strSubstitutor);
 	}
 
 	/**
@@ -348,8 +334,7 @@ public class StrSubstitutorReplacer {
 	*/
 	public StrSubstitutor setValueDelimiterMatcher(final StrMatcher valueDelimiterMatcher,
 			StrSubstitutor strSubstitutor) {
-		this.valueDelimiterMatcher = valueDelimiterMatcher;
-		return strSubstitutor;
+		return strSubstitutorReplacerDelimiter.setValueDelimiterMatcher(valueDelimiterMatcher, strSubstitutor);
 	}
 
 	/**
@@ -359,11 +344,7 @@ public class StrSubstitutorReplacer {
 	* @since  3.2
 	*/
 	public StrSubstitutor setValueDelimiter(final String valueDelimiter, StrSubstitutor strSubstitutor) {
-		if (StringUtils.isEmpty(valueDelimiter)) {
-			setValueDelimiterMatcher(null, strSubstitutor);
-			return strSubstitutor;
-		}
-		return setValueDelimiterMatcher(StrMatcher.stringMatcher(valueDelimiter), strSubstitutor);
+		return strSubstitutorReplacerDelimiter.setValueDelimiter(valueDelimiter, strSubstitutor);
 	}
 
 	/**
@@ -449,10 +430,10 @@ public class StrSubstitutorReplacer {
 	*/
 	public int substitute(final StrBuilder buf, final int offset, final int length, List<String> priorVariables,
 			StrSubstitutor strSubstitutor) {
-		final StrMatcher pfxMatcher = prefixMatcher;
-		final StrMatcher suffMatcher = suffixMatcher;
+		final StrMatcher pfxMatcher = strSubstitutorReplacerPrefix.getPrefixMatcher();
+		final StrMatcher suffMatcher = strSubstitutorReplacerSuffix.getSuffixMatcher();
 		final char escape = escapeChar;
-		final StrMatcher valueDelimMatcher = valueDelimiterMatcher;
+		final StrMatcher valueDelimMatcher = strSubstitutorReplacerDelimiter.getValueDelimiterMatcher();
 		final boolean substitutionInVariablesEnabled = enableSubstitutionInVariables;
 		final boolean top = priorVariables == null;
 		boolean altered = false;

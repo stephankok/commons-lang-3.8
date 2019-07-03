@@ -220,13 +220,9 @@ public class MultiBackgroundInitializer
      * caused an exception.
      */
     public static class MultiBackgroundInitializerResults {
-        /** A map with the child initializers. */
-        private final Map<String, BackgroundInitializer<?>> initializers;
+        private MultiBackgroundInitializerResultsProduct multiBackgroundInitializerResultsProduct;
 
-        /** A map with the result objects. */
-        private final Map<String, Object> resultObjects;
-
-        /** A map with the exceptions. */
+		/** A map with the exceptions. */
         private final Map<String, ConcurrentException> exceptions;
 
         /**
@@ -242,9 +238,9 @@ public class MultiBackgroundInitializer
                 final Map<String, BackgroundInitializer<?>> inits,
                 final Map<String, Object> results,
                 final Map<String, ConcurrentException> excepts) {
-            initializers = inits;
-            resultObjects = results;
-            exceptions = excepts;
+            this.multiBackgroundInitializerResultsProduct = new MultiBackgroundInitializerResultsProduct(inits,
+							results);
+			exceptions = excepts;
         }
 
         /**
@@ -256,7 +252,7 @@ public class MultiBackgroundInitializer
          * @throws NoSuchElementException if the name cannot be resolved
          */
         public BackgroundInitializer<?> getInitializer(final String name) {
-            return checkName(name);
+            return multiBackgroundInitializerResultsProduct.checkName(name);
         }
 
         /**
@@ -272,8 +268,7 @@ public class MultiBackgroundInitializer
          * @throws NoSuchElementException if the name cannot be resolved
          */
         public Object getResultObject(final String name) {
-            checkName(name);
-            return resultObjects.get(name);
+            return multiBackgroundInitializerResultsProduct.getResultObject(name);
         }
 
         /**
@@ -285,7 +280,7 @@ public class MultiBackgroundInitializer
          * @throws NoSuchElementException if the name cannot be resolved
          */
         public boolean isException(final String name) {
-            checkName(name);
+            multiBackgroundInitializerResultsProduct.checkName(name);
             return exceptions.containsKey(name);
         }
 
@@ -300,7 +295,7 @@ public class MultiBackgroundInitializer
          * @throws NoSuchElementException if the name cannot be resolved
          */
         public ConcurrentException getException(final String name) {
-            checkName(name);
+            multiBackgroundInitializerResultsProduct.checkName(name);
             return exceptions.get(name);
         }
 
@@ -312,7 +307,7 @@ public class MultiBackgroundInitializer
          * BackgroundInitializer} objects
          */
         public Set<String> initializerNames() {
-            return Collections.unmodifiableSet(initializers.keySet());
+            return multiBackgroundInitializerResultsProduct.initializerNames();
         }
 
         /**
@@ -323,25 +318,6 @@ public class MultiBackgroundInitializer
          */
         public boolean isSuccessful() {
             return exceptions.isEmpty();
-        }
-
-        /**
-         * Checks whether an initializer with the given name exists. If not,
-         * throws an exception. If it exists, the associated child initializer
-         * is returned.
-         *
-         * @param name the name to check
-         * @return the initializer with this name
-         * @throws NoSuchElementException if the name is unknown
-         */
-        private BackgroundInitializer<?> checkName(final String name) {
-            final BackgroundInitializer<?> init = initializers.get(name);
-            if (init == null) {
-                throw new NoSuchElementException(
-                        "No child initializer with name " + name);
-            }
-
-            return init;
         }
     }
 }
