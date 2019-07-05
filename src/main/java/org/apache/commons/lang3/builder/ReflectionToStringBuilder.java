@@ -100,9 +100,7 @@ import org.apache.commons.lang3.Validate;
  */
 public class ReflectionToStringBuilder extends ToStringBuilder {
 
-    private ReflectionToStringBuilderProduct reflectionToStringBuilderProduct = new ReflectionToStringBuilderProduct();
-
-	/**
+    /**
      * <p>
      * Builds a <code>toString</code> value using the default <code>ToStringStyle</code> through reflection.
      * </p>
@@ -382,7 +380,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * @return The toString value.
      */
     public static String toStringExclude(final Object object, final Collection<String> excludeFieldNames) {
-        return ReflectionToStringBuilderProduct.toStringExclude(object, toNoNullStringArray(excludeFieldNames));
+        return toStringExclude(object, toNoNullStringArray(excludeFieldNames));
     }
 
     /**
@@ -410,7 +408,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      *            The array to check
      * @return The given array or a new array without null.
      */
-    public static String[] toNoNullStringArray(final Object[] array) {
+    static String[] toNoNullStringArray(final Object[] array) {
         final List<String> list = new ArrayList<>(array.length);
         for (final Object e : array) {
             if (e != null) {
@@ -431,7 +429,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * @return The toString value.
      */
     public static String toStringExclude(final Object object, final String... excludeFieldNames) {
-        return ReflectionToStringBuilderProduct.toStringExclude(object, excludeFieldNames);
+        return new ReflectionToStringBuilder(object).setExcludeFieldNames(excludeFieldNames).toString();
     }
 
     private static Object checkNotNull(final Object obj) {
@@ -440,9 +438,26 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
     }
 
     /**
+     * Whether or not to append static fields.
+     */
+    private boolean appendStatics = false;
+
+    /**
+     * Whether or not to append transient fields.
+     */
+    private boolean appendTransients = false;
+
+    /**
      * Whether or not to append fields that are null.
      */
     private boolean excludeNullValues;
+
+    /**
+     * Which field names to exclude from output. Intended for fields like <code>"password"</code>.
+     *
+     * @since 3.0 this is protected instead of private
+     */
+    protected String[] excludeFieldNames;
 
     /**
      * The last super class to stop appending fields for.
@@ -586,7 +601,24 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * @return Whether or not to append the given <code>Field</code>.
      */
     protected boolean accept(final Field field) {
-        return reflectionToStringBuilderProduct.accept(field);
+        if (field.getName().indexOf(ClassUtils.INNER_CLASS_SEPARATOR_CHAR) != -1) {
+            // Reject field from inner class.
+            return false;
+        }
+        if (Modifier.isTransient(field.getModifiers()) && !this.isAppendTransients()) {
+            // Reject transient fields.
+            return false;
+        }
+        if (Modifier.isStatic(field.getModifiers()) && !this.isAppendStatics()) {
+            // Reject static fields.
+            return false;
+        }
+        if (this.excludeFieldNames != null
+            && Arrays.binarySearch(this.excludeFieldNames, field.getName()) >= 0) {
+            // Reject fields from the getExcludeFieldNames list.
+            return false;
+        }
+        return !field.isAnnotationPresent(ToStringExclude.class);
     }
 
     /**
@@ -611,7 +643,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
         AccessibleObject.setAccessible(fields, true);
         for (final Field field : fields) {
             final String fieldName = field.getName();
-            if (reflectionToStringBuilderProduct.accept(field)) {
+            if (this.accept(field)) {
                 try {
                     // Warning: Field.get(Object) creates wrappers objects
                     // for primitive types.
@@ -634,7 +666,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * @return Returns the excludeFieldNames.
      */
     public String[] getExcludeFieldNames() {
-        return reflectionToStringBuilderProduct.getExcludeFieldNames();
+        return this.excludeFieldNames.clone();
     }
 
     /**
@@ -677,7 +709,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * @since 2.1
      */
     public boolean isAppendStatics() {
-        return this.reflectionToStringBuilderProduct.getAppendStatics();
+        return this.appendStatics;
     }
 
     /**
@@ -688,7 +720,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * @return Whether or not to append transient fields.
      */
     public boolean isAppendTransients() {
-        return this.reflectionToStringBuilderProduct.getAppendTransients();
+        return this.appendTransients;
     }
 
     /**
@@ -727,7 +759,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * @since 2.1
      */
     public void setAppendStatics(final boolean appendStatics) {
-        reflectionToStringBuilderProduct.setAppendStatics(appendStatics);
+        this.appendStatics = appendStatics;
     }
 
     /**
@@ -739,7 +771,7 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      *            Whether or not to append transient fields.
      */
     public void setAppendTransients(final boolean appendTransients) {
-        reflectionToStringBuilderProduct.setAppendTransients(appendTransients);
+        this.appendTransients = appendTransients;
     }
 
     /**
@@ -763,7 +795,14 @@ public class ReflectionToStringBuilder extends ToStringBuilder {
      * @return <code>this</code>
      */
     public ReflectionToStringBuilder setExcludeFieldNames(final String... excludeFieldNamesParam) {
-        return reflectionToStringBuilderProduct.setExcludeFieldNames(this, excludeFieldNamesParam);
+        if (excludeFieldNamesParam == null) {
+            this.excludeFieldNames = null;
+        } else {
+            //clone and remove nulls
+            this.excludeFieldNames = toNoNullStringArray(excludeFieldNamesParam);
+            Arrays.sort(this.excludeFieldNames);
+        }
+        return this;
     }
 
     /**
