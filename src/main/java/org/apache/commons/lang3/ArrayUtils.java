@@ -39,11 +39,11 @@ import org.apache.commons.lang3.mutable.MutableInt;
  * An exception will not be thrown for a {@code null}
  * array input. However, an Object array that contains a {@code null}
  * element may throw an exception. Each method documents its behaviour.
- *
+// *
  * <p>#ThreadSafe#
  * @since 2.0
  */
-public class ArrayUtils extends ArrayUtilsCalculations {
+public class ArrayUtils {
 
     /**
      * An empty immutable {@code Object} array.
@@ -1418,7 +1418,7 @@ public class ArrayUtils extends ArrayUtilsCalculations {
         if (array == null) {
             return;
         }
-        reverseObject(array, 0, array.length);
+        reverse(array, 0, array.length);
     }
 
     /**
@@ -1432,7 +1432,7 @@ public class ArrayUtils extends ArrayUtilsCalculations {
         if (array == null) {
             return;
         }
-        reverseObject(array, 0, array.length);
+        reverse(array, 0, array.length);
     }
 
     /**
@@ -1446,7 +1446,7 @@ public class ArrayUtils extends ArrayUtilsCalculations {
         if (array == null) {
             return;
         }
-        reverseObject(array, 0, array.length);
+        reverse(array, 0, array.length);
     }
 
     /**
@@ -1460,7 +1460,7 @@ public class ArrayUtils extends ArrayUtilsCalculations {
         if (array == null) {
             return;
         }
-        reverseObject(array, 0, array.length);
+        reverse(array, 0, array.length);
     }
 
     /**
@@ -1474,7 +1474,7 @@ public class ArrayUtils extends ArrayUtilsCalculations {
         if (array == null) {
             return;
         }
-        reverseObject(array, 0, array.length);
+        reverse(array, 0, array.length);
     }
 
     /**
@@ -1488,7 +1488,7 @@ public class ArrayUtils extends ArrayUtilsCalculations {
         if (array == null) {
             return;
         }
-        reverseObject(array, 0, array.length);
+        reverse(array, 0, array.length);
     }
 
     /**
@@ -1502,7 +1502,7 @@ public class ArrayUtils extends ArrayUtilsCalculations {
         if (array == null) {
             return;
         }
-        reverseObject(array, 0, array.length);
+        reverse(array, 0, array.length);
     }
 
     /**
@@ -1516,7 +1516,7 @@ public class ArrayUtils extends ArrayUtilsCalculations {
         if (array == null) {
             return;
         }
-        reverseObject(array, 0, array.length);
+        reverse(array, 0, array.length);
     }
 
     /**
@@ -1530,7 +1530,7 @@ public class ArrayUtils extends ArrayUtilsCalculations {
         if (array == null) {
             return;
         }
-        reverseObject(array, 0, array.length);
+        reverse(array, 0, array.length);
     }
 
     /**
@@ -1551,7 +1551,19 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.2
      */
     public static void reverse(final boolean[] array, final int startIndexInclusive, final int endIndexExclusive) {
-    	reverseObject(array, startIndexInclusive, endIndexExclusive);
+        if (array == null) {
+            return;
+        }
+        int i = startIndexInclusive < 0 ? 0 : startIndexInclusive;
+        int j = Math.min(array.length, endIndexExclusive) - 1;
+        boolean tmp;
+        while (j > i) {
+            tmp = array[j];
+            array[j] = array[i];
+            array[i] = tmp;
+            j--;
+            i++;
+        }
     }
 
     /**
@@ -1572,7 +1584,19 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.2
      */
     public static void reverse(final byte[] array, final int startIndexInclusive, final int endIndexExclusive) {
-    	reverseObject(array, startIndexInclusive, endIndexExclusive);
+        if (array == null) {
+            return;
+        }
+        int i = startIndexInclusive < 0 ? 0 : startIndexInclusive;
+        int j = Math.min(array.length, endIndexExclusive) - 1;
+        byte tmp;
+        while (j > i) {
+            tmp = array[j];
+            array[j] = array[i];
+            array[i] = tmp;
+            j--;
+            i++;
+        }
     }
 
     /**
@@ -1593,7 +1617,19 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.2
      */
     public static void reverse(final char[] array, final int startIndexInclusive, final int endIndexExclusive) {
-    	reverseObject(array, startIndexInclusive, endIndexExclusive);
+        if (array == null) {
+            return;
+        }
+        int i = startIndexInclusive < 0 ? 0 : startIndexInclusive;
+        int j = Math.min(array.length, endIndexExclusive) - 1;
+        char tmp;
+        while (j > i) {
+            tmp = array[j];
+            array[j] = array[i];
+            array[i] = tmp;
+            j--;
+            i++;
+        }
     }
 
     /**
@@ -1614,7 +1650,19 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.2
      */
     public static void reverse(final double[] array, final int startIndexInclusive, final int endIndexExclusive) {
-    	reverseObject(array, startIndexInclusive, endIndexExclusive);
+        if (array == null) {
+            return;
+        }
+        int i = startIndexInclusive < 0 ? 0 : startIndexInclusive;
+        int j = Math.min(array.length, endIndexExclusive) - 1;
+        double tmp;
+        while (j > i) {
+            tmp = array[j];
+            array[j] = array[i];
+            array[i] = tmp;
+            j--;
+            i++;
+        }
     }
 
     /**
@@ -1635,7 +1683,19 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.2
      */
     public static void reverse(final float[] array, final int startIndexInclusive, final int endIndexExclusive) {
-    	reverseObject(array, startIndexInclusive, endIndexExclusive);
+        if (array == null) {
+            return;
+        }
+        int i = startIndexInclusive < 0 ? 0 : startIndexInclusive;
+        int j = Math.min(array.length, endIndexExclusive) - 1;
+        float tmp;
+        while (j > i) {
+            tmp = array[j];
+            array[j] = array[i];
+            array[i] = tmp;
+            j--;
+            i++;
+        }
     }
 
     /**
@@ -1656,7 +1716,19 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.2
      */
     public static void reverse(final int[] array, final int startIndexInclusive, final int endIndexExclusive) {
-    	reverseObject(array, startIndexInclusive, endIndexExclusive);
+        if (array == null) {
+            return;
+        }
+        int i = startIndexInclusive < 0 ? 0 : startIndexInclusive;
+        int j = Math.min(array.length, endIndexExclusive) - 1;
+        int tmp;
+        while (j > i) {
+            tmp = array[j];
+            array[j] = array[i];
+            array[i] = tmp;
+            j--;
+            i++;
+        }
     }
 
     /**
@@ -1677,7 +1749,19 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.2
      */
     public static void reverse(final long[] array, final int startIndexInclusive, final int endIndexExclusive) {
-    	reverseObject(array, startIndexInclusive, endIndexExclusive);
+        if (array == null) {
+            return;
+        }
+        int i = startIndexInclusive < 0 ? 0 : startIndexInclusive;
+        int j = Math.min(array.length, endIndexExclusive) - 1;
+        long tmp;
+        while (j > i) {
+            tmp = array[j];
+            array[j] = array[i];
+            array[i] = tmp;
+            j--;
+            i++;
+        }
     }
 
     /**
@@ -1697,9 +1781,21 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      *            change. Over value (&gt;array.length) is demoted to array length.
      * @since 3.2
      */
-    public static void reverse(final Object[] array, final int startIndexInclusive, final int endIndexExclusive) {    	        
-    	reverseObject(array, startIndexInclusive, endIndexExclusive);
-    }    
+    public static void reverse(final Object[] array, final int startIndexInclusive, final int endIndexExclusive) {
+        if (array == null) {
+            return;
+        }
+        int i = startIndexInclusive < 0 ? 0 : startIndexInclusive;
+        int j = Math.min(array.length, endIndexExclusive) - 1;
+        Object tmp;
+        while (j > i) {
+            tmp = array[j];
+            array[j] = array[i];
+            array[i] = tmp;
+            j--;
+            i++;
+        }
+    }
 
     /**
      * <p>
@@ -1758,7 +1854,10 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.5
      */
     public static void swap(final Object[] array, final int offset1, final int offset2) {
-        swapObject(array, offset1, offset2, 1);
+        if (array == null || array.length == 0) {
+            return;
+        }
+        swap(array, offset1, offset2, 1);
     }
 
     /**
@@ -1784,7 +1883,10 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.5
      */
     public static void swap(final long[] array, final int offset1, final int offset2) {
-        swapObject(array, offset1, offset2, 1);
+        if (array == null || array.length == 0) {
+            return;
+        }
+        swap(array, offset1, offset2, 1);
     }
 
     /**
@@ -1809,7 +1911,10 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.5
      */
     public static void swap(final int[] array, final int offset1, final int offset2) {
-        swapObject(array, offset1, offset2, 1);
+        if (array == null || array.length == 0) {
+            return;
+        }
+        swap(array, offset1, offset2, 1);
     }
 
     /**
@@ -1834,7 +1939,10 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.5
      */
     public static void swap(final short[] array, final int offset1, final int offset2) {
-        swapObject(array, offset1, offset2, 1);
+        if (array == null || array.length == 0) {
+            return;
+        }
+        swap(array, offset1, offset2, 1);
     }
 
     /**
@@ -1859,7 +1967,10 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.5
      */
     public static void swap(final char[] array, final int offset1, final int offset2) {
-        swapObject(array, offset1, offset2, 1);
+        if (array == null || array.length == 0) {
+            return;
+        }
+        swap(array, offset1, offset2, 1);
     }
 
     /**
@@ -1884,7 +1995,10 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.5
      */
     public static void swap(final byte[] array, final int offset1, final int offset2) {
-        swapObject(array, offset1, offset2, 1);
+        if (array == null || array.length == 0) {
+            return;
+        }
+        swap(array, offset1, offset2, 1);
     }
 
     /**
@@ -1909,7 +2023,10 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.5
      */
     public static void swap(final double[] array, final int offset1, final int offset2) {
-        swapObject(array, offset1, offset2, 1);
+        if (array == null || array.length == 0) {
+            return;
+        }
+        swap(array, offset1, offset2, 1);
     }
 
     /**
@@ -1934,7 +2051,10 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.5
      */
     public static void swap(final float[] array, final int offset1, final int offset2) {
-    	swapObject(array, offset1, offset2, 1);
+        if (array == null || array.length == 0) {
+            return;
+        }
+        swap(array, offset1, offset2, 1);
     }
 
     /**
@@ -1959,7 +2079,10 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.5
      */
     public static void swap(final boolean[] array, final int offset1, final int offset2) {
-        swapObject(array, offset1, offset2, 1);
+        if (array == null || array.length == 0) {
+            return;
+        }
+        swap(array, offset1, offset2, 1);
     }
 
     /**
@@ -1987,7 +2110,21 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.5
      */
     public static void swap(final boolean[] array, int offset1, int offset2, int len) {
-    	swapObject(array, offset1, offset2, len);
+        if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
+            return;
+        }
+        if (offset1 < 0) {
+            offset1 = 0;
+        }
+        if (offset2 < 0) {
+            offset2 = 0;
+        }
+        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
+        for (int i = 0; i < len; i++, offset1++, offset2++) {
+            final boolean aux = array[offset1];
+            array[offset1] = array[offset2];
+            array[offset2] = aux;
+        }
     }
 
     /**
@@ -2015,7 +2152,21 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.5
      */
     public static void swap(final byte[] array, int offset1, int offset2, int len) {
-    	swapObject(array, offset1, offset2, len);
+        if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
+            return;
+        }
+        if (offset1 < 0) {
+            offset1 = 0;
+        }
+        if (offset2 < 0) {
+            offset2 = 0;
+        }
+        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
+        for (int i = 0; i < len; i++, offset1++, offset2++) {
+            final byte aux = array[offset1];
+            array[offset1] = array[offset2];
+            array[offset2] = aux;
+        }
     }
 
     /**
@@ -2043,7 +2194,21 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.5
      */
     public static void swap(final char[] array, int offset1, int offset2, int len) {
-    	swapObject(array, offset1, offset2, len);
+        if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
+            return;
+        }
+        if (offset1 < 0) {
+            offset1 = 0;
+        }
+        if (offset2 < 0) {
+            offset2 = 0;
+        }
+        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
+        for (int i = 0; i < len; i++, offset1++, offset2++) {
+            final char aux = array[offset1];
+            array[offset1] = array[offset2];
+            array[offset2] = aux;
+        }
     }
 
     /**
@@ -2071,7 +2236,21 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.5
      */
     public static void swap(final double[] array,  int offset1, int offset2, int len) {
-    	swapObject(array, offset1, offset2, len);
+        if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
+            return;
+        }
+        if (offset1 < 0) {
+            offset1 = 0;
+        }
+        if (offset2 < 0) {
+            offset2 = 0;
+        }
+        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
+        for (int i = 0; i < len; i++, offset1++, offset2++) {
+            final double aux = array[offset1];
+            array[offset1] = array[offset2];
+            array[offset2] = aux;
+        }
     }
 
     /**
@@ -2099,7 +2278,22 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.5
      */
     public static void swap(final float[] array, int offset1, int offset2, int len) {
-    	swapObject(array, offset1, offset2, len);
+        if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
+            return;
+        }
+        if (offset1 < 0) {
+            offset1 = 0;
+        }
+        if (offset2 < 0) {
+            offset2 = 0;
+        }
+        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
+        for (int i = 0; i < len; i++, offset1++, offset2++) {
+            final float aux = array[offset1];
+            array[offset1] = array[offset2];
+            array[offset2] = aux;
+        }
+
     }
 
     /**
@@ -2127,7 +2321,21 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.5
      */
     public static void swap(final int[] array,  int offset1, int offset2, int len) {
-    	swapObject(array, offset1, offset2, len);
+        if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
+            return;
+        }
+        if (offset1 < 0) {
+            offset1 = 0;
+        }
+        if (offset2 < 0) {
+            offset2 = 0;
+        }
+        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
+        for (int i = 0; i < len; i++, offset1++, offset2++) {
+            final int aux = array[offset1];
+            array[offset1] = array[offset2];
+            array[offset2] = aux;
+        }
     }
 
     /**
@@ -2155,7 +2363,21 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.5
      */
     public static void swap(final long[] array,  int offset1, int offset2, int len) {
-    	swapObject(array, offset1, offset2, len);
+        if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
+            return;
+        }
+        if (offset1 < 0) {
+            offset1 = 0;
+        }
+        if (offset2 < 0) {
+            offset2 = 0;
+        }
+        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
+        for (int i = 0; i < len; i++, offset1++, offset2++) {
+            final long aux = array[offset1];
+            array[offset1] = array[offset2];
+            array[offset2] = aux;
+        }
     }
 
     /**
@@ -2183,7 +2405,21 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.5
      */
     public static void swap(final Object[] array,  int offset1, int offset2, int len) {
-    	swapObject(array, offset1, offset2, len);
+        if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
+            return;
+        }
+        if (offset1 < 0) {
+            offset1 = 0;
+        }
+        if (offset2 < 0) {
+            offset2 = 0;
+        }
+        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
+        for (int i = 0; i < len; i++, offset1++, offset2++) {
+            final Object aux = array[offset1];
+            array[offset1] = array[offset2];
+            array[offset2] = aux;
+        }
     }
 
    /**
@@ -2211,7 +2447,24 @@ public class ArrayUtils extends ArrayUtilsCalculations {
     * @since 3.5
     */
     public static void swap(final short[] array,  int offset1, int offset2, int len) {
-    	swapObject(array, offset1, offset2, len);
+        if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
+            return;
+        }
+        if (offset1 < 0) {
+            offset1 = 0;
+        }
+        if (offset2 < 0) {
+            offset2 = 0;
+        }
+        if (offset1 == offset2) {
+            return;
+        }
+        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
+        for (int i = 0; i < len; i++, offset1++, offset2++) {
+            final short aux = array[offset1];
+            array[offset1] = array[offset2];
+            array[offset2] = aux;
+        }
     }
 
     // Shift
@@ -2232,7 +2485,7 @@ public class ArrayUtils extends ArrayUtilsCalculations {
         if (array == null) {
             return;
         }
-        shiftObject(array, 0, array.length, offset);
+        shift(array, 0, array.length, offset);
     }
 
     /**
@@ -2251,7 +2504,7 @@ public class ArrayUtils extends ArrayUtilsCalculations {
         if (array == null) {
             return;
         }
-        shiftObject(array, 0, array.length, offset);
+        shift(array, 0, array.length, offset);
     }
 
     /**
@@ -2270,7 +2523,7 @@ public class ArrayUtils extends ArrayUtilsCalculations {
         if (array == null) {
             return;
         }
-        shiftObject(array, 0, array.length, offset);
+        shift(array, 0, array.length, offset);
     }
 
     /**
@@ -2289,7 +2542,7 @@ public class ArrayUtils extends ArrayUtilsCalculations {
         if (array == null) {
             return;
         }
-        shiftObject(array, 0, array.length, offset);
+        shift(array, 0, array.length, offset);
     }
 
     /**
@@ -2308,7 +2561,7 @@ public class ArrayUtils extends ArrayUtilsCalculations {
         if (array == null) {
             return;
         }
-        shiftObject(array, 0, array.length, offset);
+        shift(array, 0, array.length, offset);
     }
 
     /**
@@ -2327,7 +2580,7 @@ public class ArrayUtils extends ArrayUtilsCalculations {
         if (array == null) {
             return;
         }
-        shiftObject(array, 0, array.length, offset);
+        shift(array, 0, array.length, offset);
     }
 
     /**
@@ -2346,7 +2599,7 @@ public class ArrayUtils extends ArrayUtilsCalculations {
         if (array == null) {
             return;
         }
-        shiftObject(array, 0, array.length, offset);
+        shift(array, 0, array.length, offset);
     }
 
     /**
@@ -2365,7 +2618,7 @@ public class ArrayUtils extends ArrayUtilsCalculations {
         if (array == null) {
             return;
         }
-        shiftObject(array, 0, array.length, offset);
+        shift(array, 0, array.length, offset);
     }
 
     /**
@@ -2384,7 +2637,7 @@ public class ArrayUtils extends ArrayUtilsCalculations {
         if (array == null) {
             return;
         }
-        shiftObject(array, 0, array.length, offset);
+        shift(array, 0, array.length, offset);
     }
 
     /**
@@ -2407,7 +2660,44 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.5
      */
     public static void shift(final boolean[] array, int startIndexInclusive, int endIndexExclusive, int offset) {
-    	shiftObject(array, startIndexInclusive, endIndexExclusive, offset);
+        if (array == null) {
+            return;
+        }
+        if (startIndexInclusive >= array.length - 1 || endIndexExclusive <= 0) {
+            return;
+        }
+        if (startIndexInclusive < 0) {
+            startIndexInclusive = 0;
+        }
+        if (endIndexExclusive >= array.length) {
+            endIndexExclusive = array.length;
+        }
+        int n = endIndexExclusive - startIndexInclusive;
+        if (n <= 1) {
+            return;
+        }
+        offset %= n;
+        if (offset < 0) {
+            offset += n;
+        }
+        // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
+        // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
+        while (n > 1 && offset > 0) {
+            final int n_offset = n - offset;
+
+            if (offset > n_offset) {
+                swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
+                n = offset;
+                offset -= n_offset;
+            } else if (offset < n_offset) {
+                swap(array, startIndexInclusive, startIndexInclusive + n_offset,  offset);
+                startIndexInclusive += offset;
+                n = n_offset;
+            } else {
+                swap(array, startIndexInclusive, startIndexInclusive + n_offset, offset);
+                break;
+            }
+        }
     }
 
     /**
@@ -2430,7 +2720,44 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.5
      */
     public static void shift(final byte[] array, int startIndexInclusive, int endIndexExclusive, int offset) {
-    	shiftObject(array, startIndexInclusive, endIndexExclusive, offset);
+        if (array == null) {
+            return;
+        }
+        if (startIndexInclusive >= array.length - 1 || endIndexExclusive <= 0) {
+            return;
+        }
+        if (startIndexInclusive < 0) {
+            startIndexInclusive = 0;
+        }
+        if (endIndexExclusive >= array.length) {
+            endIndexExclusive = array.length;
+        }
+        int n = endIndexExclusive - startIndexInclusive;
+        if (n <= 1) {
+            return;
+        }
+        offset %= n;
+        if (offset < 0) {
+            offset += n;
+        }
+        // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
+        // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
+        while (n > 1 && offset > 0) {
+            final int n_offset = n - offset;
+
+            if (offset > n_offset) {
+                swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
+                n = offset;
+                offset -= n_offset;
+            } else if (offset < n_offset) {
+                swap(array, startIndexInclusive, startIndexInclusive + n_offset,  offset);
+                startIndexInclusive += offset;
+                n = n_offset;
+            } else {
+                swap(array, startIndexInclusive, startIndexInclusive + n_offset, offset);
+                break;
+            }
+        }
     }
 
     /**
@@ -2453,7 +2780,44 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.5
      */
     public static void shift(final char[] array, int startIndexInclusive, int endIndexExclusive, int offset) {
-    	shiftObject(array, startIndexInclusive, endIndexExclusive, offset);
+        if (array == null) {
+            return;
+        }
+        if (startIndexInclusive >= array.length - 1 || endIndexExclusive <= 0) {
+            return;
+        }
+        if (startIndexInclusive < 0) {
+            startIndexInclusive = 0;
+        }
+        if (endIndexExclusive >= array.length) {
+            endIndexExclusive = array.length;
+        }
+        int n = endIndexExclusive - startIndexInclusive;
+        if (n <= 1) {
+            return;
+        }
+        offset %= n;
+        if (offset < 0) {
+            offset += n;
+        }
+        // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
+        // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
+        while (n > 1 && offset > 0) {
+            final int n_offset = n - offset;
+
+            if (offset > n_offset) {
+                swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
+                n = offset;
+                offset -= n_offset;
+            } else if (offset < n_offset) {
+                swap(array, startIndexInclusive, startIndexInclusive + n_offset,  offset);
+                startIndexInclusive += offset;
+                n = n_offset;
+            } else {
+                swap(array, startIndexInclusive, startIndexInclusive + n_offset, offset);
+                break;
+            }
+        }
     }
 
     /**
@@ -2476,7 +2840,44 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.5
      */
     public static void shift(final double[] array, int startIndexInclusive, int endIndexExclusive, int offset) {
-    	shiftObject(array, startIndexInclusive, endIndexExclusive, offset);
+        if (array == null) {
+            return;
+        }
+        if (startIndexInclusive >= array.length - 1 || endIndexExclusive <= 0) {
+            return;
+        }
+        if (startIndexInclusive < 0) {
+            startIndexInclusive = 0;
+        }
+        if (endIndexExclusive >= array.length) {
+            endIndexExclusive = array.length;
+        }
+        int n = endIndexExclusive - startIndexInclusive;
+        if (n <= 1) {
+            return;
+        }
+        offset %= n;
+        if (offset < 0) {
+            offset += n;
+        }
+        // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
+        // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
+        while (n > 1 && offset > 0) {
+            final int n_offset = n - offset;
+
+            if (offset > n_offset) {
+                swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
+                n = offset;
+                offset -= n_offset;
+            } else if (offset < n_offset) {
+                swap(array, startIndexInclusive, startIndexInclusive + n_offset,  offset);
+                startIndexInclusive += offset;
+                n = n_offset;
+            } else {
+                swap(array, startIndexInclusive, startIndexInclusive + n_offset, offset);
+                break;
+            }
+        }
     }
 
     /**
@@ -2499,7 +2900,44 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.5
      */
     public static void shift(final float[] array, int startIndexInclusive, int endIndexExclusive, int offset) {
-    	shiftObject(array, startIndexInclusive, endIndexExclusive, offset);
+        if (array == null) {
+            return;
+        }
+        if (startIndexInclusive >= array.length - 1 || endIndexExclusive <= 0) {
+            return;
+        }
+        if (startIndexInclusive < 0) {
+            startIndexInclusive = 0;
+        }
+        if (endIndexExclusive >= array.length) {
+            endIndexExclusive = array.length;
+        }
+        int n = endIndexExclusive - startIndexInclusive;
+        if (n <= 1) {
+            return;
+        }
+        offset %= n;
+        if (offset < 0) {
+            offset += n;
+        }
+        // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
+        // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
+        while (n > 1 && offset > 0) {
+            final int n_offset = n - offset;
+
+            if (offset > n_offset) {
+                swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
+                n = offset;
+                offset -= n_offset;
+            } else if (offset < n_offset) {
+                swap(array, startIndexInclusive, startIndexInclusive + n_offset,  offset);
+                startIndexInclusive += offset;
+                n = n_offset;
+            } else {
+                swap(array, startIndexInclusive, startIndexInclusive + n_offset, offset);
+                break;
+            }
+        }
     }
 
     /**
@@ -2522,7 +2960,44 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.5
      */
     public static void shift(final int[] array, int startIndexInclusive, int endIndexExclusive, int offset) {
-    	shiftObject(array, startIndexInclusive, endIndexExclusive, offset);
+        if (array == null) {
+            return;
+        }
+        if (startIndexInclusive >= array.length - 1 || endIndexExclusive <= 0) {
+            return;
+        }
+        if (startIndexInclusive < 0) {
+            startIndexInclusive = 0;
+        }
+        if (endIndexExclusive >= array.length) {
+            endIndexExclusive = array.length;
+        }
+        int n = endIndexExclusive - startIndexInclusive;
+        if (n <= 1) {
+            return;
+        }
+        offset %= n;
+        if (offset < 0) {
+            offset += n;
+        }
+        // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
+        // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
+        while (n > 1 && offset > 0) {
+            final int n_offset = n - offset;
+
+            if (offset > n_offset) {
+                swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
+                n = offset;
+                offset -= n_offset;
+            } else if (offset < n_offset) {
+                swap(array, startIndexInclusive, startIndexInclusive + n_offset,  offset);
+                startIndexInclusive += offset;
+                n = n_offset;
+            } else {
+                swap(array, startIndexInclusive, startIndexInclusive + n_offset, offset);
+                break;
+            }
+        }
     }
 
     /**
@@ -2545,7 +3020,44 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.5
      */
     public static void shift(final long[] array, int startIndexInclusive, int endIndexExclusive, int offset) {
-    	shiftObject(array, startIndexInclusive, endIndexExclusive, offset);
+        if (array == null) {
+            return;
+        }
+        if (startIndexInclusive >= array.length - 1 || endIndexExclusive <= 0) {
+            return;
+        }
+        if (startIndexInclusive < 0) {
+            startIndexInclusive = 0;
+        }
+        if (endIndexExclusive >= array.length) {
+            endIndexExclusive = array.length;
+        }
+        int n = endIndexExclusive - startIndexInclusive;
+        if (n <= 1) {
+            return;
+        }
+        offset %= n;
+        if (offset < 0) {
+            offset += n;
+        }
+        // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
+        // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
+        while (n > 1 && offset > 0) {
+            final int n_offset = n - offset;
+
+            if (offset > n_offset) {
+                swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
+                n = offset;
+                offset -= n_offset;
+            } else if (offset < n_offset) {
+                swap(array, startIndexInclusive, startIndexInclusive + n_offset,  offset);
+                startIndexInclusive += offset;
+                n = n_offset;
+            } else {
+                swap(array, startIndexInclusive, startIndexInclusive + n_offset, offset);
+                break;
+            }
+        }
     }
 
     /**
@@ -2568,7 +3080,44 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.5
      */
     public static void shift(final Object[] array, int startIndexInclusive, int endIndexExclusive, int offset) {
-    	shiftObject(array, startIndexInclusive, endIndexExclusive, offset);    
+        if (array == null) {
+            return;
+        }
+        if (startIndexInclusive >= array.length - 1 || endIndexExclusive <= 0) {
+            return;
+        }
+        if (startIndexInclusive < 0) {
+            startIndexInclusive = 0;
+        }
+        if (endIndexExclusive >= array.length) {
+            endIndexExclusive = array.length;
+        }
+        int n = endIndexExclusive - startIndexInclusive;
+        if (n <= 1) {
+            return;
+        }
+        offset %= n;
+        if (offset < 0) {
+            offset += n;
+        }
+        // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
+        // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
+        while (n > 1 && offset > 0) {
+            final int n_offset = n - offset;
+
+            if (offset > n_offset) {
+                swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
+                n = offset;
+                offset -= n_offset;
+            } else if (offset < n_offset) {
+                swap(array, startIndexInclusive, startIndexInclusive + n_offset,  offset);
+                startIndexInclusive += offset;
+                n = n_offset;
+            } else {
+                swap(array, startIndexInclusive, startIndexInclusive + n_offset, offset);
+                break;
+            }
+        }
     }
 
     /**
@@ -2591,7 +3140,44 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.5
      */
     public static void shift(final short[] array, int startIndexInclusive, int endIndexExclusive, int offset) {
-    	shiftObject(array, startIndexInclusive, endIndexExclusive, offset);
+        if (array == null) {
+            return;
+        }
+        if (startIndexInclusive >= array.length - 1 || endIndexExclusive <= 0) {
+            return;
+        }
+        if (startIndexInclusive < 0) {
+            startIndexInclusive = 0;
+        }
+        if (endIndexExclusive >= array.length) {
+            endIndexExclusive = array.length;
+        }
+        int n = endIndexExclusive - startIndexInclusive;
+        if (n <= 1) {
+            return;
+        }
+        offset %= n;
+        if (offset < 0) {
+            offset += n;
+        }
+        // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
+        // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
+        while (n > 1 && offset > 0) {
+            final int n_offset = n - offset;
+
+            if (offset > n_offset) {
+                swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
+                n = offset;
+                offset -= n_offset;
+            } else if (offset < n_offset) {
+                swap(array, startIndexInclusive, startIndexInclusive + n_offset,  offset);
+                startIndexInclusive += offset;
+                n = n_offset;
+            } else {
+                swap(array, startIndexInclusive, startIndexInclusive + n_offset, offset);
+                break;
+            }
+        }
     }
 
     // IndexOf search
@@ -4519,9 +5105,17 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @return The new boolean[] array.
      * @since 2.1
      */
-    public static boolean[] addAll(final boolean[] array1, final boolean... array2) {    	
-        return (boolean[]) addAllObject(array1, array2);
-    }      
+    public static boolean[] addAll(final boolean[] array1, final boolean... array2) {
+        if (array1 == null) {
+            return clone(array2);
+        } else if (array2 == null) {
+            return clone(array1);
+        }
+        final boolean[] joinedArray = new boolean[array1.length + array2.length];
+        System.arraycopy(array1, 0, joinedArray, 0, array1.length);
+        System.arraycopy(array2, 0, joinedArray, array1.length, array2.length);
+        return joinedArray;
+    }
 
     /**
      * <p>Adds all the elements of the given arrays into a new array.
@@ -4541,7 +5135,15 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 2.1
      */
     public static char[] addAll(final char[] array1, final char... array2) {
-    	return (char[]) addAllObject(array1, array2);
+        if (array1 == null) {
+            return clone(array2);
+        } else if (array2 == null) {
+            return clone(array1);
+        }
+        final char[] joinedArray = new char[array1.length + array2.length];
+        System.arraycopy(array1, 0, joinedArray, 0, array1.length);
+        System.arraycopy(array2, 0, joinedArray, array1.length, array2.length);
+        return joinedArray;
     }
 
     /**
@@ -4562,7 +5164,15 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 2.1
      */
     public static byte[] addAll(final byte[] array1, final byte... array2) {
-    	return (byte[]) addAllObject(array1, array2);
+        if (array1 == null) {
+            return clone(array2);
+        } else if (array2 == null) {
+            return clone(array1);
+        }
+        final byte[] joinedArray = new byte[array1.length + array2.length];
+        System.arraycopy(array1, 0, joinedArray, 0, array1.length);
+        System.arraycopy(array2, 0, joinedArray, array1.length, array2.length);
+        return joinedArray;
     }
 
     /**
@@ -4583,7 +5193,15 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 2.1
      */
     public static short[] addAll(final short[] array1, final short... array2) {
-    	return (short[]) addAllObject(array1, array2);
+        if (array1 == null) {
+            return clone(array2);
+        } else if (array2 == null) {
+            return clone(array1);
+        }
+        final short[] joinedArray = new short[array1.length + array2.length];
+        System.arraycopy(array1, 0, joinedArray, 0, array1.length);
+        System.arraycopy(array2, 0, joinedArray, array1.length, array2.length);
+        return joinedArray;
     }
 
     /**
@@ -4604,7 +5222,15 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 2.1
      */
     public static int[] addAll(final int[] array1, final int... array2) {
-    	return (int[]) addAllObject(array1, array2);
+        if (array1 == null) {
+            return clone(array2);
+        } else if (array2 == null) {
+            return clone(array1);
+        }
+        final int[] joinedArray = new int[array1.length + array2.length];
+        System.arraycopy(array1, 0, joinedArray, 0, array1.length);
+        System.arraycopy(array2, 0, joinedArray, array1.length, array2.length);
+        return joinedArray;
     }
 
     /**
@@ -4625,7 +5251,15 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 2.1
      */
     public static long[] addAll(final long[] array1, final long... array2) {
-    	return (long[]) addAllObject(array1, array2);
+        if (array1 == null) {
+            return clone(array2);
+        } else if (array2 == null) {
+            return clone(array1);
+        }
+        final long[] joinedArray = new long[array1.length + array2.length];
+        System.arraycopy(array1, 0, joinedArray, 0, array1.length);
+        System.arraycopy(array2, 0, joinedArray, array1.length, array2.length);
+        return joinedArray;
     }
 
     /**
@@ -4646,7 +5280,15 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 2.1
      */
     public static float[] addAll(final float[] array1, final float... array2) {
-    	return (float[]) addAllObject(array1, array2);
+        if (array1 == null) {
+            return clone(array2);
+        } else if (array2 == null) {
+            return clone(array1);
+        }
+        final float[] joinedArray = new float[array1.length + array2.length];
+        System.arraycopy(array1, 0, joinedArray, 0, array1.length);
+        System.arraycopy(array2, 0, joinedArray, array1.length, array2.length);
+        return joinedArray;
     }
 
     /**
@@ -4667,7 +5309,15 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 2.1
      */
     public static double[] addAll(final double[] array1, final double... array2) {
-    	return (double[]) addAllObject(array1, array2);
+        if (array1 == null) {
+            return clone(array2);
+        } else if (array2 == null) {
+            return clone(array1);
+        }
+        final double[] joinedArray = new double[array1.length + array2.length];
+        System.arraycopy(array1, 0, joinedArray, 0, array1.length);
+        System.arraycopy(array2, 0, joinedArray, array1.length, array2.length);
+        return joinedArray;
     }
 
     /**
@@ -4929,6 +5579,25 @@ public class ArrayUtils extends ArrayUtilsCalculations {
         final short[] newArray = (short[]) copyArrayGrow1(array, Short.TYPE);
         newArray[newArray.length - 1] = element;
         return newArray;
+    }
+
+    /**
+     * Returns a copy of the given array of size 1 greater than the argument.
+     * The last value of the array is left to the default value.
+     *
+     * @param array The array to copy, must not be {@code null}.
+     * @param newArrayComponentType If {@code array} is {@code null}, create a
+     * size 1 array of this type.
+     * @return A new copy of the array of size 1 greater than the input.
+     */
+    private static Object copyArrayGrow1(final Object array, final Class<?> newArrayComponentType) {
+        if (array != null) {
+            final int arrayLength = Array.getLength(array);
+            final Object newArray = Array.newInstance(array.getClass().getComponentType(), arrayLength + 1);
+            System.arraycopy(array, 0, newArray, 0, arrayLength);
+            return newArray;
+        }
+        return Array.newInstance(newArrayComponentType, 1);
     }
 
     /**
@@ -7408,7 +8077,26 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.6
      */
     public static boolean[] insert(final int index, final boolean[] array, final boolean... values) {
-    	return (boolean[]) insertObject(index, array, values);
+        if (array == null) {
+            return null;
+        }
+        if (values == null || values.length == 0) {
+            return clone(array);
+        }
+        if (index < 0 || index > array.length) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Length: " + array.length);
+        }
+
+        final boolean[] result = new boolean[array.length + values.length];
+
+        System.arraycopy(values, 0, result, index, values.length);
+        if (index > 0) {
+            System.arraycopy(array, 0, result, 0, index);
+        }
+        if (index < array.length) {
+            System.arraycopy(array, index, result, index + values.length, array.length - index);
+        }
+        return result;
     }
 
     /**
@@ -7431,7 +8119,26 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.6
      */
     public static byte[] insert(final int index, final byte[] array, final byte... values) {
-    	return (byte[]) insertObject(index, array, values);
+        if (array == null) {
+            return null;
+        }
+        if (values == null || values.length == 0) {
+            return clone(array);
+        }
+        if (index < 0 || index > array.length) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Length: " + array.length);
+        }
+
+        final byte[] result = new byte[array.length + values.length];
+
+        System.arraycopy(values, 0, result, index, values.length);
+        if (index > 0) {
+            System.arraycopy(array, 0, result, 0, index);
+        }
+        if (index < array.length) {
+            System.arraycopy(array, index, result, index + values.length, array.length - index);
+        }
+        return result;
     }
 
     /**
@@ -7454,7 +8161,26 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.6
      */
     public static char[] insert(final int index, final char[] array, final char... values) {
-    	return (char[]) insertObject(index, array, values);
+        if (array == null) {
+            return null;
+        }
+        if (values == null || values.length == 0) {
+            return clone(array);
+        }
+        if (index < 0 || index > array.length) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Length: " + array.length);
+        }
+
+        final char[] result = new char[array.length + values.length];
+
+        System.arraycopy(values, 0, result, index, values.length);
+        if (index > 0) {
+            System.arraycopy(array, 0, result, 0, index);
+        }
+        if (index < array.length) {
+            System.arraycopy(array, index, result, index + values.length, array.length - index);
+        }
+        return result;
     }
 
     /**
@@ -7477,7 +8203,26 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.6
      */
     public static double[] insert(final int index, final double[] array, final double... values) {
-    	return (double[]) insertObject(index, array, values);
+        if (array == null) {
+            return null;
+        }
+        if (values == null || values.length == 0) {
+            return clone(array);
+        }
+        if (index < 0 || index > array.length) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Length: " + array.length);
+        }
+
+        final double[] result = new double[array.length + values.length];
+
+        System.arraycopy(values, 0, result, index, values.length);
+        if (index > 0) {
+            System.arraycopy(array, 0, result, 0, index);
+        }
+        if (index < array.length) {
+            System.arraycopy(array, index, result, index + values.length, array.length - index);
+        }
+        return result;
     }
 
     /**
@@ -7500,7 +8245,26 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.6
      */
     public static float[] insert(final int index, final float[] array, final float... values) {
-		return (float[]) insertObject(index, array, values);
+        if (array == null) {
+            return null;
+        }
+        if (values == null || values.length == 0) {
+            return clone(array);
+        }
+        if (index < 0 || index > array.length) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Length: " + array.length);
+        }
+
+        final float[] result = new float[array.length + values.length];
+
+        System.arraycopy(values, 0, result, index, values.length);
+        if (index > 0) {
+            System.arraycopy(array, 0, result, 0, index);
+        }
+        if (index < array.length) {
+            System.arraycopy(array, index, result, index + values.length, array.length - index);
+        }
+        return result;
     }
 
     /**
@@ -7523,7 +8287,26 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.6
      */
     public static int[] insert(final int index, final int[] array, final int... values) {
-    	return (int[]) insertObject(index, array, values);
+        if (array == null) {
+            return null;
+        }
+        if (values == null || values.length == 0) {
+            return clone(array);
+        }
+        if (index < 0 || index > array.length) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Length: " + array.length);
+        }
+
+        final int[] result = new int[array.length + values.length];
+
+        System.arraycopy(values, 0, result, index, values.length);
+        if (index > 0) {
+            System.arraycopy(array, 0, result, 0, index);
+        }
+        if (index < array.length) {
+            System.arraycopy(array, index, result, index + values.length, array.length - index);
+        }
+        return result;
     }
 
     /**
@@ -7546,7 +8329,26 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.6
      */
     public static long[] insert(final int index, final long[] array, final long... values) {
-        return (long[]) insertObject(index, array, values);
+        if (array == null) {
+            return null;
+        }
+        if (values == null || values.length == 0) {
+            return clone(array);
+        }
+        if (index < 0 || index > array.length) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Length: " + array.length);
+        }
+
+        final long[] result = new long[array.length + values.length];
+
+        System.arraycopy(values, 0, result, index, values.length);
+        if (index > 0) {
+            System.arraycopy(array, 0, result, 0, index);
+        }
+        if (index < array.length) {
+            System.arraycopy(array, index, result, index + values.length, array.length - index);
+        }
+        return result;
     }
 
     /**
@@ -7569,7 +8371,26 @@ public class ArrayUtils extends ArrayUtilsCalculations {
      * @since 3.6
      */
     public static short[] insert(final int index, final short[] array, final short... values) {
-    	return (short[]) insertObject(index, array, values);
+        if (array == null) {
+            return null;
+        }
+        if (values == null || values.length == 0) {
+            return clone(array);
+        }
+        if (index < 0 || index > array.length) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Length: " + array.length);
+        }
+
+        final short[] result = new short[array.length + values.length];
+
+        System.arraycopy(values, 0, result, index, values.length);
+        if (index > 0) {
+            System.arraycopy(array, 0, result, 0, index);
+        }
+        if (index < array.length) {
+            System.arraycopy(array, index, result, index + values.length, array.length - index);
+        }
+        return result;
     }
 
     /**

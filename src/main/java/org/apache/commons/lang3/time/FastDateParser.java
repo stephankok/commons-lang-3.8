@@ -85,8 +85,7 @@ public class FastDateParser implements DateParser, Serializable {
     private final String pattern;
     private final TimeZone timeZone;
     private final Locale locale;
-    private final int century;
-    private final int startYear;
+    private Century century;
 
     // derived fields
     private transient List<StrategyAndWidth> patterns;
@@ -145,8 +144,8 @@ public class FastDateParser implements DateParser, Serializable {
             definingCalendar.setTime(new Date());
             centuryStartYear= definingCalendar.get(Calendar.YEAR)-80;
         }
-        century= centuryStartYear / 100 * 100;
-        startYear= centuryStartYear - century;
+        
+        this.century = new Century(centuryStartYear);
 
         init(definingCalendar);
     }
@@ -481,16 +480,6 @@ public class FastDateParser implements DateParser, Serializable {
     }
 
     /**
-     * Adjust dates to be within appropriate century
-     * @param twoDigitYear The year to adjust
-     * @return A value between centuryStart(inclusive) to centuryStart+100(exclusive)
-     */
-    private int adjustYear(final int twoDigitYear) {
-        final int trial = century + twoDigitYear;
-        return twoDigitYear >= startYear ? trial : trial + 100;
-    }
-
-    /**
      * A strategy to parse a single field from the parsing pattern
      */
     private abstract static class Strategy {
@@ -808,7 +797,7 @@ public class FastDateParser implements DateParser, Serializable {
          */
         @Override
         int modify(final FastDateParser parser, final int iValue) {
-            return iValue < 100 ? parser.adjustYear(iValue) : iValue;
+            return iValue < 100 ? parser.century.adjustYear(iValue) : iValue;
         }
     };
 
