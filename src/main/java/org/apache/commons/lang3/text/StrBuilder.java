@@ -582,10 +582,22 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @return this, to enable chaining
      */
     public StrBuilder append(final String str, final int startIndex, final int length) {
-    	if (str == null) {
+        if (str == null) {
             return appendNull();
         }
-        return append(str.toString(), startIndex, length);
+        if (startIndex < 0 || startIndex > str.length()) {
+            throw new StringIndexOutOfBoundsException("startIndex must be valid");
+        }
+        if (length < 0 || (startIndex + length) > str.length()) {
+            throw new StringIndexOutOfBoundsException("length must be valid");
+        }
+        if (length > 0) {
+            final int len = length();
+            ensureCapacity(len + length);
+            str.getChars(startIndex, startIndex + length, buffer, len);
+            size += length;
+        }
+        return this;
     }
 
     /**

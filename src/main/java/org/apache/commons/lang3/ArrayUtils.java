@@ -2110,21 +2110,7 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void swap(final boolean[] array, int offset1, int offset2, int len) {
-        if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
-            return;
-        }
-        if (offset1 < 0) {
-            offset1 = 0;
-        }
-        if (offset2 < 0) {
-            offset2 = 0;
-        }
-        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
-        for (int i = 0; i < len; i++, offset1++, offset2++) {
-            final boolean aux = array[offset1];
-            array[offset1] = array[offset2];
-            array[offset2] = aux;
-        }
+    	swapArray(array, offset1, offset2, len);
     }
 
     /**
@@ -2152,21 +2138,7 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void swap(final byte[] array, int offset1, int offset2, int len) {
-        if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
-            return;
-        }
-        if (offset1 < 0) {
-            offset1 = 0;
-        }
-        if (offset2 < 0) {
-            offset2 = 0;
-        }
-        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
-        for (int i = 0; i < len; i++, offset1++, offset2++) {
-            final byte aux = array[offset1];
-            array[offset1] = array[offset2];
-            array[offset2] = aux;
-        }
+    	swapArray(array, offset1, offset2, len);
     }
 
     /**
@@ -2194,21 +2166,7 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void swap(final char[] array, int offset1, int offset2, int len) {
-        if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
-            return;
-        }
-        if (offset1 < 0) {
-            offset1 = 0;
-        }
-        if (offset2 < 0) {
-            offset2 = 0;
-        }
-        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
-        for (int i = 0; i < len; i++, offset1++, offset2++) {
-            final char aux = array[offset1];
-            array[offset1] = array[offset2];
-            array[offset2] = aux;
-        }
+    	swapArray(array, offset1, offset2, len);
     }
 
     /**
@@ -2236,21 +2194,7 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void swap(final double[] array,  int offset1, int offset2, int len) {
-        if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
-            return;
-        }
-        if (offset1 < 0) {
-            offset1 = 0;
-        }
-        if (offset2 < 0) {
-            offset2 = 0;
-        }
-        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
-        for (int i = 0; i < len; i++, offset1++, offset2++) {
-            final double aux = array[offset1];
-            array[offset1] = array[offset2];
-            array[offset2] = aux;
-        }
+    	swapArray(array, offset1, offset2, len);
     }
 
     /**
@@ -2278,22 +2222,7 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void swap(final float[] array, int offset1, int offset2, int len) {
-        if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
-            return;
-        }
-        if (offset1 < 0) {
-            offset1 = 0;
-        }
-        if (offset2 < 0) {
-            offset2 = 0;
-        }
-        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
-        for (int i = 0; i < len; i++, offset1++, offset2++) {
-            final float aux = array[offset1];
-            array[offset1] = array[offset2];
-            array[offset2] = aux;
-        }
-
+    	swapArray(array, offset1, offset2, len);
     }
 
     /**
@@ -2321,21 +2250,7 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void swap(final int[] array,  int offset1, int offset2, int len) {
-        if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
-            return;
-        }
-        if (offset1 < 0) {
-            offset1 = 0;
-        }
-        if (offset2 < 0) {
-            offset2 = 0;
-        }
-        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
-        for (int i = 0; i < len; i++, offset1++, offset2++) {
-            final int aux = array[offset1];
-            array[offset1] = array[offset2];
-            array[offset2] = aux;
-        }
+    	swapArray(array, offset1, offset2, len);
     }
 
     /**
@@ -2363,21 +2278,7 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void swap(final long[] array,  int offset1, int offset2, int len) {
-        if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
-            return;
-        }
-        if (offset1 < 0) {
-            offset1 = 0;
-        }
-        if (offset2 < 0) {
-            offset2 = 0;
-        }
-        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
-        for (int i = 0; i < len; i++, offset1++, offset2++) {
-            final long aux = array[offset1];
-            array[offset1] = array[offset2];
-            array[offset2] = aux;
-        }
+    	swapArray(array, offset1, offset2, len);
     }
 
     /**
@@ -2405,21 +2306,7 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void swap(final Object[] array,  int offset1, int offset2, int len) {
-        if (array == null || array.length == 0 || offset1 >= array.length || offset2 >= array.length) {
-            return;
-        }
-        if (offset1 < 0) {
-            offset1 = 0;
-        }
-        if (offset2 < 0) {
-            offset2 = 0;
-        }
-        len = Math.min(Math.min(len, array.length - offset1), array.length - offset2);
-        for (int i = 0; i < len; i++, offset1++, offset2++) {
-            final Object aux = array[offset1];
-            array[offset1] = array[offset2];
-            array[offset2] = aux;
-        }
+    	swapArray(array, offset1, offset2, len);
     }
 
    /**
@@ -2464,6 +2351,28 @@ public class ArrayUtils {
             final short aux = array[offset1];
             array[offset1] = array[offset2];
             array[offset2] = aux;
+        }
+    }
+    
+    public static void swapArray(final Object array,  int offset1, int offset2, int len) {
+        if (array == null || Array.getLength(array) == 0 || 
+        		offset1 >= Array.getLength(array) || offset2 >= Array.getLength(array)) {
+            return;
+        }
+        if (offset1 < 0) {
+            offset1 = 0;
+        }
+        if (offset2 < 0) {
+            offset2 = 0;
+        }
+        if (offset1 == offset2) {
+            return;
+        }
+        len = Math.min(Math.min(len, Array.getLength(array) - offset1), Array.getLength(array) - offset2);
+        for (int i = 0; i < len; i++, offset1++, offset2++) {
+            final Object aux = Array.get(array, offset1);
+            Array.set(array, offset1, Array.get(array, offset2));
+            Array.set(array, offset2, aux);
         }
     }
 
@@ -2659,18 +2568,23 @@ public class ArrayUtils {
      *          rotate, than the effective offset is modulo the number of elements to rotate.
      * @since 3.5
      */
-    public static void shift(final boolean[] array, int startIndexInclusive, int endIndexExclusive, int offset) {
+    public static void shift(final boolean[] array, int startIndexInclusive, 
+    		int endIndexExclusive, int offset) {
+    	shiftArray(array, startIndexInclusive, endIndexExclusive, offset);
+    }
+    
+    private static void shiftArray(final Object array, int startIndexInclusive, int endIndexExclusive, int offset) {
         if (array == null) {
             return;
         }
-        if (startIndexInclusive >= array.length - 1 || endIndexExclusive <= 0) {
+        if (startIndexInclusive >= Array.getLength(array) - 1 || endIndexExclusive <= 0) {
             return;
         }
         if (startIndexInclusive < 0) {
             startIndexInclusive = 0;
         }
-        if (endIndexExclusive >= array.length) {
-            endIndexExclusive = array.length;
+        if (endIndexExclusive >= Array.getLength(array)) {
+            endIndexExclusive = Array.getLength(array);
         }
         int n = endIndexExclusive - startIndexInclusive;
         if (n <= 1) {
@@ -2686,15 +2600,15 @@ public class ArrayUtils {
             final int n_offset = n - offset;
 
             if (offset > n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
+                swapArray(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
                 n = offset;
                 offset -= n_offset;
             } else if (offset < n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset,  offset);
+            	swapArray(array, startIndexInclusive, startIndexInclusive + n_offset,  offset);
                 startIndexInclusive += offset;
                 n = n_offset;
             } else {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset, offset);
+            	swapArray(array, startIndexInclusive, startIndexInclusive + n_offset, offset);
                 break;
             }
         }
@@ -2720,44 +2634,7 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void shift(final byte[] array, int startIndexInclusive, int endIndexExclusive, int offset) {
-        if (array == null) {
-            return;
-        }
-        if (startIndexInclusive >= array.length - 1 || endIndexExclusive <= 0) {
-            return;
-        }
-        if (startIndexInclusive < 0) {
-            startIndexInclusive = 0;
-        }
-        if (endIndexExclusive >= array.length) {
-            endIndexExclusive = array.length;
-        }
-        int n = endIndexExclusive - startIndexInclusive;
-        if (n <= 1) {
-            return;
-        }
-        offset %= n;
-        if (offset < 0) {
-            offset += n;
-        }
-        // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
-        // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
-        while (n > 1 && offset > 0) {
-            final int n_offset = n - offset;
-
-            if (offset > n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
-                n = offset;
-                offset -= n_offset;
-            } else if (offset < n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset,  offset);
-                startIndexInclusive += offset;
-                n = n_offset;
-            } else {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset, offset);
-                break;
-            }
-        }
+    	shiftArray(array, startIndexInclusive, endIndexExclusive, offset);
     }
 
     /**
@@ -2780,44 +2657,7 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void shift(final char[] array, int startIndexInclusive, int endIndexExclusive, int offset) {
-        if (array == null) {
-            return;
-        }
-        if (startIndexInclusive >= array.length - 1 || endIndexExclusive <= 0) {
-            return;
-        }
-        if (startIndexInclusive < 0) {
-            startIndexInclusive = 0;
-        }
-        if (endIndexExclusive >= array.length) {
-            endIndexExclusive = array.length;
-        }
-        int n = endIndexExclusive - startIndexInclusive;
-        if (n <= 1) {
-            return;
-        }
-        offset %= n;
-        if (offset < 0) {
-            offset += n;
-        }
-        // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
-        // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
-        while (n > 1 && offset > 0) {
-            final int n_offset = n - offset;
-
-            if (offset > n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
-                n = offset;
-                offset -= n_offset;
-            } else if (offset < n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset,  offset);
-                startIndexInclusive += offset;
-                n = n_offset;
-            } else {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset, offset);
-                break;
-            }
-        }
+    	shiftArray(array, startIndexInclusive, endIndexExclusive, offset);
     }
 
     /**
@@ -2840,44 +2680,7 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void shift(final double[] array, int startIndexInclusive, int endIndexExclusive, int offset) {
-        if (array == null) {
-            return;
-        }
-        if (startIndexInclusive >= array.length - 1 || endIndexExclusive <= 0) {
-            return;
-        }
-        if (startIndexInclusive < 0) {
-            startIndexInclusive = 0;
-        }
-        if (endIndexExclusive >= array.length) {
-            endIndexExclusive = array.length;
-        }
-        int n = endIndexExclusive - startIndexInclusive;
-        if (n <= 1) {
-            return;
-        }
-        offset %= n;
-        if (offset < 0) {
-            offset += n;
-        }
-        // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
-        // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
-        while (n > 1 && offset > 0) {
-            final int n_offset = n - offset;
-
-            if (offset > n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
-                n = offset;
-                offset -= n_offset;
-            } else if (offset < n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset,  offset);
-                startIndexInclusive += offset;
-                n = n_offset;
-            } else {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset, offset);
-                break;
-            }
-        }
+    	shiftArray(array, startIndexInclusive, endIndexExclusive, offset);
     }
 
     /**
@@ -2900,44 +2703,7 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void shift(final float[] array, int startIndexInclusive, int endIndexExclusive, int offset) {
-        if (array == null) {
-            return;
-        }
-        if (startIndexInclusive >= array.length - 1 || endIndexExclusive <= 0) {
-            return;
-        }
-        if (startIndexInclusive < 0) {
-            startIndexInclusive = 0;
-        }
-        if (endIndexExclusive >= array.length) {
-            endIndexExclusive = array.length;
-        }
-        int n = endIndexExclusive - startIndexInclusive;
-        if (n <= 1) {
-            return;
-        }
-        offset %= n;
-        if (offset < 0) {
-            offset += n;
-        }
-        // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
-        // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
-        while (n > 1 && offset > 0) {
-            final int n_offset = n - offset;
-
-            if (offset > n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
-                n = offset;
-                offset -= n_offset;
-            } else if (offset < n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset,  offset);
-                startIndexInclusive += offset;
-                n = n_offset;
-            } else {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset, offset);
-                break;
-            }
-        }
+    	shiftArray(array, startIndexInclusive, endIndexExclusive, offset);
     }
 
     /**
@@ -2960,44 +2726,7 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void shift(final int[] array, int startIndexInclusive, int endIndexExclusive, int offset) {
-        if (array == null) {
-            return;
-        }
-        if (startIndexInclusive >= array.length - 1 || endIndexExclusive <= 0) {
-            return;
-        }
-        if (startIndexInclusive < 0) {
-            startIndexInclusive = 0;
-        }
-        if (endIndexExclusive >= array.length) {
-            endIndexExclusive = array.length;
-        }
-        int n = endIndexExclusive - startIndexInclusive;
-        if (n <= 1) {
-            return;
-        }
-        offset %= n;
-        if (offset < 0) {
-            offset += n;
-        }
-        // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
-        // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
-        while (n > 1 && offset > 0) {
-            final int n_offset = n - offset;
-
-            if (offset > n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
-                n = offset;
-                offset -= n_offset;
-            } else if (offset < n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset,  offset);
-                startIndexInclusive += offset;
-                n = n_offset;
-            } else {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset, offset);
-                break;
-            }
-        }
+    	shiftArray(array, startIndexInclusive, endIndexExclusive, offset);
     }
 
     /**
@@ -3020,44 +2749,7 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void shift(final long[] array, int startIndexInclusive, int endIndexExclusive, int offset) {
-        if (array == null) {
-            return;
-        }
-        if (startIndexInclusive >= array.length - 1 || endIndexExclusive <= 0) {
-            return;
-        }
-        if (startIndexInclusive < 0) {
-            startIndexInclusive = 0;
-        }
-        if (endIndexExclusive >= array.length) {
-            endIndexExclusive = array.length;
-        }
-        int n = endIndexExclusive - startIndexInclusive;
-        if (n <= 1) {
-            return;
-        }
-        offset %= n;
-        if (offset < 0) {
-            offset += n;
-        }
-        // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
-        // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
-        while (n > 1 && offset > 0) {
-            final int n_offset = n - offset;
-
-            if (offset > n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
-                n = offset;
-                offset -= n_offset;
-            } else if (offset < n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset,  offset);
-                startIndexInclusive += offset;
-                n = n_offset;
-            } else {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset, offset);
-                break;
-            }
-        }
+    	shiftArray(array, startIndexInclusive, endIndexExclusive, offset);
     }
 
     /**
@@ -3080,44 +2772,7 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void shift(final Object[] array, int startIndexInclusive, int endIndexExclusive, int offset) {
-        if (array == null) {
-            return;
-        }
-        if (startIndexInclusive >= array.length - 1 || endIndexExclusive <= 0) {
-            return;
-        }
-        if (startIndexInclusive < 0) {
-            startIndexInclusive = 0;
-        }
-        if (endIndexExclusive >= array.length) {
-            endIndexExclusive = array.length;
-        }
-        int n = endIndexExclusive - startIndexInclusive;
-        if (n <= 1) {
-            return;
-        }
-        offset %= n;
-        if (offset < 0) {
-            offset += n;
-        }
-        // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
-        // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
-        while (n > 1 && offset > 0) {
-            final int n_offset = n - offset;
-
-            if (offset > n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
-                n = offset;
-                offset -= n_offset;
-            } else if (offset < n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset,  offset);
-                startIndexInclusive += offset;
-                n = n_offset;
-            } else {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset, offset);
-                break;
-            }
-        }
+    	shiftArray(array, startIndexInclusive, endIndexExclusive, offset);
     }
 
     /**
@@ -3140,44 +2795,7 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static void shift(final short[] array, int startIndexInclusive, int endIndexExclusive, int offset) {
-        if (array == null) {
-            return;
-        }
-        if (startIndexInclusive >= array.length - 1 || endIndexExclusive <= 0) {
-            return;
-        }
-        if (startIndexInclusive < 0) {
-            startIndexInclusive = 0;
-        }
-        if (endIndexExclusive >= array.length) {
-            endIndexExclusive = array.length;
-        }
-        int n = endIndexExclusive - startIndexInclusive;
-        if (n <= 1) {
-            return;
-        }
-        offset %= n;
-        if (offset < 0) {
-            offset += n;
-        }
-        // For algorithm explanations and proof of O(n) time complexity and O(1) space complexity
-        // see https://beradrian.wordpress.com/2015/04/07/shift-an-array-in-on-in-place/
-        while (n > 1 && offset > 0) {
-            final int n_offset = n - offset;
-
-            if (offset > n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n - n_offset,  n_offset);
-                n = offset;
-                offset -= n_offset;
-            } else if (offset < n_offset) {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset,  offset);
-                startIndexInclusive += offset;
-                n = n_offset;
-            } else {
-                swap(array, startIndexInclusive, startIndexInclusive + n_offset, offset);
-                break;
-            }
-        }
+    	shiftArray(array, startIndexInclusive, endIndexExclusive, offset);
     }
 
     // IndexOf search
@@ -3214,6 +2832,10 @@ public class ArrayUtils {
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
     public static int indexOf(final Object[] array, final Object objectToFind, int startIndex) {
+    	return indexOfArray(array, objectToFind, startIndex);
+    }
+    
+    private static int indexOfArray(final Object array, final Object objectToFind, int startIndex) {
         if (array == null) {
             return INDEX_NOT_FOUND;
         }
@@ -3221,14 +2843,14 @@ public class ArrayUtils {
             startIndex = 0;
         }
         if (objectToFind == null) {
-            for (int i = startIndex; i < array.length; i++) {
-                if (array[i] == null) {
+            for (int i = startIndex; i < Array.getLength(array); i++) {
+                if (Array.get(array, i)== null) {
                     return i;
                 }
             }
         } else {
-            for (int i = startIndex; i < array.length; i++) {
-                if (objectToFind.equals(array[i])) {
+            for (int i = startIndex; i < Array.getLength(array); i++) {
+                if (objectToFind.equals(Array.get(array, i))) {
                     return i;
                 }
             }
@@ -3288,6 +2910,23 @@ public class ArrayUtils {
         }
         return INDEX_NOT_FOUND;
     }
+    
+    private static int lastIndexOfArray(final Object array, final Object valueToFind, int startIndex) {
+    	if (array == null) {
+            return INDEX_NOT_FOUND;
+        }
+        if (startIndex < 0) {
+            return INDEX_NOT_FOUND;
+        } else if (startIndex >= Array.getLength(array)) {
+            startIndex = Array.getLength(array) - 1;
+        }
+        for (int i = startIndex; i >= 0; i--) {
+            if (valueToFind.equals(Array.get(array, i))) {
+                return i;
+            }
+        }
+        return INDEX_NOT_FOUND;
+    }
 
     /**
      * <p>Checks if the object is in the given array.
@@ -3333,18 +2972,7 @@ public class ArrayUtils {
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
     public static int indexOf(final long[] array, final long valueToFind, int startIndex) {
-        if (array == null) {
-            return INDEX_NOT_FOUND;
-        }
-        if (startIndex < 0) {
-            startIndex = 0;
-        }
-        for (int i = startIndex; i < array.length; i++) {
-            if (valueToFind == array[i]) {
-                return i;
-            }
-        }
-        return INDEX_NOT_FOUND;
+    	return indexOfArray(array, valueToFind, startIndex);
     }
 
     /**
@@ -3376,20 +3004,7 @@ public class ArrayUtils {
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
     public static int lastIndexOf(final long[] array, final long valueToFind, int startIndex) {
-        if (array == null) {
-            return INDEX_NOT_FOUND;
-        }
-        if (startIndex < 0) {
-            return INDEX_NOT_FOUND;
-        } else if (startIndex >= array.length) {
-            startIndex = array.length - 1;
-        }
-        for (int i = startIndex; i >= 0; i--) {
-            if (valueToFind == array[i]) {
-                return i;
-            }
-        }
-        return INDEX_NOT_FOUND;
+    	return lastIndexOfArray(array, valueToFind, startIndex);
     }
 
     /**
@@ -3436,18 +3051,7 @@ public class ArrayUtils {
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
     public static int indexOf(final int[] array, final int valueToFind, int startIndex) {
-        if (array == null) {
-            return INDEX_NOT_FOUND;
-        }
-        if (startIndex < 0) {
-            startIndex = 0;
-        }
-        for (int i = startIndex; i < array.length; i++) {
-            if (valueToFind == array[i]) {
-                return i;
-            }
-        }
-        return INDEX_NOT_FOUND;
+    	return indexOfArray(array, valueToFind, startIndex);
     }
 
     /**
@@ -3479,20 +3083,7 @@ public class ArrayUtils {
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
     public static int lastIndexOf(final int[] array, final int valueToFind, int startIndex) {
-        if (array == null) {
-            return INDEX_NOT_FOUND;
-        }
-        if (startIndex < 0) {
-            return INDEX_NOT_FOUND;
-        } else if (startIndex >= array.length) {
-            startIndex = array.length - 1;
-        }
-        for (int i = startIndex; i >= 0; i--) {
-            if (valueToFind == array[i]) {
-                return i;
-            }
-        }
-        return INDEX_NOT_FOUND;
+        return lastIndexOfArray(array, valueToFind, startIndex);
     }
 
     /**
@@ -3539,18 +3130,7 @@ public class ArrayUtils {
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
     public static int indexOf(final short[] array, final short valueToFind, int startIndex) {
-        if (array == null) {
-            return INDEX_NOT_FOUND;
-        }
-        if (startIndex < 0) {
-            startIndex = 0;
-        }
-        for (int i = startIndex; i < array.length; i++) {
-            if (valueToFind == array[i]) {
-                return i;
-            }
-        }
-        return INDEX_NOT_FOUND;
+        return indexOfArray(array, valueToFind, startIndex);
     }
 
     /**
@@ -3582,20 +3162,7 @@ public class ArrayUtils {
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
     public static int lastIndexOf(final short[] array, final short valueToFind, int startIndex) {
-        if (array == null) {
-            return INDEX_NOT_FOUND;
-        }
-        if (startIndex < 0) {
-            return INDEX_NOT_FOUND;
-        } else if (startIndex >= array.length) {
-            startIndex = array.length - 1;
-        }
-        for (int i = startIndex; i >= 0; i--) {
-            if (valueToFind == array[i]) {
-                return i;
-            }
-        }
-        return INDEX_NOT_FOUND;
+    	return lastIndexOfArray(array, valueToFind, startIndex);
     }
 
     /**
@@ -3644,18 +3211,7 @@ public class ArrayUtils {
      * @since 2.1
      */
     public static int indexOf(final char[] array, final char valueToFind, int startIndex) {
-        if (array == null) {
-            return INDEX_NOT_FOUND;
-        }
-        if (startIndex < 0) {
-            startIndex = 0;
-        }
-        for (int i = startIndex; i < array.length; i++) {
-            if (valueToFind == array[i]) {
-                return i;
-            }
-        }
-        return INDEX_NOT_FOUND;
+    	return indexOfArray(array, valueToFind, startIndex);
     }
 
     /**
@@ -3689,20 +3245,7 @@ public class ArrayUtils {
      * @since 2.1
      */
     public static int lastIndexOf(final char[] array, final char valueToFind, int startIndex) {
-        if (array == null) {
-            return INDEX_NOT_FOUND;
-        }
-        if (startIndex < 0) {
-            return INDEX_NOT_FOUND;
-        } else if (startIndex >= array.length) {
-            startIndex = array.length - 1;
-        }
-        for (int i = startIndex; i >= 0; i--) {
-            if (valueToFind == array[i]) {
-                return i;
-            }
-        }
-        return INDEX_NOT_FOUND;
+    	return lastIndexOfArray(array, valueToFind, startIndex);
     }
 
     /**
@@ -3750,18 +3293,7 @@ public class ArrayUtils {
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
     public static int indexOf(final byte[] array, final byte valueToFind, int startIndex) {
-        if (array == null) {
-            return INDEX_NOT_FOUND;
-        }
-        if (startIndex < 0) {
-            startIndex = 0;
-        }
-        for (int i = startIndex; i < array.length; i++) {
-            if (valueToFind == array[i]) {
-                return i;
-            }
-        }
-        return INDEX_NOT_FOUND;
+    	return indexOfArray(array, valueToFind, startIndex);
     }
 
     /**
@@ -3793,20 +3325,7 @@ public class ArrayUtils {
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
     public static int lastIndexOf(final byte[] array, final byte valueToFind, int startIndex) {
-        if (array == null) {
-            return INDEX_NOT_FOUND;
-        }
-        if (startIndex < 0) {
-            return INDEX_NOT_FOUND;
-        } else if (startIndex >= array.length) {
-            startIndex = array.length - 1;
-        }
-        for (int i = startIndex; i >= 0; i--) {
-            if (valueToFind == array[i]) {
-                return i;
-            }
-        }
-        return INDEX_NOT_FOUND;
+    	return lastIndexOfArray(array, valueToFind, startIndex);
     }
 
     /**
@@ -3870,18 +3389,7 @@ public class ArrayUtils {
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
     public static int indexOf(final double[] array, final double valueToFind, int startIndex) {
-        if (isEmpty(array)) {
-            return INDEX_NOT_FOUND;
-        }
-        if (startIndex < 0) {
-            startIndex = 0;
-        }
-        for (int i = startIndex; i < array.length; i++) {
-            if (valueToFind == array[i]) {
-                return i;
-            }
-        }
-        return INDEX_NOT_FOUND;
+    	return indexOfArray(array, valueToFind, startIndex);
     }
 
     /**
@@ -3964,20 +3472,7 @@ public class ArrayUtils {
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
     public static int lastIndexOf(final double[] array, final double valueToFind, int startIndex) {
-        if (isEmpty(array)) {
-            return INDEX_NOT_FOUND;
-        }
-        if (startIndex < 0) {
-            return INDEX_NOT_FOUND;
-        } else if (startIndex >= array.length) {
-            startIndex = array.length - 1;
-        }
-        for (int i = startIndex; i >= 0; i--) {
-            if (valueToFind == array[i]) {
-                return i;
-            }
-        }
-        return INDEX_NOT_FOUND;
+    	return lastIndexOfArray(array, valueToFind, startIndex);
     }
 
     /**
@@ -4077,18 +3572,7 @@ public class ArrayUtils {
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
     public static int indexOf(final float[] array, final float valueToFind, int startIndex) {
-        if (isEmpty(array)) {
-            return INDEX_NOT_FOUND;
-        }
-        if (startIndex < 0) {
-            startIndex = 0;
-        }
-        for (int i = startIndex; i < array.length; i++) {
-            if (valueToFind == array[i]) {
-                return i;
-            }
-        }
-        return INDEX_NOT_FOUND;
+    	return indexOfArray(array, valueToFind, startIndex);
     }
 
     /**
@@ -4120,20 +3604,7 @@ public class ArrayUtils {
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
     public static int lastIndexOf(final float[] array, final float valueToFind, int startIndex) {
-        if (isEmpty(array)) {
-            return INDEX_NOT_FOUND;
-        }
-        if (startIndex < 0) {
-            return INDEX_NOT_FOUND;
-        } else if (startIndex >= array.length) {
-            startIndex = array.length - 1;
-        }
-        for (int i = startIndex; i >= 0; i--) {
-            if (valueToFind == array[i]) {
-                return i;
-            }
-        }
-        return INDEX_NOT_FOUND;
+    	return lastIndexOfArray(array, valueToFind, startIndex);
     }
 
     /**
@@ -4225,20 +3696,7 @@ public class ArrayUtils {
      *  {@link #INDEX_NOT_FOUND} ({@code -1}) if not found or {@code null} array input
      */
     public static int lastIndexOf(final boolean[] array, final boolean valueToFind, int startIndex) {
-        if (isEmpty(array)) {
-            return INDEX_NOT_FOUND;
-        }
-        if (startIndex < 0) {
-            return INDEX_NOT_FOUND;
-        } else if (startIndex >= array.length) {
-            startIndex = array.length - 1;
-        }
-        for (int i = startIndex; i >= 0; i--) {
-            if (valueToFind == array[i]) {
-                return i;
-            }
-        }
-        return INDEX_NOT_FOUND;
+    	return lastIndexOfArray(array, valueToFind, startIndex);
     }
 
     /**

@@ -403,20 +403,9 @@ public class CompareToBuilder implements Builder<Integer> {
      * @since 2.0
      */
     public CompareToBuilder append(final Object lhs, final Object rhs, final Comparator<?> comparator) {
-        if (comparison != 0) {
-            return this;
-        }
-        if (lhs == rhs) {
-            return this;
-        }
-        if (lhs == null) {
-            comparison = -1;
-            return this;
-        }
-        if (rhs == null) {
-            comparison = 1;
-            return this;
-        }
+    	if (!pointerUnique(lhs, rhs)) {
+    		return this;
+    	}
         if (lhs.getClass().isArray()) {
             // factor out array case in order to keep method small enough to be inlined
             appendArray(lhs, rhs, comparator);
@@ -657,11 +646,10 @@ public class CompareToBuilder implements Builder<Integer> {
      * @since 2.0
      */
     public CompareToBuilder append(final Object[] lhs, final Object[] rhs, final Comparator<?> comparator) {
-    	 if (pointerCheck(lhs, rhs) == null) {
- 	        if (lhs.length != rhs.length) {
- 	            comparison = lhs.length < rhs.length ? -1 : 1;
- 	            return this;
- 	        }
+    	 if (pointerUnique(lhs, rhs)) {
+     		if (sameLength(lhs.length, rhs.length)) {
+  	        	return this;
+  	        }
  	        for (int i = 0; i < lhs.length && comparison == 0; i++) {
  	            append(lhs[i], rhs[i]);
  	        }
@@ -685,11 +673,10 @@ public class CompareToBuilder implements Builder<Integer> {
      * @return this - used to chain append calls
      */
     public CompareToBuilder append(final long[] lhs, final long[] rhs) {
-    	 if (pointerCheck(lhs, rhs) == null) {
- 	        if (lhs.length != rhs.length) {
- 	            comparison = lhs.length < rhs.length ? -1 : 1;
- 	            return this;
- 	        }
+    	 if (pointerUnique(lhs, rhs)) {
+     		if (sameLength(lhs.length, rhs.length)) {
+  	        	return this;
+  	        }
  	        for (int i = 0; i < lhs.length && comparison == 0; i++) {
  	            append(lhs[i], rhs[i]);
  	        }
@@ -713,11 +700,10 @@ public class CompareToBuilder implements Builder<Integer> {
      * @return this - used to chain append calls
      */
     public CompareToBuilder append(final int[] lhs, final int[] rhs) {
-    	 if (pointerCheck(lhs, rhs) == null) {
- 	        if (lhs.length != rhs.length) {
- 	            comparison = lhs.length < rhs.length ? -1 : 1;
- 	            return this;
- 	        }
+    	 if (pointerUnique(lhs, rhs)) {
+     		if (sameLength(lhs.length, rhs.length)) {
+  	        	return this;
+  	        }
  	        for (int i = 0; i < lhs.length && comparison == 0; i++) {
  	            append(lhs[i], rhs[i]);
  	        }
@@ -741,11 +727,10 @@ public class CompareToBuilder implements Builder<Integer> {
      * @return this - used to chain append calls
      */
     public CompareToBuilder append(final short[] lhs, final short[] rhs) {
-    	 if (pointerCheck(lhs, rhs) == null) {
- 	        if (lhs.length != rhs.length) {
- 	            comparison = lhs.length < rhs.length ? -1 : 1;
- 	            return this;
- 	        }
+    	 if (pointerUnique(lhs, rhs)) {
+     		if (sameLength(lhs.length, rhs.length)) {
+  	        	return this;
+  	        }
  	        for (int i = 0; i < lhs.length && comparison == 0; i++) {
  	            append(lhs[i], rhs[i]);
  	        }
@@ -769,36 +754,16 @@ public class CompareToBuilder implements Builder<Integer> {
      * @return this - used to chain append calls
      */
     public CompareToBuilder append(final char[] lhs, final char[] rhs) {
-        if (pointerCheck(lhs, rhs) == null) {
-	        if (lhs.length != rhs.length) {
-	            comparison = lhs.length < rhs.length ? -1 : 1;
-	            return this;
-	        }
+        if (pointerUnique(lhs, rhs)) {
+    		if (sameLength(lhs.length, rhs.length)) {
+  	        	return this;
+  	        }
 	        for (int i = 0; i < lhs.length && comparison == 0; i++) {
 	            append(lhs[i], rhs[i]);
 	        }
         }
         return this;
     }
-
-	private CompareToBuilder pointerCheck(Object lhs, Object rhs) {
-		if (comparison != 0) {
-            return this;
-        }
-        if (lhs == rhs) {
-            return this;
-        }
-        if (lhs == null) {
-            comparison = -1;
-            return this;
-        }
-        if (rhs == null) {
-            comparison = 1;
-            return this;
-        }
-        
-        return null;
-	}
 
     /**
      * <p>Appends to the <code>builder</code> the deep comparison of
@@ -816,28 +781,15 @@ public class CompareToBuilder implements Builder<Integer> {
      * @return this - used to chain append calls
      */
     public CompareToBuilder append(final byte[] lhs, final byte[] rhs) {
-        if (comparison != 0) {
-            return this;
-        }
-        if (lhs == rhs) {
-            return this;
-        }
-        if (lhs == null) {
-            comparison = -1;
-            return this;
-        }
-        if (rhs == null) {
-            comparison = 1;
-            return this;
-        }
-        if (lhs.length != rhs.length) {
-            comparison = lhs.length < rhs.length ? -1 : 1;
-            return this;
-        }
-        for (int i = 0; i < lhs.length && comparison == 0; i++) {
-            append(lhs[i], rhs[i]);
-        }
-        return this;
+	 if (pointerUnique(lhs, rhs)) {
+ 			if (sameLength(lhs.length, rhs.length)) {
+	        	return this;
+	        }
+	        for (int i = 0; i < lhs.length && comparison == 0; i++) {
+	            append(lhs[i], rhs[i]);
+	        }
+	  }
+	  return this;
     }
 
     /**
@@ -856,11 +808,10 @@ public class CompareToBuilder implements Builder<Integer> {
      * @return this - used to chain append calls
      */
     public CompareToBuilder append(final double[] lhs, final double[] rhs) {
-    	 if (pointerCheck(lhs, rhs) == null) {
- 	        if (lhs.length != rhs.length) {
- 	            comparison = lhs.length < rhs.length ? -1 : 1;
- 	            return this;
- 	        }
+    	 if (pointerUnique(lhs, rhs)) {
+     		if (sameLength(lhs.length, rhs.length)) {
+  	        	return this;
+  	        }
  	        for (int i = 0; i < lhs.length && comparison == 0; i++) {
  	            append(lhs[i], rhs[i]);
  	        }
@@ -884,11 +835,10 @@ public class CompareToBuilder implements Builder<Integer> {
      * @return this - used to chain append calls
      */
     public CompareToBuilder append(final float[] lhs, final float[] rhs) {
-    	 if (pointerCheck(lhs, rhs) == null) {
- 	        if (lhs.length != rhs.length) {
- 	            comparison = lhs.length < rhs.length ? -1 : 1;
- 	            return this;
- 	        }
+    	 if (pointerUnique(lhs, rhs)) {
+    		if (sameLength(lhs.length, rhs.length)) {
+  	        	return this;
+  	        }
  	        for (int i = 0; i < lhs.length && comparison == 0; i++) {
  	            append(lhs[i], rhs[i]);
  	        }
@@ -912,10 +862,9 @@ public class CompareToBuilder implements Builder<Integer> {
      * @return this - used to chain append calls
      */
     public CompareToBuilder append(final boolean[] lhs, final boolean[] rhs) {
-    	 if (pointerCheck(lhs, rhs) == null) {
- 	        if (lhs.length != rhs.length) {
- 	            comparison = lhs.length < rhs.length ? -1 : 1;
- 	            return this;
+    	 if (pointerUnique(lhs, rhs)) {
+ 	        if (sameLength(lhs.length, rhs.length)) {
+ 	        	return this;
  	        }
  	        for (int i = 0; i < lhs.length && comparison == 0; i++) {
  	            append(lhs[i], rhs[i]);
@@ -923,6 +872,38 @@ public class CompareToBuilder implements Builder<Integer> {
          }
          return this;
     }
+    
+    /*
+     * Check if two objects are the same with respect to pointer
+     */
+	private boolean pointerUnique(Object lhs, Object rhs) {
+		if (comparison != 0) {
+            return false;
+        }
+        if (lhs == rhs) {
+            return false;
+        }
+        if (lhs == null) {
+            comparison = -1;
+            return false;
+        }
+        if (rhs == null) {
+            comparison = 1;
+            return false;
+        }        
+        return true;
+	}
+	/*
+	 * Check if the length of the arrays are the same
+	 */
+	private boolean sameLength(int lhs, int rhs)
+	{
+        if (lhs != rhs) {
+            comparison = lhs < rhs ? -1 : 1;
+            return true;
+        }
+        return false;
+	}
 
     //-----------------------------------------------------------------------
     /**
@@ -952,5 +933,7 @@ public class CompareToBuilder implements Builder<Integer> {
     public Integer build() {
         return Integer.valueOf(toComparison());
     }
+    
+    
 }
 

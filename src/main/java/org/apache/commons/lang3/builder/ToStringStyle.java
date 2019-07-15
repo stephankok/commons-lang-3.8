@@ -996,19 +996,7 @@ public abstract class ToStringStyle implements Serializable {
      *  for summary info, <code>null</code> for style decides
      */
     public void append(final StringBuffer buffer, final String fieldName, final long[] array, final Boolean fullDetail) {
-        appendFieldStart(buffer, fieldName);
-
-        if (array == null) {
-            appendNullText(buffer, fieldName);
-
-        } else if (isFullDetail(fullDetail)) {
-            appendDetail(buffer, fieldName, array);
-
-        } else {
-            appendSummary(buffer, fieldName, array);
-        }
-
-        appendFieldEnd(buffer, fieldName);
+    	appendArray(buffer, fieldName, array, fullDetail);
     }
 
     /**
@@ -1021,14 +1009,7 @@ public abstract class ToStringStyle implements Serializable {
      *  not <code>null</code>
      */
     protected void appendDetail(final StringBuffer buffer, final String fieldName, final long[] array) {
-        buffer.append(arrayStart);
-        for (int i = 0; i < array.length; i++) {
-            if (i > 0) {
-                buffer.append(arraySeparator);
-            }
-            appendDetail(buffer, fieldName, array[i]);
-        }
-        buffer.append(arrayEnd);
+    	appendDetailArray(buffer, fieldName, array);
     }
 
     /**
@@ -1057,19 +1038,7 @@ public abstract class ToStringStyle implements Serializable {
      *  for summary info, <code>null</code> for style decides
      */
     public void append(final StringBuffer buffer, final String fieldName, final int[] array, final Boolean fullDetail) {
-        appendFieldStart(buffer, fieldName);
-
-        if (array == null) {
-            appendNullText(buffer, fieldName);
-
-        } else if (isFullDetail(fullDetail)) {
-            appendDetail(buffer, fieldName, array);
-
-        } else {
-            appendSummary(buffer, fieldName, array);
-        }
-
-        appendFieldEnd(buffer, fieldName);
+    	appendArray(buffer, fieldName, array, fullDetail);
     }
 
     /**
@@ -1082,14 +1051,7 @@ public abstract class ToStringStyle implements Serializable {
      *  not <code>null</code>
      */
     protected void appendDetail(final StringBuffer buffer, final String fieldName, final int[] array) {
-        buffer.append(arrayStart);
-        for (int i = 0; i < array.length; i++) {
-            if (i > 0) {
-                buffer.append(arraySeparator);
-            }
-            appendDetail(buffer, fieldName, array[i]);
-        }
-        buffer.append(arrayEnd);
+    	appendDetailArray(buffer, fieldName, array);
     }
 
     /**
@@ -1143,14 +1105,7 @@ public abstract class ToStringStyle implements Serializable {
      *  not <code>null</code>
      */
     protected void appendDetail(final StringBuffer buffer, final String fieldName, final short[] array) {
-        buffer.append(arrayStart);
-        for (int i = 0; i < array.length; i++) {
-            if (i > 0) {
-                buffer.append(arraySeparator);
-            }
-            appendDetail(buffer, fieldName, array[i]);
-        }
-        buffer.append(arrayEnd);
+    	appendDetailArray(buffer, fieldName, array);
     }
 
     /**
@@ -1179,19 +1134,7 @@ public abstract class ToStringStyle implements Serializable {
      *  for summary info, <code>null</code> for style decides
      */
     public void append(final StringBuffer buffer, final String fieldName, final byte[] array, final Boolean fullDetail) {
-        appendFieldStart(buffer, fieldName);
-
-        if (array == null) {
-            appendNullText(buffer, fieldName);
-
-        } else if (isFullDetail(fullDetail)) {
-            appendDetail(buffer, fieldName, array);
-
-        } else {
-            appendSummary(buffer, fieldName, array);
-        }
-
-        appendFieldEnd(buffer, fieldName);
+    	appendArray(buffer, fieldName, array, fullDetail);
     }
 
     /**
@@ -1204,14 +1147,7 @@ public abstract class ToStringStyle implements Serializable {
      *  not <code>null</code>
      */
     protected void appendDetail(final StringBuffer buffer, final String fieldName, final byte[] array) {
-        buffer.append(arrayStart);
-        for (int i = 0; i < array.length; i++) {
-            if (i > 0) {
-                buffer.append(arraySeparator);
-            }
-            appendDetail(buffer, fieldName, array[i]);
-        }
-        buffer.append(arrayEnd);
+    	appendDetailArray(buffer, fieldName, array);
     }
 
     /**
@@ -1240,19 +1176,7 @@ public abstract class ToStringStyle implements Serializable {
      *  for summary info, <code>null</code> for style decides
      */
     public void append(final StringBuffer buffer, final String fieldName, final char[] array, final Boolean fullDetail) {
-        appendFieldStart(buffer, fieldName);
-
-        if (array == null) {
-            appendNullText(buffer, fieldName);
-
-        } else if (isFullDetail(fullDetail)) {
-            appendDetail(buffer, fieldName, array);
-
-        } else {
-            appendSummary(buffer, fieldName, array);
-        }
-
-        appendFieldEnd(buffer, fieldName);
+    	appendArray(buffer, fieldName, array, fullDetail);
     }
 
     /**
@@ -1265,14 +1189,7 @@ public abstract class ToStringStyle implements Serializable {
      *  not <code>null</code>
      */
     protected void appendDetail(final StringBuffer buffer, final String fieldName, final char[] array) {
-        buffer.append(arrayStart);
-        for (int i = 0; i < array.length; i++) {
-            if (i > 0) {
-                buffer.append(arraySeparator);
-            }
-            appendDetail(buffer, fieldName, array[i]);
-        }
-        buffer.append(arrayEnd);
+    	appendDetailArray(buffer, fieldName, array);
     }
 
     /**
@@ -1301,19 +1218,7 @@ public abstract class ToStringStyle implements Serializable {
      *  for summary info, <code>null</code> for style decides
      */
     public void append(final StringBuffer buffer, final String fieldName, final double[] array, final Boolean fullDetail) {
-        appendFieldStart(buffer, fieldName);
-
-        if (array == null) {
-            appendNullText(buffer, fieldName);
-
-        } else if (isFullDetail(fullDetail)) {
-            appendDetail(buffer, fieldName, array);
-
-        } else {
-            appendSummary(buffer, fieldName, array);
-        }
-
-        appendFieldEnd(buffer, fieldName);
+    	appendArray(buffer, fieldName, array, fullDetail);
     }
 
     /**
@@ -1326,14 +1231,7 @@ public abstract class ToStringStyle implements Serializable {
      *  not <code>null</code>
      */
     protected void appendDetail(final StringBuffer buffer, final String fieldName, final double[] array) {
-        buffer.append(arrayStart);
-        for (int i = 0; i < array.length; i++) {
-            if (i > 0) {
-                buffer.append(arraySeparator);
-            }
-            appendDetail(buffer, fieldName, array[i]);
-        }
-        buffer.append(arrayEnd);
+    	appendDetailArray(buffer, fieldName, array);
     }
 
     /**
@@ -1362,19 +1260,7 @@ public abstract class ToStringStyle implements Serializable {
      *  for summary info, <code>null</code> for style decides
      */
     public void append(final StringBuffer buffer, final String fieldName, final float[] array, final Boolean fullDetail) {
-        appendFieldStart(buffer, fieldName);
-
-        if (array == null) {
-            appendNullText(buffer, fieldName);
-
-        } else if (isFullDetail(fullDetail)) {
-            appendDetail(buffer, fieldName, array);
-
-        } else {
-            appendSummary(buffer, fieldName, array);
-        }
-
-        appendFieldEnd(buffer, fieldName);
+    	appendArray(buffer, fieldName, array, fullDetail);
     }
 
     /**
@@ -1387,14 +1273,7 @@ public abstract class ToStringStyle implements Serializable {
      *  not <code>null</code>
      */
     protected void appendDetail(final StringBuffer buffer, final String fieldName, final float[] array) {
-        buffer.append(arrayStart);
-        for (int i = 0; i < array.length; i++) {
-            if (i > 0) {
-                buffer.append(arraySeparator);
-            }
-            appendDetail(buffer, fieldName, array[i]);
-        }
-        buffer.append(arrayEnd);
+    	appendDetailArray(buffer, fieldName, array);
     }
 
     /**
@@ -1423,19 +1302,7 @@ public abstract class ToStringStyle implements Serializable {
      *  for summary info, <code>null</code> for style decides
      */
     public void append(final StringBuffer buffer, final String fieldName, final boolean[] array, final Boolean fullDetail) {
-        appendFieldStart(buffer, fieldName);
-
-        if (array == null) {
-            appendNullText(buffer, fieldName);
-
-        } else if (isFullDetail(fullDetail)) {
-            appendDetail(buffer, fieldName, array);
-
-        } else {
-            appendSummary(buffer, fieldName, array);
-        }
-
-        appendFieldEnd(buffer, fieldName);
+    	appendArray(buffer, fieldName, array, fullDetail);
     }
 
     /**
@@ -1448,14 +1315,38 @@ public abstract class ToStringStyle implements Serializable {
      *  not <code>null</code>
      */
     protected void appendDetail(final StringBuffer buffer, final String fieldName, final boolean[] array) {
+    	appendDetailArray(buffer, fieldName, array);
+    }
+    
+    private void appendDetailArray(final StringBuffer buffer, final String fieldName, final Object array) {
         buffer.append(arrayStart);
-        for (int i = 0; i < array.length; i++) {
+        for (int i = 0; i < Array.getLength(array); i++) {
             if (i > 0) {
                 buffer.append(arraySeparator);
             }
-            appendDetail(buffer, fieldName, array[i]);
+            appendDetail(buffer, fieldName, Array.get(array, i));
         }
         buffer.append(arrayEnd);
+    }
+    
+    private void appendSummaryArray(final StringBuffer buffer, final String fieldName, final Object array) {
+        appendSummarySize(buffer, fieldName, Array.getLength(array));
+    }
+    
+    private void appendArray(final StringBuffer buffer, final String fieldName, final Object array, final Boolean fullDetail) {
+        appendFieldStart(buffer, fieldName);
+
+        if (array == null) {
+            appendNullText(buffer, fieldName);
+
+        } else if (isFullDetail(fullDetail)) {
+            appendDetailArray(buffer, fieldName, array);
+
+        } else {
+            appendSummaryArray(buffer, fieldName, array);
+        }
+
+        appendFieldEnd(buffer, fieldName);
     }
 
     /**
