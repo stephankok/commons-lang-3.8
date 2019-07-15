@@ -417,12 +417,7 @@ public class FieldUtils {
      *             if the field is not made accessible
      */
     public static Object readField(final Field field, final Object target, final boolean forceAccess) throws IllegalAccessException {
-        Validate.isTrue(field != null, "The field must not be null");
-        if (forceAccess && !field.isAccessible()) {
-            field.setAccessible(true);
-        } else {
-            MemberUtils.setAccessibleWorkaround(field);
-        }
+    	validateField(field, forceAccess);
         return field.get(target);
     }
 
@@ -679,12 +674,7 @@ public class FieldUtils {
      */
     public static void writeField(final Field field, final Object target, final Object value, final boolean forceAccess)
             throws IllegalAccessException {
-        Validate.isTrue(field != null, "The field must not be null");
-        if (forceAccess && !field.isAccessible()) {
-            field.setAccessible(true);
-        } else {
-            MemberUtils.setAccessibleWorkaround(field);
-        }
+    	validateField(field, forceAccess);
         field.set(target, value);
     }
 
@@ -834,5 +824,21 @@ public class FieldUtils {
         Validate.isTrue(field != null, "Cannot locate declared field %s.%s", cls.getName(), fieldName);
         // already forced access above, don't repeat it here:
         writeField(field, target, value, false);
+    }
+    
+    /**
+     * Helpers
+     * 
+     */
+    
+    private static void validateField(final Field field, final boolean forceAccess)
+    		throws IllegalAccessException 
+    {
+    	Validate.isTrue(field != null, "The field must not be null");
+        if (forceAccess && !field.isAccessible()) {
+            field.setAccessible(true);
+        } else {
+            MemberUtils.setAccessibleWorkaround(field);
+        }
     }
 }
