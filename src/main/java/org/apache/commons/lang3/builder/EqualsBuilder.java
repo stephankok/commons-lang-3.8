@@ -834,22 +834,14 @@ public class EqualsBuilder implements Builder<Boolean> {
      * @return EqualsBuilder - used to chain calls.
      */
     public EqualsBuilder append(final Object[] lhs, final Object[] rhs) {
-        if (!isEquals) {
-            return this;
-        }
-        if (lhs == rhs) {
-            return this;
-        }
-        if (lhs == null || rhs == null) {
-            this.setEquals(false);
-            return this;
-        }
-        if (lhs.length != rhs.length) {
-            this.setEquals(false);
-            return this;
-        }
-        for (int i = 0; i < lhs.length && isEquals; ++i) {
-            append(lhs[i], rhs[i]);
+    	if( appendPrimitivePointerCheck(lhs, rhs) == null) {
+	        if (lhs.length != rhs.length) {
+	            this.setEquals(false);
+	            return this;
+	        }
+	        for (int i = 0; i < lhs.length && isEquals; ++i) {
+	            append(lhs[i], rhs[i]);
+	        }
         }
         return this;
     }
@@ -865,22 +857,14 @@ public class EqualsBuilder implements Builder<Boolean> {
      * @return EqualsBuilder - used to chain calls.
      */
     public EqualsBuilder append(final long[] lhs, final long[] rhs) {
-        if (!isEquals) {
-            return this;
-        }
-        if (lhs == rhs) {
-            return this;
-        }
-        if (lhs == null || rhs == null) {
-            this.setEquals(false);
-            return this;
-        }
-        if (lhs.length != rhs.length) {
-            this.setEquals(false);
-            return this;
-        }
-        for (int i = 0; i < lhs.length && isEquals; ++i) {
-            append(lhs[i], rhs[i]);
+    	if( appendPrimitivePointerCheck(lhs, rhs) == null) {
+	        if (lhs.length != rhs.length) {
+	            this.setEquals(false);
+	            return this;
+	        }
+	        for (int i = 0; i < lhs.length && isEquals; ++i) {
+	            append(lhs[i], rhs[i]);
+	        }
         }
         return this;
     }
@@ -896,22 +880,14 @@ public class EqualsBuilder implements Builder<Boolean> {
      * @return EqualsBuilder - used to chain calls.
      */
     public EqualsBuilder append(final int[] lhs, final int[] rhs) {
-        if (!isEquals) {
-            return this;
-        }
-        if (lhs == rhs) {
-            return this;
-        }
-        if (lhs == null || rhs == null) {
-            this.setEquals(false);
-            return this;
-        }
-        if (lhs.length != rhs.length) {
-            this.setEquals(false);
-            return this;
-        }
-        for (int i = 0; i < lhs.length && isEquals; ++i) {
-            append(lhs[i], rhs[i]);
+    	if( appendPrimitivePointerCheck(lhs, rhs) == null) {
+	        if (lhs.length != rhs.length) {
+	            this.setEquals(false);
+	            return this;
+	        }
+	        for (int i = 0; i < lhs.length && isEquals; ++i) {
+	            append(lhs[i], rhs[i]);
+	        }
         }
         return this;
     }
@@ -927,7 +903,20 @@ public class EqualsBuilder implements Builder<Boolean> {
      * @return EqualsBuilder - used to chain calls.
      */
     public EqualsBuilder append(final short[] lhs, final short[] rhs) {
-        if (!isEquals) {
+        if( appendPrimitivePointerCheck(lhs, rhs) == null) {
+	        if (lhs.length != rhs.length) {
+	            this.setEquals(false);
+	            return this;
+	        }
+	        for (int i = 0; i < lhs.length && isEquals; ++i) {
+	            append(lhs[i], rhs[i]);
+	        }
+        }
+        return this;
+    }
+
+	private EqualsBuilder appendPrimitivePointerCheck(Object lhs, Object rhs) {
+		if (!isEquals) {
             return this;
         }
         if (lhs == rhs) {
@@ -936,16 +925,9 @@ public class EqualsBuilder implements Builder<Boolean> {
         if (lhs == null || rhs == null) {
             this.setEquals(false);
             return this;
-        }
-        if (lhs.length != rhs.length) {
-            this.setEquals(false);
-            return this;
-        }
-        for (int i = 0; i < lhs.length && isEquals; ++i) {
-            append(lhs[i], rhs[i]);
-        }
-        return this;
-    }
+        }        
+        return null;
+	}
 
     /**
      * <p>Deep comparison of array of <code>char</code>. Length and all
@@ -958,22 +940,14 @@ public class EqualsBuilder implements Builder<Boolean> {
      * @return EqualsBuilder - used to chain calls.
      */
     public EqualsBuilder append(final char[] lhs, final char[] rhs) {
-        if (!isEquals) {
-            return this;
-        }
-        if (lhs == rhs) {
-            return this;
-        }
-        if (lhs == null || rhs == null) {
-            this.setEquals(false);
-            return this;
-        }
-        if (lhs.length != rhs.length) {
-            this.setEquals(false);
-            return this;
-        }
-        for (int i = 0; i < lhs.length && isEquals; ++i) {
-            append(lhs[i], rhs[i]);
+    	if( appendPrimitivePointerCheck(lhs, rhs) == null) {
+	        if (lhs.length != rhs.length) {
+	            this.setEquals(false);
+	            return this;
+	        }
+	        for (int i = 0; i < lhs.length && isEquals; ++i) {
+	            append(lhs[i], rhs[i]);
+	        }
         }
         return this;
     }
@@ -989,22 +963,14 @@ public class EqualsBuilder implements Builder<Boolean> {
      * @return EqualsBuilder - used to chain calls.
      */
     public EqualsBuilder append(final byte[] lhs, final byte[] rhs) {
-        if (!isEquals) {
-            return this;
-        }
-        if (lhs == rhs) {
-            return this;
-        }
-        if (lhs == null || rhs == null) {
-            this.setEquals(false);
-            return this;
-        }
-        if (lhs.length != rhs.length) {
-            this.setEquals(false);
-            return this;
-        }
-        for (int i = 0; i < lhs.length && isEquals; ++i) {
-            append(lhs[i], rhs[i]);
+    	if( appendPrimitivePointerCheck(lhs, rhs) == null) {
+	        if (lhs.length != rhs.length) {
+	            this.setEquals(false);
+	            return this;
+	        }
+	        for (int i = 0; i < lhs.length && isEquals; ++i) {
+	            append(lhs[i], rhs[i]);
+	        }
         }
         return this;
     }
@@ -1020,22 +986,14 @@ public class EqualsBuilder implements Builder<Boolean> {
      * @return EqualsBuilder - used to chain calls.
      */
     public EqualsBuilder append(final double[] lhs, final double[] rhs) {
-        if (!isEquals) {
-            return this;
-        }
-        if (lhs == rhs) {
-            return this;
-        }
-        if (lhs == null || rhs == null) {
-            this.setEquals(false);
-            return this;
-        }
-        if (lhs.length != rhs.length) {
-            this.setEquals(false);
-            return this;
-        }
-        for (int i = 0; i < lhs.length && isEquals; ++i) {
-            append(lhs[i], rhs[i]);
+    	if( appendPrimitivePointerCheck(lhs, rhs) == null) {
+	        if (lhs.length != rhs.length) {
+	            this.setEquals(false);
+	            return this;
+	        }
+	        for (int i = 0; i < lhs.length && isEquals; ++i) {
+	            append(lhs[i], rhs[i]);
+	        }
         }
         return this;
     }
@@ -1051,22 +1009,14 @@ public class EqualsBuilder implements Builder<Boolean> {
      * @return EqualsBuilder - used to chain calls.
      */
     public EqualsBuilder append(final float[] lhs, final float[] rhs) {
-        if (!isEquals) {
-            return this;
-        }
-        if (lhs == rhs) {
-            return this;
-        }
-        if (lhs == null || rhs == null) {
-            this.setEquals(false);
-            return this;
-        }
-        if (lhs.length != rhs.length) {
-            this.setEquals(false);
-            return this;
-        }
-        for (int i = 0; i < lhs.length && isEquals; ++i) {
-            append(lhs[i], rhs[i]);
+    	if( appendPrimitivePointerCheck(lhs, rhs) == null) {
+	        if (lhs.length != rhs.length) {
+	            this.setEquals(false);
+	            return this;
+	        }
+	        for (int i = 0; i < lhs.length && isEquals; ++i) {
+	            append(lhs[i], rhs[i]);
+	        }
         }
         return this;
     }
@@ -1082,22 +1032,14 @@ public class EqualsBuilder implements Builder<Boolean> {
      * @return EqualsBuilder - used to chain calls.
      */
     public EqualsBuilder append(final boolean[] lhs, final boolean[] rhs) {
-        if (!isEquals) {
-            return this;
-        }
-        if (lhs == rhs) {
-            return this;
-        }
-        if (lhs == null || rhs == null) {
-            this.setEquals(false);
-            return this;
-        }
-        if (lhs.length != rhs.length) {
-            this.setEquals(false);
-            return this;
-        }
-        for (int i = 0; i < lhs.length && isEquals; ++i) {
-            append(lhs[i], rhs[i]);
+    	if( appendPrimitivePointerCheck(lhs, rhs) == null) {
+	        if (lhs.length != rhs.length) {
+	            this.setEquals(false);
+	            return this;
+	        }
+	        for (int i = 0; i < lhs.length && isEquals; ++i) {
+	            append(lhs[i], rhs[i]);
+	        }
         }
         return this;
     }
