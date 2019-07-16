@@ -1080,19 +1080,7 @@ public abstract class ToStringStyle implements Serializable {
      *  for summary info, <code>null</code> for style decides
      */
     public void append(final StringBuffer buffer, final String fieldName, final short[] array, final Boolean fullDetail) {
-        appendFieldStart(buffer, fieldName);
-
-        if (array == null) {
-            appendNullText(buffer, fieldName);
-
-        } else if (isFullDetail(fullDetail)) {
-            appendDetail(buffer, fieldName, array);
-
-        } else {
-            appendSummary(buffer, fieldName, array);
-        }
-
-        appendFieldEnd(buffer, fieldName);
+    	appendArray(buffer, fieldName, array, fullDetail);
     }
 
     /**
@@ -1326,7 +1314,7 @@ public abstract class ToStringStyle implements Serializable {
             }
             appendDetail(buffer, fieldName, Array.get(array, i));
         }
-        buffer.append(arrayEnd);
+        buffer.append(arrayEnd);       
     }
     
     private void appendSummaryArray(final StringBuffer buffer, final String fieldName, final Object array) {
