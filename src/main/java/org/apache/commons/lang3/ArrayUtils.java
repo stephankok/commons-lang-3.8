@@ -327,6 +327,18 @@ public class ArrayUtils {
         }
         return array.clone();
     }
+    
+    private static Object cloneArray(final Object array)
+    {
+    	if (array == null) {
+    		return null;
+    	}
+        Object newArray = Array.newInstance(array.getClass().getComponentType(), 
+        		Array.getLength(array));
+        System.arraycopy(array, 0, newArray, 0, Array.getLength(array));
+        return newArray;
+    }
+    
 
     /**
      * <p>Clones an array returning a typecast result and handling
@@ -7189,20 +7201,7 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static boolean[] removeAllOccurences(final boolean[] array, final boolean element) {
-        int index = indexOf(array, element);
-        if (index == INDEX_NOT_FOUND) {
-            return clone(array);
-        }
-
-        final int[] indices = new int[array.length - index];
-        indices[0] = index;
-        int count = 1;
-
-        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) {
-            indices[count++] = index;
-        }
-
-        return removeAll(array, Arrays.copyOf(indices, count));
+        return (boolean[]) removeAllOccurencesArray(array, element);
     }
 
     /**
@@ -7221,20 +7220,7 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static char[] removeAllOccurences(final char[] array, final char element) {
-        int index = indexOf(array, element);
-        if (index == INDEX_NOT_FOUND) {
-            return clone(array);
-        }
-
-        final int[] indices = new int[array.length - index];
-        indices[0] = index;
-        int count = 1;
-
-        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) {
-            indices[count++] = index;
-        }
-
-        return removeAll(array, Arrays.copyOf(indices, count));
+    	return (char[]) removeAllOccurencesArray(array, element);
     }
 
     /**
@@ -7253,20 +7239,7 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static byte[] removeAllOccurences(final byte[] array, final byte element) {
-        int index = indexOf(array, element);
-        if (index == INDEX_NOT_FOUND) {
-            return clone(array);
-        }
-
-        final int[] indices = new int[array.length - index];
-        indices[0] = index;
-        int count = 1;
-
-        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) {
-            indices[count++] = index;
-        }
-
-        return removeAll(array, Arrays.copyOf(indices, count));
+    	return (byte[]) removeAllOccurencesArray(array, element);
     }
 
     /**
@@ -7285,20 +7258,7 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static short[] removeAllOccurences(final short[] array, final short element) {
-        int index = indexOf(array, element);
-        if (index == INDEX_NOT_FOUND) {
-            return clone(array);
-        }
-
-        final int[] indices = new int[array.length - index];
-        indices[0] = index;
-        int count = 1;
-
-        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) {
-            indices[count++] = index;
-        }
-
-        return removeAll(array, Arrays.copyOf(indices, count));
+    	return (short[]) removeAllOccurencesArray(array, element);
     }
 
     /**
@@ -7317,20 +7277,7 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static int[] removeAllOccurences(final int[] array, final int element) {
-        int index = indexOf(array, element);
-        if (index == INDEX_NOT_FOUND) {
-            return clone(array);
-        }
-
-        final int[] indices = new int[array.length - index];
-        indices[0] = index;
-        int count = 1;
-
-        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) {
-            indices[count++] = index;
-        }
-
-        return removeAll(array, Arrays.copyOf(indices, count));
+    	return (int[]) removeAllOccurencesArray(array, element);
     }
 
     /**
@@ -7349,20 +7296,7 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static long[] removeAllOccurences(final long[] array, final long element) {
-        int index = indexOf(array, element);
-        if (index == INDEX_NOT_FOUND) {
-            return clone(array);
-        }
-
-        final int[] indices = new int[array.length - index];
-        indices[0] = index;
-        int count = 1;
-
-        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) {
-            indices[count++] = index;
-        }
-
-        return removeAll(array, Arrays.copyOf(indices, count));
+    	return (long[]) removeAllOccurencesArray(array, element);
     }
 
     /**
@@ -7381,20 +7315,7 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static float[] removeAllOccurences(final float[] array, final float element) {
-        int index = indexOf(array, element);
-        if (index == INDEX_NOT_FOUND) {
-            return clone(array);
-        }
-
-        final int[] indices = new int[array.length - index];
-        indices[0] = index;
-        int count = 1;
-
-        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) {
-            indices[count++] = index;
-        }
-
-        return removeAll(array, Arrays.copyOf(indices, count));
+    	return (float[]) removeAllOccurencesArray(array, element);
     }
 
     /**
@@ -7413,20 +7334,7 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static double[] removeAllOccurences(final double[] array, final double element) {
-        int index = indexOf(array, element);
-        if (index == INDEX_NOT_FOUND) {
-            return clone(array);
-        }
-
-        final int[] indices = new int[array.length - index];
-        indices[0] = index;
-        int count = 1;
-
-        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) {
-            indices[count++] = index;
-        }
-
-        return removeAll(array, Arrays.copyOf(indices, count));
+    	return (double[]) removeAllOccurencesArray(array, element);
     }
 
     /**
@@ -7446,16 +7354,21 @@ public class ArrayUtils {
      * @since 3.5
      */
     public static <T> T[] removeAllOccurences(final T[] array, final T element) {
-        int index = indexOf(array, element);
+    	return (T[]) removeAllOccurencesArray(array, element);
+    }
+    
+    
+    private static Object removeAllOccurencesArray(final Object array, final Object element) {
+        int index = indexOfArray(array, element, 0);
         if (index == INDEX_NOT_FOUND) {
-            return clone(array);
+        	return cloneArray(array);
         }
 
-        final int[] indices = new int[array.length - index];
+        final int[] indices = new int[Array.getLength(array) - index];
         indices[0] = index;
         int count = 1;
 
-        while ((index = indexOf(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) {
+        while ((index = indexOfArray(array, element, indices[count - 1] + 1)) != INDEX_NOT_FOUND) {
             indices[count++] = index;
         }
 
