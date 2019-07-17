@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Serializable;
 import java.io.Writer;
+import java.lang.reflect.Array;
 import java.nio.CharBuffer;
 import java.util.Iterator;
 import java.util.List;
@@ -772,7 +773,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
         }
         return this;
     }
-
+    
     /**
      * Appends a char array to the string builder.
      * Appending null will call {@link #appendNull()}.
@@ -1199,14 +1200,8 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      */
     public StrBuilder appendWithSeparators(final Iterable<?> iterable, final String separator) {
         if (iterable != null) {
-            final String sep = Objects.toString(separator, "");
-            final Iterator<?> it = iterable.iterator();
-            while (it.hasNext()) {
-                append(it.next());
-                if (it.hasNext()) {
-                    append(sep);
-                }
-            }
+        	final Iterator<?> it = iterable.iterator();
+        	return appendWithSeparators(it, separator);
         }
         return this;
     }
@@ -1427,25 +1422,7 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @return this, to enable chaining
      */
     public StrBuilder appendFixedWidthPadLeft(final Object obj, final int width, final char padChar) {
-        if (width > 0) {
-            ensureCapacity(size + width);
-            String str = (obj == null ? getNullText() : obj.toString());
-            if (str == null) {
-                str = StringUtils.EMPTY;
-            }
-            final int strLen = str.length();
-            if (strLen >= width) {
-                str.getChars(strLen - width, strLen, buffer, size);
-            } else {
-                final int padLen = width - strLen;
-                for (int i = 0; i < padLen; i++) {
-                    buffer[size + i] = padChar;
-                }
-                str.getChars(0, strLen, buffer, size + padLen);
-            }
-            size += width;
-        }
-        return this;
+    	return appendFixedWidthPad(obj, width, padChar, false);
     }
 
     /**
@@ -1474,25 +1451,54 @@ public class StrBuilder implements CharSequence, Appendable, Serializable, Build
      * @return this, to enable chaining
      */
     public StrBuilder appendFixedWidthPadRight(final Object obj, final int width, final char padChar) {
+    	return appendFixedWidthPad(obj, width, padChar, true);
+    }
+    
+    private StrBuilder appendFixedWidthPad(final Object obj, final int width, final char padChar, boolean addRight) { 	
         if (width > 0) {
             ensureCapacity(size + width);
-            String str = (obj == null ? getNullText() : obj.toString());
-            if (str == null) {
-                str = StringUtils.EMPTY;
+    		String str = (obj == null ? getNullText() : obj.toString());
+    		if (str == null) {
+    		    str = StringUtils.EMPTY;
+    		}
+
+            if (addRight) {
+            	addPaddingRight(str, width, padChar);
             }
-            final int strLen = str.length();
-            if (strLen >= width) {
-                str.getChars(0, width, buffer, size);
-            } else {
-                final int padLen = width - strLen;
-                str.getChars(0, strLen, buffer, size);
-                for (int i = 0; i < padLen; i++) {
-                    buffer[size + strLen + i] = padChar;
-                }
+            else {
+            	addPaddingLeft(str, width, padChar);
             }
             size += width;
         }
         return this;
+    }
+    
+    private void addPaddingRight(String str, int width, char padChar)
+    {
+		final int strLen = str.length();
+    	if (strLen >= width) {
+            str.getChars(0, width, buffer, size);
+        } else {
+            final int padLen = width - strLen;
+            str.getChars(0, strLen, buffer, size);
+            for (int i = 0; i < padLen; i++) {
+                buffer[size + strLen + i] = padChar;
+            }
+        }
+    }
+    
+    private void addPaddingLeft(String str, int width, char padChar)
+    {
+    	final int strLen = str.length();
+        if (strLen >= width) {
+            str.getChars(strLen - width, strLen, buffer, size);
+        } else {
+            final int padLen = width - strLen;
+            str.getChars(0, strLen, buffer, size + padLen);
+            for (int i = 0; i < padLen; i++) {
+                buffer[size + i] = padChar;
+            }
+        }
     }
 
     /**

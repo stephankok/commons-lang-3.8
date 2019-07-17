@@ -185,7 +185,7 @@ public class DiffBuilder implements Builder<DiffResult> {
             });
         }
         return this;
-    }
+    }   
 
     /**
      * <p>

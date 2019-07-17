@@ -2453,33 +2453,7 @@ public class StringUtils {
      * @since 3.0 Changed signature from containsNone(String, char[]) to containsNone(CharSequence, char...)
      */
     public static boolean containsNone(final CharSequence cs, final char... searchChars) {
-        if (cs == null || searchChars == null) {
-            return true;
-        }
-        final int csLen = cs.length();
-        final int csLast = csLen - 1;
-        final int searchLen = searchChars.length;
-        final int searchLast = searchLen - 1;
-        for (int i = 0; i < csLen; i++) {
-            final char ch = cs.charAt(i);
-            for (int j = 0; j < searchLen; j++) {
-                if (searchChars[j] == ch) {
-                    if (Character.isHighSurrogate(ch)) {
-                        if (j == searchLast) {
-                            // missing low surrogate, fine, like String.indexOf(String)
-                            return false;
-                        }
-                        if (i < csLast && searchChars[j + 1] == cs.charAt(i + 1)) {
-                            return false;
-                        }
-                    } else {
-                        // ch is in the Basic Multilingual Plane
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
+        return !containsAny(cs, searchChars);
     }
 
     /**
@@ -4063,23 +4037,7 @@ public class StringUtils {
      * @since 2.0
      */
     public static String join(final Object[] array, final char separator, final int startIndex, final int endIndex) {
-        if (array == null) {
-            return null;
-        }
-        final int noOfItems = endIndex - startIndex;
-        if (noOfItems <= 0) {
-            return EMPTY;
-        }
-        final StringBuilder buf = newStringBuilder(noOfItems);
-        for (int i = startIndex; i < endIndex; i++) {
-            if (i > startIndex) {
-                buf.append(separator);
-            }
-            if (array[i] != null) {
-                buf.append(array[i]);
-            }
-        }
-        return buf.toString();
+    	return joinArray(array, separator, startIndex, endIndex);
     }
 
     /**
@@ -4117,7 +4075,7 @@ public class StringUtils {
         return joinArray(array, separator, startIndex, endIndex);
     }
     
-    private static String joinArray(Object array, char separator, int startIndex, int endIndex)
+    private static String joinArray(Object array, Object separator, int startIndex, int endIndex)
     {
     	if (array == null) {
             return null;
@@ -4131,7 +4089,10 @@ public class StringUtils {
             if (i > startIndex) {
                 buf.append(separator);
             }
-            buf.append(Array.get(array, i));
+            Object item = Array.get(array, i);
+            if (item != null) {
+            	buf.append(item);            	
+            }
         }
         return buf.toString();
     }
@@ -4413,31 +4374,10 @@ public class StringUtils {
      * {@code endIndex > array.length()}
      */
     public static String join(final Object[] array, String separator, final int startIndex, final int endIndex) {
-        if (array == null) {
-            return null;
-        }
         if (separator == null) {
             separator = EMPTY;
         }
-
-        // endIndex - startIndex > 0:   Len = NofStrings *(len(firstString) + len(separator))
-        //           (Assuming that all Strings are roughly equally long)
-        final int noOfItems = endIndex - startIndex;
-        if (noOfItems <= 0) {
-            return EMPTY;
-        }
-
-        final StringBuilder buf = newStringBuilder(noOfItems);
-
-        for (int i = startIndex; i < endIndex; i++) {
-            if (i > startIndex) {
-                buf.append(separator);
-            }
-            if (array[i] != null) {
-                buf.append(array[i]);
-            }
-        }
-        return buf.toString();
+        return joinArray(array, separator, startIndex, endIndex);
     }
 
     /**
@@ -5616,8 +5556,8 @@ public class StringUtils {
      *             and/or size 0)
      * @since 2.4
      */
-    private static String replaceEach(
-            final String text, final String[] searchList, final String[] replacementList, final boolean repeat, final int timeToLive) {
+    private static String replaceEach(final String text, final String[] searchList, 
+    		final String[] replacementList, final boolean repeat, final int timeToLive) {
 
         // mchyzer Performance note: This creates very few new objects (one major goal)
         // let me know if there are performance requests, we can create a harness to measure
@@ -5742,7 +5682,7 @@ public class StringUtils {
         }
 
         return replaceEach(result, searchList, replacementList, repeat, timeToLive - 1);
-    }
+    }   
 
     // Replace, character based
     //-----------------------------------------------------------------------
@@ -6621,27 +6561,7 @@ public class StringUtils {
      * @since 2.0
      */
     public static String capitalize(final String str) {
-        int strLen;
-        if (str == null || (strLen = str.length()) == 0) {
-            return str;
-        }
-
-        final int firstCodepoint = str.codePointAt(0);
-        final int newCodePoint = Character.toTitleCase(firstCodepoint);
-        if (firstCodepoint == newCodePoint) {
-            // already capitalized
-            return str;
-        }
-
-        final int newCodePoints[] = new int[strLen]; // cannot be longer than the char array
-        int outOffset = 0;
-        newCodePoints[outOffset++] = newCodePoint; // copy the first codepoint
-        for (int inOffset = Character.charCount(firstCodepoint); inOffset < strLen; ) {
-            final int codepoint = str.codePointAt(inOffset);
-            newCodePoints[outOffset++] = codepoint; // copy the remaining ones
-            inOffset += Character.charCount(codepoint);
-         }
-        return new String(newCodePoints, 0, outOffset);
+        return changeCapitalization(str, true);
     }
 
     /**
@@ -6666,13 +6586,19 @@ public class StringUtils {
      * @since 2.0
      */
     public static String uncapitalize(final String str) {
-        int strLen;
+        return changeCapitalization(str, false);
+    }
+
+    private static String changeCapitalization(final String str, boolean toTitle)
+    {
+    	int strLen;
         if (str == null || (strLen = str.length()) == 0) {
             return str;
         }
 
         final int firstCodepoint = str.codePointAt(0);
-        final int newCodePoint = Character.toLowerCase(firstCodepoint);
+        final int newCodePoint = toTitle ? 
+        		Character.toTitleCase(firstCodepoint) : Character.toLowerCase(firstCodepoint);
         if (firstCodepoint == newCodePoint) {
             // already capitalized
             return str;
@@ -6688,7 +6614,6 @@ public class StringUtils {
          }
         return new String(newCodePoints, 0, outOffset);
     }
-
     /**
      * <p>Swaps the case of a String changing upper and title case to
      * lower case, and lower case to upper case.</p>

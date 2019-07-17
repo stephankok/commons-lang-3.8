@@ -396,14 +396,10 @@ public class StrSubstitutor {
      * @return the result of the replace operation
      */
     public String replace(final String source) {
-        if (source == null) {
-            return null;
-        }
-        final StrBuilder buf = new StrBuilder(source);
-        if (substitute(buf, 0, source.length()) == false) {
-            return source;
-        }
-        return buf.toString();
+    	if (source == null) {
+    		return null;
+    	}
+    	return replace(source, 0, source.length());
     }
 
     /**

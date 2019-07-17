@@ -926,10 +926,15 @@ public abstract class ToStringStyle implements Serializable {
      * @param array  the array to add to the <code>toString</code>,
      *  not <code>null</code>
      */
-    protected void appendDetail(final StringBuffer buffer, final String fieldName, final Object[] array) {
-        buffer.append(arrayStart);
-        for (int i = 0; i < array.length; i++) {
-            final Object item = array[i];
+    protected void appendDetail(final StringBuffer buffer, final String fieldName, final Object[] array) {   
+    	appendDetailArrayInternal(buffer, fieldName, array);
+    }
+    
+    private void appendDetailArrayInternal(final StringBuffer buffer, final String fieldName, final Object array) {
+    	buffer.append(arrayStart);
+        final int length = Array.getLength(array);
+        for (int i = 0; i < length; i++) {
+            final Object item = Array.get(array, i);
             if (i > 0) {
                 buffer.append(arraySeparator);
             }
@@ -953,21 +958,7 @@ public abstract class ToStringStyle implements Serializable {
      * @since 2.0
      */
     protected void reflectionAppendArrayDetail(final StringBuffer buffer, final String fieldName, final Object array) {
-        buffer.append(arrayStart);
-        final int length = Array.getLength(array);
-        for (int i = 0; i < length; i++) {
-            final Object item = Array.get(array, i);
-            if (i > 0) {
-                buffer.append(arraySeparator);
-            }
-            if (item == null) {
-                appendNullText(buffer, fieldName);
-
-            } else {
-                appendInternal(buffer, fieldName, item, arrayContentDetail);
-            }
-        }
-        buffer.append(arrayEnd);
+    	appendDetailArrayInternal(buffer, fieldName, array);
     }
 
     /**
